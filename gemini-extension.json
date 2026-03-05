@@ -1,6 +1,56 @@
 {
   "name": "okta-mcp-server",
-  "version": "2.0.0",
+  "version": "3.0.0",
+  "settings": [
+    {
+      "name": "Okta Org URL",
+      "description": "Your Okta organization URL (e.g. https://your-org.okta.com). Found in Admin Console → Settings → Account.",
+      "envVar": "OKTA_ORG_URL",
+      "sensitive": false
+    },
+    {
+      "name": "OAuth Client ID",
+      "description": "OAuth 2.0 client ID for secure authentication. Create a Service app (for Private Key JWT) or Native app (for Device Auth Grant) in Admin Console → Applications. Leave empty to use SSWS API token instead.",
+      "envVar": "OKTA_CLIENT_ID",
+      "sensitive": false
+    },
+    {
+      "name": "Private Key (PEM)",
+      "description": "PEM-encoded private key for Private Key JWT authentication. Register the matching public key (JWK) in your Okta Service app's credentials. Leave empty to use Device Authorization Grant or SSWS instead.",
+      "envVar": "OKTA_PRIVATE_KEY",
+      "sensitive": true
+    },
+    {
+      "name": "Private Key File Path",
+      "description": "Alternative to inline private key: absolute path to a PEM private key file (e.g. /path/to/private-key.pem). Leave empty if using inline OKTA_PRIVATE_KEY or a different auth mode.",
+      "envVar": "OKTA_PRIVATE_KEY_FILE",
+      "sensitive": false
+    },
+    {
+      "name": "Private Key ID (kid)",
+      "description": "Key ID (kid) for the JWT header. Required only if multiple keys are registered on your Okta app. Leave empty otherwise.",
+      "envVar": "OKTA_PRIVATE_KEY_KID",
+      "sensitive": false
+    },
+    {
+      "name": "SSWS API Token",
+      "description": "Legacy Okta API token (SSWS). Only needed if not using OAuth (no Client ID). Create one in Admin Console → Security → API → Tokens.",
+      "envVar": "OKTA_API_TOKEN",
+      "sensitive": true
+    },
+    {
+      "name": "OAuth Scopes",
+      "description": "Space-separated OAuth 2.0 scopes (e.g. 'okta.users.manage okta.apps.manage'). Defaults to 'okta.users.manage'. Only used with OAuth flows.",
+      "envVar": "OKTA_SCOPES",
+      "sensitive": false
+    },
+    {
+      "name": "Authorization Server ID",
+      "description": "Custom authorization server ID (e.g. 'default'). Omit to use the org-level authorization server. Only used with OAuth flows.",
+      "envVar": "OKTA_AUTH_SERVER_ID",
+      "sensitive": false
+    }
+  ],
   "mcpServers": {
     "okta-users": {
       "command": "node",
