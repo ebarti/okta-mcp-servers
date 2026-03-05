@@ -1,0 +1,69 @@
+name: Check Upstream Spec Path
+
+on:
+  schedule:
+    # Runs every Monday at 07:00 UTC (1h before the update workflow)
+    - cron: '0 7 * * 1'
+  workflow_dispatch:
+
+permissions:
+  issues: write
+
+jobs:
+  check-path:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check if upstream spec URL is still reachable
+        id: check
+        run: |
+          SPEC_URL="https://raw.githubusercontent.com/okta/okta-management-openapi-spec/refs/heads/master/dist/current/management-oneOfInheritance.yaml"
+          HTTP_STATUS=$(curl -s -o /dev/null -w "%{http_code}" "$SPEC_URL")
+
+          echo "status=$HTTP_STATUS" >> "$GITHUB_OUTPUT"
+          echo "url=$SPEC_URL" >> "$GITHUB_OUTPUT"
+
+          if [ "$HTTP_STATUS" -eq 200 ]; then
+            echo "✅ Upstream spec is reachable (HTTP $HTTP_STATUS)"
+          else
+            echo "⚠️ Upstream spec returned HTTP $HTTP_STATUS"
+          fi
+
+      - name: Create issue if spec path has changed
+        if: steps.check.outputs.status != '200'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const title = '⚠️ Upstream Okta OpenAPI spec path may have changed';
+            const body = [
+              `The upstream OpenAPI spec URL returned **HTTP ${{ steps.check.outputs.status }}** instead of 200.`,
+              '',
+              '**URL checked:**',
+              '```',
+              '${{ steps.check.outputs.url }}',
+              '```',
+              '',
+              'The Okta team may have moved or renamed the spec file. Please:',
+              '1. Check the [okta-management-openapi-spec](https://github.com/okta/okta-management-openapi-spec) repo for the new path',
+              '2. Update the URL in `.github/workflows/update-spec.yml`',
+              '3. Update the URL in `.github/workflows/check-spec-path.yml`',
+            ].join('\n');
+
+            // Avoid duplicate issues
+            const existing = await github.rest.issues.listForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'open',
+              labels: 'upstream-spec',
+            });
+            if (existing.data.length > 0) {
+              console.log('Issue already exists, skipping.');
+              return;
+            }
+
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title,
+              body,
+              labels: ['upstream-spec', 'automated'],
+            });
