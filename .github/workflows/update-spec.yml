@@ -1,0 +1,63 @@
+name: Update Okta OpenAPI Spec
+
+on:
+  schedule:
+    # Runs every Monday at 08:00 UTC
+    - cron: '0 8 * * 1'
+  workflow_dispatch: # Allow manual trigger
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  update-spec:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Download latest OpenAPI spec
+        run: |
+          curl -fsSL \
+            "https://raw.githubusercontent.com/okta/okta-management-openapi-spec/refs/heads/master/dist/current/management-oneOfInheritance.yaml" \
+            -o okta-management-openapi.yaml
+
+      - name: Check for changes
+        id: diff
+        run: |
+          if git diff --quiet okta-management-openapi.yaml; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+            echo "No changes to the OpenAPI spec."
+          else
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+            echo "OpenAPI spec has changed!"
+          fi
+
+      - name: Regenerate tool manifests
+        if: steps.diff.outputs.changed == 'true'
+        run: npm run generate
+
+      - name: Create Pull Request
+        if: steps.diff.outputs.changed == 'true'
+        uses: peter-evans/create-pull-request@v7
+        with:
+          commit-message: 'chore: update Okta OpenAPI spec and regenerate tools'
+          title: 'chore: update Okta OpenAPI spec'
+          body: |
+            Automated update from [okta-management-openapi-spec](https://github.com/okta/okta-management-openapi-spec).
+
+            Changes detected in the upstream OpenAPI specification. Tool manifests have been regenerated.
+
+            Please review the diff to verify the changes look correct.
+          branch: auto-update/okta-openapi-spec
+          delete-branch: true
+          labels: automated,dependencies

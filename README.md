@@ -34,6 +34,12 @@ export OKTA_API_TOKEN=your-ssws-token
 
 That's it — the servers are ready to use. You can selectively enable the ones you need from the extension settings.
 
+## Automatic Updates
+
+A [GitHub Actions workflow](.github/workflows/update-spec.yml) runs weekly (every Monday) to check for upstream changes to the [Okta OpenAPI spec](https://github.com/okta/okta-management-openapi-spec). If changes are detected, it regenerates the tool manifests and opens a PR automatically.
+
+You can also trigger it manually from the Actions tab.
+
 ## Regenerating (for contributors)
 
 If you update the OpenAPI spec:
