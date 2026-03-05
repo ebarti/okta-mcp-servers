@@ -1,0 +1,3093 @@
+[
+  {
+    "name": "listGroups",
+    "description": "List all groups. Lists all groups with pagination support. > **Note:** To list all groups belonging to a member, use the [List all groups endpoint in the User Resources API](/openapi/okta-management/management/tag/UserResources/#tag/UserResources/operation/listUserGroups). The number of groups returned depends on the specified [`limit`](/openapi/okta-management/management/tag/Group/#tag/Group/operation/listGroups!in=query&path=limit&t=request), if you have a search, filter, and/or query paramet…",
+    "tags": [
+      "Group"
+    ],
+    "method": "GET",
+    "pathTemplate": "/api/v1/groups",
+    "pathParams": [],
+    "queryParams": [
+      "search",
+      "filter",
+      "q",
+      "after",
+      "limit",
+      "expand",
+      "sortBy",
+      "sortOrder"
+    ],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "search": {
+          "type": "string",
+          "description": "Searches for groups with a supported [filtering](https://developer.okta.com/docs/api/#filter) expression for all properties except for `_embedded`, `_links`, and `objectClass`. Okta recommends using this parameter for optimal search performance. This operation supports [pagination](https://develope…"
+        },
+        "filter": {
+          "type": "string",
+          "description": "Filter expression for groups. See [Filter](https://developer.okta.com/docs/api/#filter). Filtering supports the following limited number of properties: `id`, `type`, `lastUpdated`, and `lastMembershipUpdated`. > **Note:** All filters must be [URL encoded](https://developer.mozilla.org/en-US/docs/Gl…"
+        },
+        "q": {
+          "type": "string",
+          "description": "Finds a group that matches the `name` property. > **Note:** Paging and searching are currently mutually exclusive. You can't page a query. The default limit for a query is 300 results. Query is intended for an auto-complete picker use case where users refine their search string to constrain the res…"
+        },
+        "after": {
+          "type": "string",
+          "description": "Specifies the pagination cursor for the next page of groups. The `after` cursor should be treated as an opaque value and obtained through the next link relation. See [Pagination](https://developer.okta.com/docs/api/#pagination)."
+        },
+        "limit": {
+          "type": "number",
+          "description": "Specifies the number of group results in a page. Okta recommends using a specific value other than the default or maximum. If your request times out, retry your request with a smaller `limit` and [page the results](https://developer.okta.com/docs/api/#pagination). The Okta default `Everyone` group …"
+        },
+        "expand": {
+          "type": "string",
+          "description": "If specified, additional metadata is included in the response. Possible values are `stats` and `app`. This additional metadata is listed in the [`_embedded`](https://developer.okta.com/docs/api/openapi/okta-management/management/tag/Group/#tag/Group/operation/addGroup!c=200&path=_embedded&t=respons…"
+        },
+        "sortBy": {
+          "type": "string",
+          "description": "Specifies field to sort by **(for search queries only)**. `sortBy` can be any single property, for example `sortBy=profile.name`."
+        },
+        "sortOrder": {
+          "type": "string",
+          "description": "Specifies sort order: `asc` or `desc` (for search queries only). This parameter is ignored if `sortBy` isn't present. Groups with the same value for the `sortBy` property are ordered by `id`'."
+        }
+      }
+    }
+  },
+  {
+    "name": "addGroup",
+    "description": "Add a group. Adds a new group with the `OKTA_GROUP` type to your org. > **Note:** App import operations are responsible for syncing groups with `APP_GROUP` type such as Active Directory groups. See [About groups](https://help.okta.com/okta_help.htm?id=Directory_Groups) in the help documentation.",
+    "tags": [
+      "Group"
+    ],
+    "method": "POST",
+    "pathTemplate": "/api/v1/groups",
+    "pathParams": [],
+    "queryParams": [],
+    "hasBody": true,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "requestBody": {
+          "type": "object",
+          "description": "The JSON request body. Refer to the Okta API docs for the schema."
+        }
+      },
+      "required": [
+        "requestBody"
+      ]
+    }
+  },
+  {
+    "name": "listGroupRules",
+    "description": "List all group rules. Lists all group rules for your org",
+    "tags": [
+      "GroupRule"
+    ],
+    "method": "GET",
+    "pathTemplate": "/api/v1/groups/rules",
+    "pathParams": [],
+    "queryParams": [
+      "limit",
+      "after",
+      "search",
+      "expand"
+    ],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "limit": {
+          "type": "number",
+          "description": "Specifies the number of rule results in a page"
+        },
+        "after": {
+          "type": "string",
+          "description": "Specifies the pagination cursor for the next page of rules"
+        },
+        "search": {
+          "type": "string",
+          "description": "Specifies the keyword to search rules for"
+        },
+        "expand": {
+          "type": "string",
+          "description": "If specified as `groupIdToGroupNameMap`, then displays group names"
+        }
+      }
+    }
+  },
+  {
+    "name": "createGroupRule",
+    "description": "Create a group rule. Creates a group rule to dynamically add users to the specified group if they match the condition. > **Note:** Group rules are created with the status set to `'INACTIVE'`.",
+    "tags": [
+      "GroupRule"
+    ],
+    "method": "POST",
+    "pathTemplate": "/api/v1/groups/rules",
+    "pathParams": [],
+    "queryParams": [],
+    "hasBody": true,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "requestBody": {
+          "type": "object",
+          "description": "The JSON request body. Refer to the Okta API docs for the schema."
+        }
+      },
+      "required": [
+        "requestBody"
+      ]
+    }
+  },
+  {
+    "name": "getGroupRule",
+    "description": "Retrieve a group rule. Retrieves a specific group rule by ID from your org",
+    "tags": [
+      "GroupRule"
+    ],
+    "method": "GET",
+    "pathTemplate": "/api/v1/groups/rules/{groupRuleId}",
+    "pathParams": [
+      "groupRuleId"
+    ],
+    "queryParams": [
+      "expand"
+    ],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "groupRuleId": {
+          "type": "string",
+          "description": "The `id` of the group rule"
+        },
+        "expand": {
+          "type": "string",
+          "description": "If specified as `groupIdToGroupNameMap`, then show group names"
+        }
+      },
+      "required": [
+        "groupRuleId"
+      ]
+    }
+  },
+  {
+    "name": "replaceGroupRule",
+    "description": "Replace a group rule. Replaces a group rule > **Notes:** You can only update rules with a group whose status is set to `INACTIVE`. > > You currently can't update the `actions` section.",
+    "tags": [
+      "GroupRule"
+    ],
+    "method": "PUT",
+    "pathTemplate": "/api/v1/groups/rules/{groupRuleId}",
+    "pathParams": [
+      "groupRuleId"
+    ],
+    "queryParams": [],
+    "hasBody": true,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "groupRuleId": {
+          "type": "string",
+          "description": "The `id` of the group rule"
+        },
+        "requestBody": {
+          "type": "object",
+          "description": "The JSON request body. Refer to the Okta API docs for the schema."
+        }
+      },
+      "required": [
+        "groupRuleId",
+        "requestBody"
+      ]
+    }
+  },
+  {
+    "name": "deleteGroupRule",
+    "description": "Delete a group rule. Deletes a specific group rule by `groupRuleId`",
+    "tags": [
+      "GroupRule"
+    ],
+    "method": "DELETE",
+    "pathTemplate": "/api/v1/groups/rules/{groupRuleId}",
+    "pathParams": [
+      "groupRuleId"
+    ],
+    "queryParams": [
+      "removeUsers"
+    ],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "groupRuleId": {
+          "type": "string",
+          "description": "The `id` of the group rule"
+        },
+        "removeUsers": {
+          "type": "boolean",
+          "description": "If set to `true`, removes users from groups assigned by this rule"
+        }
+      },
+      "required": [
+        "groupRuleId"
+      ]
+    }
+  },
+  {
+    "name": "activateGroupRule",
+    "description": "Activate a group rule. Activates a specific group rule by ID from your org",
+    "tags": [
+      "GroupRule"
+    ],
+    "method": "POST",
+    "pathTemplate": "/api/v1/groups/rules/{groupRuleId}/lifecycle/activate",
+    "pathParams": [
+      "groupRuleId"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "groupRuleId": {
+          "type": "string",
+          "description": "The `id` of the group rule"
+        }
+      },
+      "required": [
+        "groupRuleId"
+      ]
+    }
+  },
+  {
+    "name": "deactivateGroupRule",
+    "description": "Deactivate a group rule. Deactivates a specific group rule by ID from your org",
+    "tags": [
+      "GroupRule"
+    ],
+    "method": "POST",
+    "pathTemplate": "/api/v1/groups/rules/{groupRuleId}/lifecycle/deactivate",
+    "pathParams": [
+      "groupRuleId"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "groupRuleId": {
+          "type": "string",
+          "description": "The `id` of the group rule"
+        }
+      },
+      "required": [
+        "groupRuleId"
+      ]
+    }
+  },
+  {
+    "name": "getGroup",
+    "description": "Retrieve a group. Retrieves a specific group by `id` from your org",
+    "tags": [
+      "Group"
+    ],
+    "method": "GET",
+    "pathTemplate": "/api/v1/groups/{groupId}",
+    "pathParams": [
+      "groupId"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "groupId": {
+          "type": "string",
+          "description": "The `id` of the group"
+        }
+      },
+      "required": [
+        "groupId"
+      ]
+    }
+  },
+  {
+    "name": "replaceGroup",
+    "description": "Replace a group. Replaces the profile for a group of `OKTA_GROUP` type from your org. > **Note :** You only can modify profiles for groups of the `OKTA_GROUP` type. > > App imports are responsible for updating profiles for groups of the `APP_GROUP` type, such as Active Directory groups.",
+    "tags": [
+      "Group"
+    ],
+    "method": "PUT",
+    "pathTemplate": "/api/v1/groups/{groupId}",
+    "pathParams": [
+      "groupId"
+    ],
+    "queryParams": [],
+    "hasBody": true,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "groupId": {
+          "type": "string",
+          "description": "The `id` of the group"
+        },
+        "requestBody": {
+          "type": "object",
+          "description": "The JSON request body. Refer to the Okta API docs for the schema."
+        }
+      },
+      "required": [
+        "groupId",
+        "requestBody"
+      ]
+    }
+  },
+  {
+    "name": "deleteGroup",
+    "description": "Delete a group. Deletes a group of the `OKTA_GROUP` or `APP_GROUP` type from your org. > **Note:** You can't remove groups of type `APP_GROUP` if they are used in a group push mapping.",
+    "tags": [
+      "Group"
+    ],
+    "method": "DELETE",
+    "pathTemplate": "/api/v1/groups/{groupId}",
+    "pathParams": [
+      "groupId"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "groupId": {
+          "type": "string",
+          "description": "The `id` of the group"
+        }
+      },
+      "required": [
+        "groupId"
+      ]
+    }
+  },
+  {
+    "name": "listAssignedApplicationsForGroup",
+    "description": "List all assigned apps. Lists all apps that are assigned to a group. See [Application Groups API](/openapi/okta-management/management/tag/ApplicationGroups/).",
+    "tags": [
+      "Group"
+    ],
+    "method": "GET",
+    "pathTemplate": "/api/v1/groups/{groupId}/apps",
+    "pathParams": [
+      "groupId"
+    ],
+    "queryParams": [
+      "after",
+      "limit"
+    ],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "groupId": {
+          "type": "string",
+          "description": "The `id` of the group"
+        },
+        "after": {
+          "type": "string",
+          "description": "Specifies the pagination cursor for the next page of apps"
+        },
+        "limit": {
+          "type": "number",
+          "description": "Specifies the number of app results for a page"
+        }
+      },
+      "required": [
+        "groupId"
+      ]
+    }
+  },
+  {
+    "name": "listGroupOwners",
+    "description": "List all group owners. Lists all owners for a specific group",
+    "tags": [
+      "GroupOwner"
+    ],
+    "method": "GET",
+    "pathTemplate": "/api/v1/groups/{groupId}/owners",
+    "pathParams": [
+      "groupId"
+    ],
+    "queryParams": [
+      "search",
+      "after",
+      "limit"
+    ],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "groupId": {
+          "type": "string",
+          "description": "The `id` of the group"
+        },
+        "search": {
+          "type": "string",
+          "description": "SCIM filter expression for group owners. Allows you to filter owners by type."
+        },
+        "after": {
+          "type": "string",
+          "description": "Specifies the pagination cursor for the next page of owners"
+        },
+        "limit": {
+          "type": "number",
+          "description": "Specifies the number of owner results in a page"
+        }
+      },
+      "required": [
+        "groupId"
+      ]
+    }
+  },
+  {
+    "name": "assignGroupOwner",
+    "description": "Assign a group owner. Assigns a group owner",
+    "tags": [
+      "GroupOwner"
+    ],
+    "method": "POST",
+    "pathTemplate": "/api/v1/groups/{groupId}/owners",
+    "pathParams": [
+      "groupId"
+    ],
+    "queryParams": [],
+    "hasBody": true,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "groupId": {
+          "type": "string",
+          "description": "The `id` of the group"
+        },
+        "requestBody": {
+          "type": "object",
+          "description": "The JSON request body. Refer to the Okta API docs for the schema."
+        }
+      },
+      "required": [
+        "groupId",
+        "requestBody"
+      ]
+    }
+  },
+  {
+    "name": "deleteGroupOwner",
+    "description": "Delete a group owner. Deletes a group owner from a specific group",
+    "tags": [
+      "GroupOwner"
+    ],
+    "method": "DELETE",
+    "pathTemplate": "/api/v1/groups/{groupId}/owners/{ownerId}",
+    "pathParams": [
+      "groupId",
+      "ownerId"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "groupId": {
+          "type": "string",
+          "description": "The `id` of the group"
+        },
+        "ownerId": {
+          "type": "string",
+          "description": "The `id` of the group owner"
+        }
+      },
+      "required": [
+        "groupId",
+        "ownerId"
+      ]
+    }
+  },
+  {
+    "name": "listGroupUsers",
+    "description": "List all member users. Lists all users that are a member of a group. The default user limit is set to a very high number due to historical reasons that are no longer valid for most orgs. This will change in a future version of this API. The recommended page limit is now `limit=200`.",
+    "tags": [
+      "Group"
+    ],
+    "method": "GET",
+    "pathTemplate": "/api/v1/groups/{groupId}/users",
+    "pathParams": [
+      "groupId"
+    ],
+    "queryParams": [
+      "after",
+      "limit"
+    ],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "groupId": {
+          "type": "string",
+          "description": "The `id` of the group"
+        },
+        "after": {
+          "type": "string",
+          "description": "The cursor to use for pagination. It is an opaque string that specifies your current location in the list and is obtained from the `Link` response header. See [Pagination](https://developer.okta.com/docs/api/#pagination)."
+        },
+        "limit": {
+          "type": "number",
+          "description": "Specifies the number of user results in a page"
+        }
+      },
+      "required": [
+        "groupId"
+      ]
+    }
+  },
+  {
+    "name": "assignUserToGroup",
+    "description": "Assign a user to a group. Assigns a user to a group with the `OKTA_GROUP` type. > **Note:** You only can modify memberships for groups of the `OKTA_GROUP` type. App imports are responsible for managing group memberships for groups of the `APP_GROUP` type, such as Active Directory groups.",
+    "tags": [
+      "Group"
+    ],
+    "method": "PUT",
+    "pathTemplate": "/api/v1/groups/{groupId}/users/{userId}",
+    "pathParams": [
+      "groupId",
+      "userId"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "groupId": {
+          "type": "string",
+          "description": "The `id` of the group"
+        },
+        "userId": {
+          "type": "string",
+          "description": "ID of an existing Okta user"
+        }
+      },
+      "required": [
+        "groupId",
+        "userId"
+      ]
+    }
+  },
+  {
+    "name": "unassignUserFromGroup",
+    "description": "Unassign a user from a group. Unassigns a user from a group with the `OKTA_GROUP` type. > **Note:** You only can modify memberships for groups of the `OKTA_GROUP` type. > > App imports are responsible for managing group memberships for groups of the `APP_GROUP` type, such as Active Directory groups.",
+    "tags": [
+      "Group"
+    ],
+    "method": "DELETE",
+    "pathTemplate": "/api/v1/groups/{groupId}/users/{userId}",
+    "pathParams": [
+      "groupId",
+      "userId"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "groupId": {
+          "type": "string",
+          "description": "The `id` of the group"
+        },
+        "userId": {
+          "type": "string",
+          "description": "ID of an existing Okta user"
+        }
+      },
+      "required": [
+        "groupId",
+        "userId"
+      ]
+    }
+  },
+  {
+    "name": "listLinkedObjectDefinitions",
+    "description": "List all linked object definitions. Lists all Linked Object definitions",
+    "tags": [
+      "LinkedObject"
+    ],
+    "method": "GET",
+    "pathTemplate": "/api/v1/meta/schemas/user/linkedObjects",
+    "pathParams": [],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {}
+    }
+  },
+  {
+    "name": "createLinkedObjectDefinition",
+    "description": "Create a linked object definition. Creates a Linked Object definition",
+    "tags": [
+      "LinkedObject"
+    ],
+    "method": "POST",
+    "pathTemplate": "/api/v1/meta/schemas/user/linkedObjects",
+    "pathParams": [],
+    "queryParams": [],
+    "hasBody": true,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "requestBody": {
+          "type": "object",
+          "description": "The JSON request body. Refer to the Okta API docs for the schema."
+        }
+      },
+      "required": [
+        "requestBody"
+      ]
+    }
+  },
+  {
+    "name": "getLinkedObjectDefinition",
+    "description": "Retrieve a linked object definition. Retrieves a Linked Object definition",
+    "tags": [
+      "LinkedObject"
+    ],
+    "method": "GET",
+    "pathTemplate": "/api/v1/meta/schemas/user/linkedObjects/{linkedObjectName}",
+    "pathParams": [
+      "linkedObjectName"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "linkedObjectName": {
+          "type": "string",
+          "description": "Primary or Associated name"
+        }
+      },
+      "required": [
+        "linkedObjectName"
+      ]
+    }
+  },
+  {
+    "name": "deleteLinkedObjectDefinition",
+    "description": "Delete a linked object definition. Deletes the Linked Object definition specified by either the `primary` or `associated` name. The entire definition is removed, regardless of which name that you specify.",
+    "tags": [
+      "LinkedObject"
+    ],
+    "method": "DELETE",
+    "pathTemplate": "/api/v1/meta/schemas/user/linkedObjects/{linkedObjectName}",
+    "pathParams": [
+      "linkedObjectName"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "linkedObjectName": {
+          "type": "string",
+          "description": "Primary or Associated name"
+        }
+      },
+      "required": [
+        "linkedObjectName"
+      ]
+    }
+  },
+  {
+    "name": "listUserTypes",
+    "description": "List all user types. Lists all user types in your org",
+    "tags": [
+      "UserType"
+    ],
+    "method": "GET",
+    "pathTemplate": "/api/v1/meta/types/user",
+    "pathParams": [],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {}
+    }
+  },
+  {
+    "name": "createUserType",
+    "description": "Create a user type. Creates a new user type. Okta automatically creates a `default` user type for your org. You may add up to nine additional user types. > **Note**: New user types are based on the current default schema template. Modifications to this schema do not automatically propagate to previously created user types.",
+    "tags": [
+      "UserType"
+    ],
+    "method": "POST",
+    "pathTemplate": "/api/v1/meta/types/user",
+    "pathParams": [],
+    "queryParams": [],
+    "hasBody": true,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "requestBody": {
+          "type": "object",
+          "description": "The JSON request body. Refer to the Okta API docs for the schema."
+        }
+      },
+      "required": [
+        "requestBody"
+      ]
+    }
+  },
+  {
+    "name": "getUserType",
+    "description": "Retrieve a user type. Retrieves a user type by ID. Use `default` to fetch the default user type.",
+    "tags": [
+      "UserType"
+    ],
+    "method": "GET",
+    "pathTemplate": "/api/v1/meta/types/user/{typeId}",
+    "pathParams": [
+      "typeId"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "typeId": {
+          "type": "string",
+          "description": ""
+        }
+      },
+      "required": [
+        "typeId"
+      ]
+    }
+  },
+  {
+    "name": "updateUserType",
+    "description": "Update a user type. Updates an existing user type. This operation is a partial update. > **Note**: You can only update the `displayName` and `description` elements. The `name` of an existing user type can't be changed.",
+    "tags": [
+      "UserType"
+    ],
+    "method": "POST",
+    "pathTemplate": "/api/v1/meta/types/user/{typeId}",
+    "pathParams": [
+      "typeId"
+    ],
+    "queryParams": [],
+    "hasBody": true,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "typeId": {
+          "type": "string",
+          "description": ""
+        },
+        "requestBody": {
+          "type": "object",
+          "description": "The JSON request body. Refer to the Okta API docs for the schema."
+        }
+      },
+      "required": [
+        "typeId",
+        "requestBody"
+      ]
+    }
+  },
+  {
+    "name": "replaceUserType",
+    "description": "Replace a user type. Replaces an existing user type. This operation is a full update. > **Note**: The `name` of an existing user type can't be changed, but must be part of the request body. You can only replace the `displayName` and `description` elements.",
+    "tags": [
+      "UserType"
+    ],
+    "method": "PUT",
+    "pathTemplate": "/api/v1/meta/types/user/{typeId}",
+    "pathParams": [
+      "typeId"
+    ],
+    "queryParams": [],
+    "hasBody": true,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "typeId": {
+          "type": "string",
+          "description": ""
+        },
+        "requestBody": {
+          "type": "object",
+          "description": "The JSON request body. Refer to the Okta API docs for the schema."
+        }
+      },
+      "required": [
+        "typeId"
+      ]
+    }
+  },
+  {
+    "name": "deleteUserType",
+    "description": "Delete a user type. Deletes a user type permanently. > **Note**: You can't delete the default user type or a user type that is currently assigned to users.",
+    "tags": [
+      "UserType"
+    ],
+    "method": "DELETE",
+    "pathTemplate": "/api/v1/meta/types/user/{typeId}",
+    "pathParams": [
+      "typeId"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "typeId": {
+          "type": "string",
+          "description": ""
+        }
+      },
+      "required": [
+        "typeId"
+      ]
+    }
+  },
+  {
+    "name": "listYubikeyOtpTokens",
+    "description": "List all YubiKey OTP tokens. Lists all YubiKey OTP tokens",
+    "tags": [
+      "UserFactor"
+    ],
+    "method": "GET",
+    "pathTemplate": "/api/v1/org/factors/yubikey_token/tokens",
+    "pathParams": [],
+    "queryParams": [
+      "after",
+      "expand",
+      "filter",
+      "forDownload",
+      "limit",
+      "sortBy",
+      "sortOrder"
+    ],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "after": {
+          "type": "string",
+          "description": "Specifies the pagination cursor for the next page of tokens"
+        },
+        "expand": {
+          "type": "string",
+          "description": "Embeds the [user](/openapi/okta-management/management/tag/User/) resource if the YubiKey token is assigned to a user and `expand` is set to `user`"
+        },
+        "filter": {
+          "type": "string",
+          "description": "The expression used to filter tokens",
+          "enum": [
+            "profile.email",
+            "profile.serial",
+            "activated",
+            "user.id",
+            "created",
+            "status",
+            "lastVerified"
+          ]
+        },
+        "forDownload": {
+          "type": "boolean",
+          "description": "Returns tokens in a CSV to download instead of in the response. When you use this query parameter, the `limit` default changes to 1000."
+        },
+        "limit": {
+          "type": "number",
+          "description": "Specifies the number of results per page"
+        },
+        "sortBy": {
+          "type": "string",
+          "description": "The value of how the tokens are sorted",
+          "enum": [
+            "profile.email",
+            "profile.serial",
+            "activated",
+            "user.id",
+            "created",
+            "status",
+            "lastVerified"
+          ]
+        },
+        "sortOrder": {
+          "type": "string",
+          "description": "Specifies the sort order, either `ASC` or `DESC`",
+          "enum": [
+            "ASC",
+            "DESC"
+          ]
+        }
+      }
+    }
+  },
+  {
+    "name": "uploadYubikeyOtpTokenSeed",
+    "description": "Upload a YubiKey OTP seed. Uploads a seed for a user to enroll a YubiKey OTP",
+    "tags": [
+      "UserFactor"
+    ],
+    "method": "POST",
+    "pathTemplate": "/api/v1/org/factors/yubikey_token/tokens",
+    "pathParams": [],
+    "queryParams": [
+      "after",
+      "expand",
+      "filter",
+      "forDownload",
+      "limit",
+      "sortBy",
+      "sortOrder"
+    ],
+    "hasBody": true,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "after": {
+          "type": "string",
+          "description": "Specifies the pagination cursor for the next page of tokens"
+        },
+        "expand": {
+          "type": "string",
+          "description": "Embeds the [user](/openapi/okta-management/management/tag/User/) resource if the YubiKey token is assigned to a user and `expand` is set to `user`"
+        },
+        "filter": {
+          "type": "string",
+          "description": "The expression used to filter tokens",
+          "enum": [
+            "profile.email",
+            "profile.serial",
+            "activated",
+            "user.id",
+            "created",
+            "status",
+            "lastVerified"
+          ]
+        },
+        "forDownload": {
+          "type": "boolean",
+          "description": "Returns tokens in a CSV to download instead of in the response. When you use this query parameter, the `limit` default changes to 1000."
+        },
+        "limit": {
+          "type": "number",
+          "description": "Specifies the number of results per page"
+        },
+        "sortBy": {
+          "type": "string",
+          "description": "The value of how the tokens are sorted",
+          "enum": [
+            "profile.email",
+            "profile.serial",
+            "activated",
+            "user.id",
+            "created",
+            "status",
+            "lastVerified"
+          ]
+        },
+        "sortOrder": {
+          "type": "string",
+          "description": "Specifies the sort order, either `ASC` or `DESC`",
+          "enum": [
+            "ASC",
+            "DESC"
+          ]
+        },
+        "requestBody": {
+          "type": "object",
+          "description": "The JSON request body. Refer to the Okta API docs for the schema."
+        }
+      },
+      "required": [
+        "requestBody"
+      ]
+    }
+  },
+  {
+    "name": "getYubikeyOtpTokenById",
+    "description": "Retrieve a YubiKey OTP token. Retrieves the specified YubiKey OTP token by `id`",
+    "tags": [
+      "UserFactor"
+    ],
+    "method": "GET",
+    "pathTemplate": "/api/v1/org/factors/yubikey_token/tokens/{tokenId}",
+    "pathParams": [
+      "tokenId"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "tokenId": {
+          "type": "string",
+          "description": "The YubiKey OTP token ID"
+        }
+      },
+      "required": [
+        "tokenId"
+      ]
+    }
+  },
+  {
+    "name": "getSession",
+    "description": "Retrieve a session. Retrieves information about the Session specified by the given session ID",
+    "tags": [
+      "Session"
+    ],
+    "method": "GET",
+    "pathTemplate": "/api/v1/sessions/{sessionId}",
+    "pathParams": [
+      "sessionId"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "sessionId": {
+          "type": "string",
+          "description": "`id` of the Session"
+        }
+      },
+      "required": [
+        "sessionId"
+      ]
+    }
+  },
+  {
+    "name": "revokeSession",
+    "description": "Revoke a session. Revokes the specified Session",
+    "tags": [
+      "Session"
+    ],
+    "method": "DELETE",
+    "pathTemplate": "/api/v1/sessions/{sessionId}",
+    "pathParams": [
+      "sessionId"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "sessionId": {
+          "type": "string",
+          "description": "`id` of the Session"
+        }
+      },
+      "required": [
+        "sessionId"
+      ]
+    }
+  },
+  {
+    "name": "refreshSession",
+    "description": "Refresh a session. Refreshes an existing Session using the `id` for that Session. A successful response contains the refreshed Session with an updated `expiresAt` timestamp.",
+    "tags": [
+      "Session"
+    ],
+    "method": "POST",
+    "pathTemplate": "/api/v1/sessions/{sessionId}/lifecycle/refresh",
+    "pathParams": [
+      "sessionId"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "sessionId": {
+          "type": "string",
+          "description": "`id` of the Session"
+        }
+      },
+      "required": [
+        "sessionId"
+      ]
+    }
+  },
+  {
+    "name": "listUsers",
+    "description": "List all users. Lists users in your org, with pagination in most cases. A subset of users can be returned that match a supported filter expression or search criteria. Different results are returned depending on specified queries in the request. > **Notes:** > * This operation omits users that have a status of `DEPROVISIONED` in the response. To return all users, use a filter or search query instead. > * The `search` parameter results are sourced from an eventually consistent datasource and may …",
+    "tags": [
+      "User"
+    ],
+    "method": "GET",
+    "pathTemplate": "/api/v1/users",
+    "pathParams": [],
+    "queryParams": [
+      "search",
+      "filter",
+      "q",
+      "after",
+      "limit",
+      "sortBy",
+      "sortOrder",
+      "fields",
+      "expand"
+    ],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "search": {
+          "type": "string",
+          "description": "Searches for users with a supported filtering expression for most properties. Okta recommends using this parameter for optimal search performance. > **Note:** Using an overly complex or long search query can result in an error. This operation supports [pagination](https://developer.okta.com/docs/ap…"
+        },
+        "filter": {
+          "type": "string",
+          "description": "Filters users with a supported expression for a subset of properties. > **Note:** Returned users include those with the `DEPROVISIONED` status. This requires [URL encoding](https://developer.mozilla.org/en-US/docs/Glossary/Percent-encoding). For example, `filter=lastUpdated gt \"2013-06-01T00:00:00.…"
+        },
+        "q": {
+          "type": "string",
+          "description": "Finds users who match the specified query. This doesn't support pagination. > **Note:** For optimal performance, use the `search` parameter instead. Use the `q` parameter for simple queries, such as a lookup of users by name when creating a people picker. The value of `q` is matched against `firstN…"
+        },
+        "after": {
+          "type": "string",
+          "description": "The cursor to use for pagination. It is an opaque string that specifies your current location in the list and is obtained from the `Link` response header. See [Pagination](https://developer.okta.com/docs/api/#pagination)."
+        },
+        "limit": {
+          "type": "number",
+          "description": "Specifies the number of results returned. Defaults to 10 if `q` is provided."
+        },
+        "sortBy": {
+          "type": "string",
+          "description": "Specifies field to sort by (for search queries only). This can be any single property, for example `sortBy=profile.lastName`. Users with the same value for the `sortBy` property will be ordered by `id`."
+        },
+        "sortOrder": {
+          "type": "string",
+          "description": "Specifies the sort order: `asc` or `desc` (for search queries only). Sorting is done in ASCII sort order (that is, by ASCII character value), but isn't case sensitive. `sortOrder` is ignored if `sortBy` isn't present."
+        },
+        "fields": {
+          "type": "string",
+          "description": "Specifies a select set of user properties to query. Any other properties will be filtered out of the returned users. Requested fields should be comma-separated. Profile attributes should be contained within a `profile:({field1}, {field2}, ...)` directive."
+        },
+        "expand": {
+          "type": "string",
+          "description": "<x-lifecycle-container><x-lifecycle class=\"ea\"></x-lifecycle></x-lifecycle-container>A parameter to include metadata in the `_embedded` property. Supported value: `classification`."
+        }
+      }
+    }
+  },
+  {
+    "name": "createUser",
+    "description": "Create a user. Creates a new user in your Okta org with or without credentials.<br> > **Legal Disclaimer** > > After a user is added to the Okta directory, they receive an activation email. As part of signing up for this service, > you agreed not to use Okta's service/product to spam and/or send unsolicited messages. > Please refrain from adding unrelated accounts to the directory as Okta is not responsible for, and disclaims any and all > liability associated with, the activation email's conte…",
+    "tags": [
+      "User"
+    ],
+    "method": "POST",
+    "pathTemplate": "/api/v1/users",
+    "pathParams": [],
+    "queryParams": [
+      "activate",
+      "provider",
+      "nextLogin"
+    ],
+    "hasBody": true,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "activate": {
+          "type": "boolean",
+          "description": "Executes an [activation lifecycle](https://developer.okta.com/docs/api/openapi/okta-management/management/tag/UserLifecycle/#tag/UserLifecycle/operation/activateUser) operation when creating the user"
+        },
+        "provider": {
+          "type": "boolean",
+          "description": "Indicates whether to create a user with a specified authentication provider"
+        },
+        "nextLogin": {
+          "type": "string",
+          "description": "With `activate=true`, if `nextLogin=changePassword`, a user is created, activated, and the password is set to `EXPIRED`. The user must change it the next time they sign in."
+        },
+        "requestBody": {
+          "type": "object",
+          "description": "The JSON request body. Refer to the Okta API docs for the schema."
+        }
+      },
+      "required": [
+        "requestBody"
+      ]
+    }
+  },
+  {
+    "name": "getUser",
+    "description": "Retrieve a user. Retrieves a user from your Okta org. You can substitute `me` for the `id` to fetch the current user linked to an API token or session cookie. * The request returns the user linked to the API token that is specified in the Authorization header, not the user linked to the active session. Details of the admin user who granted the API token is returned. * When the end user has an active Okta session, it is typically a CORS request from the browser. Therefore, it's possible to retri…",
+    "tags": [
+      "User"
+    ],
+    "method": "GET",
+    "pathTemplate": "/api/v1/users/{id}",
+    "pathParams": [
+      "id"
+    ],
+    "queryParams": [
+      "expand"
+    ],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "An ID, login, or login shortname (as long as the shortname is unambiguous) of an existing Okta user"
+        },
+        "expand": {
+          "type": "string",
+          "description": "An optional parameter to include metadata in the `_embedded` attribute. Valid values: `blocks` or <x-lifecycle class=\"ea\"></x-lifecycle> `classification`."
+        }
+      },
+      "required": [
+        "id"
+      ]
+    }
+  },
+  {
+    "name": "updateUser",
+    "description": "Update a user. Updates a user's profile or credentials with partial update semantics. > **Important:** Use the `POST` method for partial updates. Unspecified properties are set to null with `PUT`. `profile` and `credentials` can be updated independently or together with a single request. > **Note**: Currently, the user type of a user can only be changed via a full replacement PUT operation. If the request parameters of a partial update include the type element from the user object, the value mu…",
+    "tags": [
+      "User"
+    ],
+    "method": "POST",
+    "pathTemplate": "/api/v1/users/{id}",
+    "pathParams": [
+      "id"
+    ],
+    "queryParams": [
+      "strict"
+    ],
+    "hasBody": true,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "An ID, login, or login shortname (as long as the shortname is unambiguous) of an existing Okta user"
+        },
+        "strict": {
+          "type": "boolean",
+          "description": "If true, validates against minimum age and history password policy"
+        },
+        "requestBody": {
+          "type": "object",
+          "description": "The JSON request body. Refer to the Okta API docs for the schema."
+        }
+      },
+      "required": [
+        "id",
+        "requestBody"
+      ]
+    }
+  },
+  {
+    "name": "replaceUser",
+    "description": "Replace a user. Replaces a user's profile, credentials, or both using strict-update semantics. All profile properties must be specified when updating a user's profile with a `PUT` method. Any property not specified in the request is deleted. > **Important:** Don't use a `PUT` method for partial updates.",
+    "tags": [
+      "User"
+    ],
+    "method": "PUT",
+    "pathTemplate": "/api/v1/users/{id}",
+    "pathParams": [
+      "id"
+    ],
+    "queryParams": [
+      "strict"
+    ],
+    "hasBody": true,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "An ID, login, or login shortname (as long as the shortname is unambiguous) of an existing Okta user"
+        },
+        "strict": {
+          "type": "boolean",
+          "description": "If `true`, validates against minimum age and history password policy"
+        },
+        "requestBody": {
+          "type": "object",
+          "description": "The JSON request body. Refer to the Okta API docs for the schema."
+        }
+      },
+      "required": [
+        "id",
+        "requestBody"
+      ]
+    }
+  },
+  {
+    "name": "deleteUser",
+    "description": "Delete a user. Deletes a user permanently. This operation can only be performed on users that have a `DEPROVISIONED` status. > **Warning:** This action can't be recovered! This operation on a user that hasn't been deactivated causes that user to be deactivated. A second delete operation is required to delete the user. > **Note:** You can also perform user deletion asynchronously. To invoke asynchronous user deletion, pass an HTTP header `Prefer: respond-async` with the request. This header is a…",
+    "tags": [
+      "User"
+    ],
+    "method": "DELETE",
+    "pathTemplate": "/api/v1/users/{id}",
+    "pathParams": [
+      "id"
+    ],
+    "queryParams": [
+      "sendEmail"
+    ],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "An ID, login, or login shortname (as long as the shortname is unambiguous) of an existing Okta user"
+        },
+        "sendEmail": {
+          "type": "boolean",
+          "description": "Sends a deactivation email to the admin if `true`"
+        }
+      },
+      "required": [
+        "id"
+      ]
+    }
+  },
+  {
+    "name": "listAppLinks",
+    "description": "List all assigned app links. Lists all app links for all direct or indirect (through group membership) assigned apps. > **Note:** To list all apps in an org, use the [List all applications endpoint in the Applications API](/openapi/okta-management/management/tag/Application/#tag/Application/operation/listApplications).",
+    "tags": [
+      "UserResources"
+    ],
+    "method": "GET",
+    "pathTemplate": "/api/v1/users/{id}/appLinks",
+    "pathParams": [
+      "id"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "An ID, login, or login shortname (as long as the shortname is unambiguous) of an existing Okta user"
+        }
+      },
+      "required": [
+        "id"
+      ]
+    }
+  },
+  {
+    "name": "listUserBlocks",
+    "description": "List all user blocks. Lists information about how the user is blocked from accessing their account",
+    "tags": [
+      "User"
+    ],
+    "method": "GET",
+    "pathTemplate": "/api/v1/users/{id}/blocks",
+    "pathParams": [
+      "id"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "An ID, login, or login shortname (as long as the shortname is unambiguous) of an existing Okta user"
+        }
+      },
+      "required": [
+        "id"
+      ]
+    }
+  },
+  {
+    "name": "listUserGroups",
+    "description": "List all groups. Lists all groups of which the user is a member. > **Note:** To list all groups in your org, use the [List all groups endpoints in the Groups API](/openapi/okta-management/management/tag/Group/#tag/Group/operation/listGroups).",
+    "tags": [
+      "UserResources"
+    ],
+    "method": "GET",
+    "pathTemplate": "/api/v1/users/{id}/groups",
+    "pathParams": [
+      "id"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "An ID, login, or login shortname (as long as the shortname is unambiguous) of an existing Okta user"
+        }
+      },
+      "required": [
+        "id"
+      ]
+    }
+  },
+  {
+    "name": "activateUser",
+    "description": "Activate a user. Activates a user. Perform this operation only on users with a `STAGED` or `DEPROVISIONED` status. Activation of a user is an asynchronous operation. * The user has the `transitioningToStatus` property with an `ACTIVE` value during activation. This indicates that the user hasn't completed the asynchronous operation. * The user has an `ACTIVE` status when the activation process completes. Users who don't have a password must complete the welcome flow by visiting the activation li…",
+    "tags": [
+      "UserLifecycle"
+    ],
+    "method": "POST",
+    "pathTemplate": "/api/v1/users/{id}/lifecycle/activate",
+    "pathParams": [
+      "id"
+    ],
+    "queryParams": [
+      "sendEmail"
+    ],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "An ID, login, or login shortname (as long as the shortname is unambiguous) of an existing Okta user"
+        },
+        "sendEmail": {
+          "type": "boolean",
+          "description": "Sends an activation email to the user if `true`"
+        }
+      },
+      "required": [
+        "id"
+      ]
+    }
+  },
+  {
+    "name": "deactivateUser",
+    "description": "Deactivate a user. Deactivates a user. Perform this operation only on users that do not have a `DEPROVISIONED` status. * The user's `transitioningToStatus` property is `DEPROVISIONED` during deactivation to indicate that the user hasn't completed the asynchronous operation. * The user's status is `DEPROVISIONED` when the deactivation process is complete. > **Important:** Deactivating a user is a **destructive** operation. The user is deprovisioned from all assigned apps, which might destroy the…",
+    "tags": [
+      "UserLifecycle"
+    ],
+    "method": "POST",
+    "pathTemplate": "/api/v1/users/{id}/lifecycle/deactivate",
+    "pathParams": [
+      "id"
+    ],
+    "queryParams": [
+      "sendEmail"
+    ],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "An ID, login, or login shortname (as long as the shortname is unambiguous) of an existing Okta user"
+        },
+        "sendEmail": {
+          "type": "boolean",
+          "description": "Sends a deactivation email to the admin if `true`"
+        }
+      },
+      "required": [
+        "id"
+      ]
+    }
+  },
+  {
+    "name": "expirePassword",
+    "description": "Expire the password. Expires the password. This operation transitions the user status to `PASSWORD_EXPIRED` so that the user must change their password the next time that they sign in. <br> If you have integrated Okta with your on-premises Active Directory (AD), then setting a user's password as expired in Okta also expires the password in AD. When the user tries to sign in to Okta, delegated authentication finds the password-expired status in AD, and the user is presented with the password-exp…",
+    "tags": [
+      "UserCred"
+    ],
+    "method": "POST",
+    "pathTemplate": "/api/v1/users/{id}/lifecycle/expire_password",
+    "pathParams": [
+      "id"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "An ID, login, or login shortname (as long as the shortname is unambiguous) of an existing Okta user"
+        }
+      },
+      "required": [
+        "id"
+      ]
+    }
+  },
+  {
+    "name": "expirePasswordWithTempPassword",
+    "description": "Expire the password with a temporary password. Expires the password and resets the user's password to a temporary password. This operation transitions the user status to `PASSWORD_EXPIRED` so that the user must change their password the next time that they sign in. The user's password is reset to a temporary password that's returned, and then the user's password is expired. If `revokeSessions` is included in the request with a value of `true`, the user's current outstanding sessions are revoked…",
+    "tags": [
+      "UserCred"
+    ],
+    "method": "POST",
+    "pathTemplate": "/api/v1/users/{id}/lifecycle/expire_password_with_temp_password",
+    "pathParams": [
+      "id"
+    ],
+    "queryParams": [
+      "revokeSessions"
+    ],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "An ID, login, or login shortname (as long as the shortname is unambiguous) of an existing Okta user"
+        },
+        "revokeSessions": {
+          "type": "boolean",
+          "description": "Revokes the user's existing sessions if `true`"
+        }
+      },
+      "required": [
+        "id"
+      ]
+    }
+  },
+  {
+    "name": "reactivateUser",
+    "description": "Reactivate a user. Reactivates a user. Perform this operation only on users with a `PROVISIONED` or `RECOVERY` [status](/openapi/okta-management/management/tag/User/#tag/User/operation/listUsers!c=200&path=status&t=response). This operation restarts the activation workflow if for some reason the user activation wasn't completed when using the `activationToken` from [Activate User](/openapi/okta-management/management/tag/UserLifecycle/#tag/UserLifecycle/operation/activateUser). Users that don't …",
+    "tags": [
+      "UserLifecycle"
+    ],
+    "method": "POST",
+    "pathTemplate": "/api/v1/users/{id}/lifecycle/reactivate",
+    "pathParams": [
+      "id"
+    ],
+    "queryParams": [
+      "sendEmail"
+    ],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "An ID, login, or login shortname (as long as the shortname is unambiguous) of an existing Okta user"
+        },
+        "sendEmail": {
+          "type": "boolean",
+          "description": "Sends an activation email to the user if `true`"
+        }
+      },
+      "required": [
+        "id"
+      ]
+    }
+  },
+  {
+    "name": "resetFactors",
+    "description": "Reset the factors. Resets all factors for the specified user. All MFA factor enrollments return to the unenrolled state. The user's status remains `ACTIVE`. This link is present only if the user is currently enrolled in one or more MFA factors.",
+    "tags": [
+      "UserLifecycle"
+    ],
+    "method": "POST",
+    "pathTemplate": "/api/v1/users/{id}/lifecycle/reset_factors",
+    "pathParams": [
+      "id"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "An ID, login, or login shortname (as long as the shortname is unambiguous) of an existing Okta user"
+        }
+      },
+      "required": [
+        "id"
+      ]
+    }
+  },
+  {
+    "name": "resetPassword",
+    "description": "Reset a password. Resets a password. Generates a one-time token (OTT) that you can use to reset a user's password. You can automatically email the OTT link to the user or return the OTT to the API caller and distribute using a custom flow. This operation transitions the user to the `RECOVERY` status. The user is then not able to sign in or initiate a forgot password flow until they complete the reset flow. This operation provides an option to delete all the user's sessions. However, if the requ…",
+    "tags": [
+      "UserCred"
+    ],
+    "method": "POST",
+    "pathTemplate": "/api/v1/users/{id}/lifecycle/reset_password",
+    "pathParams": [
+      "id"
+    ],
+    "queryParams": [
+      "sendEmail",
+      "revokeSessions"
+    ],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "An ID, login, or login shortname (as long as the shortname is unambiguous) of an existing Okta user"
+        },
+        "sendEmail": {
+          "type": "boolean",
+          "description": ""
+        },
+        "revokeSessions": {
+          "type": "boolean",
+          "description": "Revokes all user sessions, except for the current session, if set to `true`"
+        }
+      },
+      "required": [
+        "id",
+        "sendEmail"
+      ]
+    }
+  },
+  {
+    "name": "suspendUser",
+    "description": "Suspend a user. Suspends a user. Perform this operation only on users with an `ACTIVE` status. The user has a `SUSPENDED` status when the process completes. Suspended users can't sign in to Okta. They can only be unsuspended or deactivated. Their group and app assignments are retained.",
+    "tags": [
+      "UserLifecycle"
+    ],
+    "method": "POST",
+    "pathTemplate": "/api/v1/users/{id}/lifecycle/suspend",
+    "pathParams": [
+      "id"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "An ID, login, or login shortname (as long as the shortname is unambiguous) of an existing Okta user"
+        }
+      },
+      "required": [
+        "id"
+      ]
+    }
+  },
+  {
+    "name": "unlockUser",
+    "description": "Unlock a user. Unlocks a user with a `LOCKED_OUT` status or unlocks a user with an `ACTIVE` status that's blocked from unknown devices. Unlocked users have an `ACTIVE` status and can sign in with their current password. > **Note:** This operation works with Okta-sourced users. It doesn't support directory-sourced accounts such as Active Directory.",
+    "tags": [
+      "UserLifecycle"
+    ],
+    "method": "POST",
+    "pathTemplate": "/api/v1/users/{id}/lifecycle/unlock",
+    "pathParams": [
+      "id"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "An ID, login, or login shortname (as long as the shortname is unambiguous) of an existing Okta user"
+        }
+      },
+      "required": [
+        "id"
+      ]
+    }
+  },
+  {
+    "name": "unsuspendUser",
+    "description": "Unsuspend a user. Unsuspends a user and returns them to the `ACTIVE` state. This operation can only be performed on users that have a `SUSPENDED` status.",
+    "tags": [
+      "UserLifecycle"
+    ],
+    "method": "POST",
+    "pathTemplate": "/api/v1/users/{id}/lifecycle/unsuspend",
+    "pathParams": [
+      "id"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "An ID, login, or login shortname (as long as the shortname is unambiguous) of an existing Okta user"
+        }
+      },
+      "required": [
+        "id"
+      ]
+    }
+  },
+  {
+    "name": "assignLinkedObjectValueForPrimary",
+    "description": "Assign a linked object value for primary. Assigns the first user as the `associated` and the second user as the `primary` for the specified relationship. If the first user is already associated with a different `primary` for this relationship, the previous link is removed. A linked object relationship can specify only one primary user for an associated user.",
+    "tags": [
+      "UserLinkedObject"
+    ],
+    "method": "PUT",
+    "pathTemplate": "/api/v1/users/{userIdOrLogin}/linkedObjects/{primaryRelationshipName}/{primaryUserId}",
+    "pathParams": [
+      "userIdOrLogin",
+      "primaryRelationshipName",
+      "primaryUserId"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "userIdOrLogin": {
+          "type": "string",
+          "description": "If for the `self` link, this is the ID of the user for whom you want to get the primary user ID. If for the `associated` relation, this is the user ID or login value of the user assigned the associated relationship. This can be `me` to represent the current session user."
+        },
+        "primaryRelationshipName": {
+          "type": "string",
+          "description": "Name of the `primary` relationship being assigned"
+        },
+        "primaryUserId": {
+          "type": "string",
+          "description": "User ID to be assigned to the `primary` relationship for the `associated` user"
+        }
+      },
+      "required": [
+        "userIdOrLogin",
+        "primaryRelationshipName",
+        "primaryUserId"
+      ]
+    }
+  },
+  {
+    "name": "listLinkedObjectsForUser",
+    "description": "List the primary or all of the associated linked object values. Lists either the `self` link for the primary user or all associated users in the relationship specified by `relationshipName`. If the specified user isn't associated in any relationship, an empty array is returned. Use `me` instead of `id` to specify the current session user.",
+    "tags": [
+      "UserLinkedObject"
+    ],
+    "method": "GET",
+    "pathTemplate": "/api/v1/users/{userIdOrLogin}/linkedObjects/{relationshipName}",
+    "pathParams": [
+      "userIdOrLogin",
+      "relationshipName"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "userIdOrLogin": {
+          "type": "string",
+          "description": "If for the `self` link, this is the ID of the user for whom you want to get the primary user ID. If for the `associated` relation, this is the user ID or login value of the user assigned the associated relationship. This can be `me` to represent the current session user."
+        },
+        "relationshipName": {
+          "type": "string",
+          "description": "Name of the `primary` or `associated` relationship being queried"
+        }
+      },
+      "required": [
+        "userIdOrLogin",
+        "relationshipName"
+      ]
+    }
+  },
+  {
+    "name": "deleteLinkedObjectForUser",
+    "description": "Delete a linked object value. Deletes any existing relationship between the `associated` and `primary` user. For the `associated` user, this is specified by the ID. The `primary` name specifies the relationship. The operation is successful if the relationship is deleted. The operation is also successful if the specified user isn't in the `associated` relationship for any instance of the specified `primary` and thus, no relationship is found.",
+    "tags": [
+      "UserLinkedObject"
+    ],
+    "method": "DELETE",
+    "pathTemplate": "/api/v1/users/{userIdOrLogin}/linkedObjects/{relationshipName}",
+    "pathParams": [
+      "userIdOrLogin",
+      "relationshipName"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "userIdOrLogin": {
+          "type": "string",
+          "description": "If for the `self` link, this is the ID of the user for whom you want to get the primary user ID. If for the `associated` relation, this is the user ID or login value of the user assigned the associated relationship. This can be `me` to represent the current session user."
+        },
+        "relationshipName": {
+          "type": "string",
+          "description": "Name of the `primary` or `associated` relationship being queried"
+        }
+      },
+      "required": [
+        "userIdOrLogin",
+        "relationshipName"
+      ]
+    }
+  },
+  {
+    "name": "listAuthenticatorEnrollments",
+    "description": "List all authenticator enrollments. Lists all authenticator enrollments of the specified user",
+    "tags": [
+      "UserAuthenticatorEnrollments"
+    ],
+    "method": "GET",
+    "pathTemplate": "/api/v1/users/{userId}/authenticator-enrollments",
+    "pathParams": [
+      "userId"
+    ],
+    "queryParams": [
+      "discloseIdentifiers"
+    ],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "description": "ID of an existing Okta user"
+        },
+        "discloseIdentifiers": {
+          "type": "array",
+          "description": "Indicates whether or not the identifier of an authenticator enrollment is disclosed or anonymized. If it's included in the operation query, then the identifier of the authenticator enrollment (the actual phone number, for example) is included in the response."
+        }
+      },
+      "required": [
+        "userId"
+      ]
+    }
+  },
+  {
+    "name": "createAuthenticatorEnrollment",
+    "description": "Create an auto-activated Phone authenticator enrollment. Creates a Phone authenticator enrollment that's automatically activated",
+    "tags": [
+      "UserAuthenticatorEnrollments"
+    ],
+    "method": "POST",
+    "pathTemplate": "/api/v1/users/{userId}/authenticator-enrollments/phone",
+    "pathParams": [
+      "userId"
+    ],
+    "queryParams": [],
+    "hasBody": true,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "description": "ID of an existing Okta user"
+        },
+        "requestBody": {
+          "type": "object",
+          "description": "The JSON request body. Refer to the Okta API docs for the schema."
+        }
+      },
+      "required": [
+        "userId"
+      ]
+    }
+  },
+  {
+    "name": "createTacAuthenticatorEnrollment",
+    "description": "Create an auto-activated TAC authenticator enrollment. Creates an auto-activated Temporary access code (TAC) authenticator enrollment",
+    "tags": [
+      "UserAuthenticatorEnrollments"
+    ],
+    "method": "POST",
+    "pathTemplate": "/api/v1/users/{userId}/authenticator-enrollments/tac",
+    "pathParams": [
+      "userId"
+    ],
+    "queryParams": [],
+    "hasBody": true,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "description": "ID of an existing Okta user"
+        },
+        "requestBody": {
+          "type": "object",
+          "description": "The JSON request body. Refer to the Okta API docs for the schema."
+        }
+      },
+      "required": [
+        "userId"
+      ]
+    }
+  },
+  {
+    "name": "getAuthenticatorEnrollment",
+    "description": "Retrieve an authenticator enrollment. Retrieves a user's authenticator enrollment by `enrollmentId`",
+    "tags": [
+      "UserAuthenticatorEnrollments"
+    ],
+    "method": "GET",
+    "pathTemplate": "/api/v1/users/{userId}/authenticator-enrollments/{enrollmentId}",
+    "pathParams": [
+      "userId",
+      "enrollmentId"
+    ],
+    "queryParams": [
+      "discloseIdentifiers"
+    ],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "description": "ID of an existing Okta user"
+        },
+        "enrollmentId": {
+          "type": "string",
+          "description": "Unique identifier of an enrollment"
+        },
+        "discloseIdentifiers": {
+          "type": "array",
+          "description": "Indicates whether or not the identifier of an authenticator enrollment is disclosed or anonymized. If it's included in the operation query, then the identifier of the authenticator enrollment (the actual phone number, for example) is included in the response."
+        }
+      },
+      "required": [
+        "userId",
+        "enrollmentId"
+      ]
+    }
+  },
+  {
+    "name": "deleteAuthenticatorEnrollment",
+    "description": "Delete an authenticator enrollment. Deletes an existing enrollment for the specified user. The user can enroll the authenticator again.",
+    "tags": [
+      "UserAuthenticatorEnrollments"
+    ],
+    "method": "DELETE",
+    "pathTemplate": "/api/v1/users/{userId}/authenticator-enrollments/{enrollmentId}",
+    "pathParams": [
+      "userId",
+      "enrollmentId"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "description": "ID of an existing Okta user"
+        },
+        "enrollmentId": {
+          "type": "string",
+          "description": "Unique identifier of an enrollment"
+        }
+      },
+      "required": [
+        "userId",
+        "enrollmentId"
+      ]
+    }
+  },
+  {
+    "name": "getUserClassification",
+    "description": "Retrieve a user's classification. Retrieves a user's classification",
+    "tags": [
+      "UserClassification"
+    ],
+    "method": "GET",
+    "pathTemplate": "/api/v1/users/{userId}/classification",
+    "pathParams": [
+      "userId"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "description": "ID of an existing Okta user"
+        }
+      },
+      "required": [
+        "userId"
+      ]
+    }
+  },
+  {
+    "name": "replaceUserClassification",
+    "description": "Replace the user's classification. Replaces the user's classification",
+    "tags": [
+      "UserClassification"
+    ],
+    "method": "PUT",
+    "pathTemplate": "/api/v1/users/{userId}/classification",
+    "pathParams": [
+      "userId"
+    ],
+    "queryParams": [],
+    "hasBody": true,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "description": "ID of an existing Okta user"
+        },
+        "requestBody": {
+          "type": "object",
+          "description": "The JSON request body. Refer to the Okta API docs for the schema."
+        }
+      },
+      "required": [
+        "userId",
+        "requestBody"
+      ]
+    }
+  },
+  {
+    "name": "listUserClients",
+    "description": "List all clients. Lists all client resources for which the specified user has grants or tokens. > **Note:** To list all client resources for which a specified authorization server has tokens, use the [List all client resources for an authorization server in the Authorization Servers API](/openapi/okta-management/management/tag/AuthorizationServerClients/#tag/AuthorizationServerClients/operation/listOAuth2ClientsForAuthorizationServer).",
+    "tags": [
+      "UserResources"
+    ],
+    "method": "GET",
+    "pathTemplate": "/api/v1/users/{userId}/clients",
+    "pathParams": [
+      "userId"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "description": "ID of an existing Okta user"
+        }
+      },
+      "required": [
+        "userId"
+      ]
+    }
+  },
+  {
+    "name": "listGrantsForUserAndClient",
+    "description": "List all grants for a client. Lists all grants for a specified user and client",
+    "tags": [
+      "UserGrant"
+    ],
+    "method": "GET",
+    "pathTemplate": "/api/v1/users/{userId}/clients/{clientId}/grants",
+    "pathParams": [
+      "userId",
+      "clientId"
+    ],
+    "queryParams": [
+      "expand",
+      "after",
+      "limit"
+    ],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "description": "ID of an existing Okta user"
+        },
+        "clientId": {
+          "type": "string",
+          "description": "`client_id` of the app"
+        },
+        "expand": {
+          "type": "string",
+          "description": "Valid value: `scope`. If specified, scope details are included in the `_embedded` attribute."
+        },
+        "after": {
+          "type": "string",
+          "description": "The cursor to use for pagination. It is an opaque string that specifies your current location in the list and is obtained from the `Link` response header. See [Pagination](https://developer.okta.com/docs/api/#pagination)."
+        },
+        "limit": {
+          "type": "number",
+          "description": "Specifies the number of tokens to return"
+        }
+      },
+      "required": [
+        "userId",
+        "clientId"
+      ]
+    }
+  },
+  {
+    "name": "revokeGrantsForUserAndClient",
+    "description": "Revoke all grants for a client. Revokes all grants for the specified user and client",
+    "tags": [
+      "UserGrant"
+    ],
+    "method": "DELETE",
+    "pathTemplate": "/api/v1/users/{userId}/clients/{clientId}/grants",
+    "pathParams": [
+      "userId",
+      "clientId"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "description": "ID of an existing Okta user"
+        },
+        "clientId": {
+          "type": "string",
+          "description": "`client_id` of the app"
+        }
+      },
+      "required": [
+        "userId",
+        "clientId"
+      ]
+    }
+  },
+  {
+    "name": "listRefreshTokensForUserAndClient",
+    "description": "List all refresh tokens for a client. Lists all refresh tokens issued for the specified user and client",
+    "tags": [
+      "UserOAuth"
+    ],
+    "method": "GET",
+    "pathTemplate": "/api/v1/users/{userId}/clients/{clientId}/tokens",
+    "pathParams": [
+      "userId",
+      "clientId"
+    ],
+    "queryParams": [
+      "expand",
+      "after",
+      "limit"
+    ],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "description": "ID of an existing Okta user"
+        },
+        "clientId": {
+          "type": "string",
+          "description": "`client_id` of the app"
+        },
+        "expand": {
+          "type": "string",
+          "description": "Valid value: `scope`. If specified, scope details are included in the `_embedded` attribute."
+        },
+        "after": {
+          "type": "string",
+          "description": "The cursor to use for pagination. It is an opaque string that specifies your current location in the list and is obtained from the `Link` response header. See [Pagination](https://developer.okta.com/docs/api/#pagination)."
+        },
+        "limit": {
+          "type": "number",
+          "description": "Specifies the number of tokens to return"
+        }
+      },
+      "required": [
+        "userId",
+        "clientId"
+      ]
+    }
+  },
+  {
+    "name": "revokeTokensForUserAndClient",
+    "description": "Revoke all refresh tokens for a client. Revokes all refresh tokens issued for the specified user and client",
+    "tags": [
+      "UserOAuth"
+    ],
+    "method": "DELETE",
+    "pathTemplate": "/api/v1/users/{userId}/clients/{clientId}/tokens",
+    "pathParams": [
+      "userId",
+      "clientId"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "description": "ID of an existing Okta user"
+        },
+        "clientId": {
+          "type": "string",
+          "description": "`client_id` of the app"
+        }
+      },
+      "required": [
+        "userId",
+        "clientId"
+      ]
+    }
+  },
+  {
+    "name": "getRefreshTokenForUserAndClient",
+    "description": "Retrieve a refresh token for a client. Retrieves a refresh token issued for the specified user and client",
+    "tags": [
+      "UserOAuth"
+    ],
+    "method": "GET",
+    "pathTemplate": "/api/v1/users/{userId}/clients/{clientId}/tokens/{tokenId}",
+    "pathParams": [
+      "userId",
+      "clientId",
+      "tokenId"
+    ],
+    "queryParams": [
+      "expand"
+    ],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "description": "ID of an existing Okta user"
+        },
+        "clientId": {
+          "type": "string",
+          "description": "`client_id` of the app"
+        },
+        "tokenId": {
+          "type": "string",
+          "description": "`id` of Token"
+        },
+        "expand": {
+          "type": "string",
+          "description": "Valid value: `scope`. If specified, scope details are included in the `_embedded` attribute."
+        }
+      },
+      "required": [
+        "userId",
+        "clientId",
+        "tokenId"
+      ]
+    }
+  },
+  {
+    "name": "revokeTokenForUserAndClient",
+    "description": "Revoke a token for a client. Revokes the specified refresh and access tokens",
+    "tags": [
+      "UserOAuth"
+    ],
+    "method": "DELETE",
+    "pathTemplate": "/api/v1/users/{userId}/clients/{clientId}/tokens/{tokenId}",
+    "pathParams": [
+      "userId",
+      "clientId",
+      "tokenId"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "description": "ID of an existing Okta user"
+        },
+        "clientId": {
+          "type": "string",
+          "description": "`client_id` of the app"
+        },
+        "tokenId": {
+          "type": "string",
+          "description": "`id` of Token"
+        }
+      },
+      "required": [
+        "userId",
+        "clientId",
+        "tokenId"
+      ]
+    }
+  },
+  {
+    "name": "changePassword",
+    "description": "Update password. Updates a user's password by validating the user's current password. This operation provides an option to delete all the sessions of the specified user. However, if the request is made in the context of a session owned by the specified user, that session isn't cleared. You can only perform this operation on users in `STAGED`, `ACTIVE`, `PASSWORD_EXPIRED`, or `RECOVERY` status that have a valid [password credential](https://developer.okta.com/docs/api/openapi/okta-management/man…",
+    "tags": [
+      "UserCred"
+    ],
+    "method": "POST",
+    "pathTemplate": "/api/v1/users/{userId}/credentials/change_password",
+    "pathParams": [
+      "userId"
+    ],
+    "queryParams": [
+      "strict"
+    ],
+    "hasBody": true,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "description": "ID of an existing Okta user"
+        },
+        "strict": {
+          "type": "boolean",
+          "description": "If true, validates against the password minimum age policy"
+        },
+        "requestBody": {
+          "type": "object",
+          "description": "The JSON request body. Refer to the Okta API docs for the schema."
+        }
+      },
+      "required": [
+        "userId",
+        "requestBody"
+      ]
+    }
+  },
+  {
+    "name": "changeRecoveryQuestion",
+    "description": "Update recovery question. Updates a user's recovery question and answer credential by validating the user's current password. You can only perform this operation on users in `STAGED`, `ACTIVE`, or `RECOVERY` status that have a valid [password credential](https://developer.okta.com/docs/api/openapi/okta-management/management/tag/User/#tag/User/operation/createUser!path=credentials/password&t=request).",
+    "tags": [
+      "UserCred"
+    ],
+    "method": "POST",
+    "pathTemplate": "/api/v1/users/{userId}/credentials/change_recovery_question",
+    "pathParams": [
+      "userId"
+    ],
+    "queryParams": [],
+    "hasBody": true,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "description": "ID of an existing Okta user"
+        },
+        "requestBody": {
+          "type": "object",
+          "description": "The JSON request body. Refer to the Okta API docs for the schema."
+        }
+      },
+      "required": [
+        "userId",
+        "requestBody"
+      ]
+    }
+  },
+  {
+    "name": "forgotPassword",
+    "description": "Start forgot password flow. Starts the forgot password flow. Generates a one-time token (OTT) that you can use to reset a user's password. The user must validate their security question's answer when visiting the reset link. Perform this operation only on users with an `ACTIVE` status and a valid [recovery question credential](https://developer.okta.com/docs/api/openapi/okta-management/management/tag/User/#tag/User/operation/createUser!path=credentials/recovery_question&t=request). > **Note:** …",
+    "tags": [
+      "UserCred"
+    ],
+    "method": "POST",
+    "pathTemplate": "/api/v1/users/{userId}/credentials/forgot_password",
+    "pathParams": [
+      "userId"
+    ],
+    "queryParams": [
+      "sendEmail"
+    ],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "description": "ID of an existing Okta user"
+        },
+        "sendEmail": {
+          "type": "boolean",
+          "description": "Sends a forgot password email to the user if `true`"
+        }
+      },
+      "required": [
+        "userId"
+      ]
+    }
+  },
+  {
+    "name": "forgotPasswordSetNewPassword",
+    "description": "Reset password with recovery question. Resets the user's password to the specified password if the provided answer to the recovery question is correct. You must include the recovery question answer with the submission.",
+    "tags": [
+      "UserCred"
+    ],
+    "method": "POST",
+    "pathTemplate": "/api/v1/users/{userId}/credentials/forgot_password_recovery_question",
+    "pathParams": [
+      "userId"
+    ],
+    "queryParams": [
+      "sendEmail"
+    ],
+    "hasBody": true,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "description": "ID of an existing Okta user"
+        },
+        "sendEmail": {
+          "type": "boolean",
+          "description": ""
+        },
+        "requestBody": {
+          "type": "object",
+          "description": "The JSON request body. Refer to the Okta API docs for the schema."
+        }
+      },
+      "required": [
+        "userId",
+        "requestBody"
+      ]
+    }
+  },
+  {
+    "name": "listUserDevices",
+    "description": "List all devices. Lists all devices enrolled by a user. > **Note:** To list all devices registered to an org, use the [List all devices endpoint in the Devices API](/openapi/okta-management/management/tag/Device/#tag/Device/operation/listDevices).",
+    "tags": [
+      "UserResources"
+    ],
+    "method": "GET",
+    "pathTemplate": "/api/v1/users/{userId}/devices",
+    "pathParams": [
+      "userId"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "description": "ID of an existing Okta user"
+        }
+      },
+      "required": [
+        "userId"
+      ]
+    }
+  },
+  {
+    "name": "listFactors",
+    "description": "List all enrolled factors. Lists all enrolled factors for the specified user that are included in the highest priority [authenticator enrollment policy](https://developer.okta.com/docs/api/openapi/okta-management/management/tag/Policy/) that applies to the user. Only enrolled factors that are `REQUIRED` or `OPTIONAL` in the highest priority authenticator enrollment policy can be returned. > **Note:** When admins use this endpoint for other users, the authenticator enrollment policy that's evalu…",
+    "tags": [
+      "UserFactor"
+    ],
+    "method": "GET",
+    "pathTemplate": "/api/v1/users/{userId}/factors",
+    "pathParams": [
+      "userId"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "description": "ID of an existing Okta user"
+        }
+      },
+      "required": [
+        "userId"
+      ]
+    }
+  },
+  {
+    "name": "enrollFactor",
+    "description": "Enroll a factor. Enrolls a supported factor for the specified user > **Notes:** > * All responses return the enrolled factor with a status of either `PENDING_ACTIVATION` or `ACTIVE`. > * You can't use the Factors API to enroll Okta Fastpass (`signed_nonce`) for a user. See [Configure Okta Fastpass](https://help.okta.com/okta_help.htm?type=oie&id=ext-fp-configure). #### Additional SMS/Call factor information * **Rate limits**: Okta may return a `429 Too Many Requests` status code if you attempt …",
+    "tags": [
+      "UserFactor"
+    ],
+    "method": "POST",
+    "pathTemplate": "/api/v1/users/{userId}/factors",
+    "pathParams": [
+      "userId"
+    ],
+    "queryParams": [
+      "updatePhone",
+      "templateId",
+      "tokenLifetimeSeconds",
+      "activate"
+    ],
+    "hasBody": true,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "description": "ID of an existing Okta user"
+        },
+        "updatePhone": {
+          "type": "boolean",
+          "description": "If `true`, indicates that you are replacing the currently registered phone number for the specified user. This parameter is ignored if the existing phone number is used by an activated factor."
+        },
+        "templateId": {
+          "type": "string",
+          "description": "ID of an existing custom SMS template. See the [SMS Templates API](../Template). This parameter is only used by `sms` factors. If the provided ID doesn't exist, the default template is used instead."
+        },
+        "tokenLifetimeSeconds": {
+          "type": "number",
+          "description": "Defines how long the token remains valid"
+        },
+        "activate": {
+          "type": "boolean",
+          "description": "If `true`, the factor is immediately activated as part of the enrollment. An activation process isn't required. Currently auto-activation is supported by `sms`, `call`, `email` and `token:hotp` (Custom TOTP) factors."
+        },
+        "requestBody": {
+          "type": "object",
+          "description": "The JSON request body. Refer to the Okta API docs for the schema."
+        }
+      },
+      "required": [
+        "userId",
+        "requestBody"
+      ]
+    }
+  },
+  {
+    "name": "listSupportedFactors",
+    "description": "List all supported factors. Lists all the supported factors that can be enrolled for the specified user that are included in the highest priority [authenticator enrollment policy](https://developer.okta.com/docs/api/openapi/okta-management/management/tag/Policy/) that applies to the user. Only factors that are `REQUIRED` or `OPTIONAL` in the highest priority authenticator enrollment policy can be returned. > **Note:** When admins use this endpoint for other users, the authenticator enrollment p…",
+    "tags": [
+      "UserFactor"
+    ],
+    "method": "GET",
+    "pathTemplate": "/api/v1/users/{userId}/factors/catalog",
+    "pathParams": [
+      "userId"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "description": "ID of an existing Okta user"
+        }
+      },
+      "required": [
+        "userId"
+      ]
+    }
+  },
+  {
+    "name": "listSupportedSecurityQuestions",
+    "description": "List all supported security questions. Lists all available security questions for the specified user",
+    "tags": [
+      "UserFactor"
+    ],
+    "method": "GET",
+    "pathTemplate": "/api/v1/users/{userId}/factors/questions",
+    "pathParams": [
+      "userId"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "description": "ID of an existing Okta user"
+        }
+      },
+      "required": [
+        "userId"
+      ]
+    }
+  },
+  {
+    "name": "getFactor",
+    "description": "Retrieve a factor. Retrieves an existing factor for the specified user",
+    "tags": [
+      "UserFactor"
+    ],
+    "method": "GET",
+    "pathTemplate": "/api/v1/users/{userId}/factors/{factorId}",
+    "pathParams": [
+      "userId",
+      "factorId"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "description": "ID of an existing Okta user"
+        },
+        "factorId": {
+          "type": "string",
+          "description": "ID of an existing user factor"
+        }
+      },
+      "required": [
+        "userId",
+        "factorId"
+      ]
+    }
+  },
+  {
+    "name": "unenrollFactor",
+    "description": "Unenroll a factor. Unenrolls an existing factor for the specified user. You can't unenroll a factor from a deactivated user. Unenrolling a factor allows the user to enroll a new factor. > **Note:** If you unenroll the `push` or the `signed_nonce` factors, Okta also unenrolls any other `totp`, `signed_nonce`, or Okta Verify `push` factors associated with the user.",
+    "tags": [
+      "UserFactor"
+    ],
+    "method": "DELETE",
+    "pathTemplate": "/api/v1/users/{userId}/factors/{factorId}",
+    "pathParams": [
+      "userId",
+      "factorId"
+    ],
+    "queryParams": [
+      "removeRecoveryEnrollment"
+    ],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "description": "ID of an existing Okta user"
+        },
+        "factorId": {
+          "type": "string",
+          "description": "ID of an existing user factor"
+        },
+        "removeRecoveryEnrollment": {
+          "type": "boolean",
+          "description": "If `true`, removes the phone number as both a recovery method and a factor. This parameter is only used for the `sms` and `call` factors."
+        }
+      },
+      "required": [
+        "userId",
+        "factorId"
+      ]
+    }
+  },
+  {
+    "name": "activateFactor",
+    "description": "Activate a factor. Activates a factor. Some factors (`call`, `email`, `push`, `sms`, `token:software:totp`, `u2f`, and `webauthn`) require activation to complete the enrollment process. Okta enforces a rate limit of five activation attempts within five minutes. After a user exceeds the rate limit, Okta returns an error message. > **Notes:** > * If the user exceeds their SMS, call, or email factor activation rate limit, then an [OTP resend request](./#tag/UserFactor/operation/resendEnrollFactor)…",
+    "tags": [
+      "UserFactor"
+    ],
+    "method": "POST",
+    "pathTemplate": "/api/v1/users/{userId}/factors/{factorId}/lifecycle/activate",
+    "pathParams": [
+      "userId",
+      "factorId"
+    ],
+    "queryParams": [],
+    "hasBody": true,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "description": "ID of an existing Okta user"
+        },
+        "factorId": {
+          "type": "string",
+          "description": "ID of an existing user factor"
+        },
+        "requestBody": {
+          "type": "object",
+          "description": "The JSON request body. Refer to the Okta API docs for the schema."
+        }
+      },
+      "required": [
+        "userId",
+        "factorId"
+      ]
+    }
+  },
+  {
+    "name": "resendEnrollFactor",
+    "description": "Resend a factor enrollment. Resends an `sms`, `call`, or `email` factor challenge as part of an enrollment flow. For `call` and `sms` factors, Okta enforces a rate limit of one OTP challenge per device every 30 seconds. You can configure your `sms` and `call` factors to use a third-party telephony provider. See the [Telephony inline hook reference](https://developer.okta.com/docs/reference/telephony-hook/). Okta alternates between SMS providers with every resend request to ensure delivery of SM…",
+    "tags": [
+      "UserFactor"
+    ],
+    "method": "POST",
+    "pathTemplate": "/api/v1/users/{userId}/factors/{factorId}/resend",
+    "pathParams": [
+      "userId",
+      "factorId"
+    ],
+    "queryParams": [
+      "templateId"
+    ],
+    "hasBody": true,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "description": "ID of an existing Okta user"
+        },
+        "factorId": {
+          "type": "string",
+          "description": "ID of an existing user factor"
+        },
+        "templateId": {
+          "type": "string",
+          "description": "ID of an existing custom SMS template. See the [SMS Templates API](../Template). This parameter is only used by `sms` factors."
+        },
+        "requestBody": {
+          "type": "object",
+          "description": "The JSON request body. Refer to the Okta API docs for the schema."
+        }
+      },
+      "required": [
+        "userId",
+        "factorId",
+        "requestBody"
+      ]
+    }
+  },
+  {
+    "name": "getFactorTransactionStatus",
+    "description": "Retrieve a factor transaction status. Retrieves the status of a `push` factor verification transaction > **Note:** > The response body for a number matching push challenge to an Okta Verify `push` factor enrollment is different from the response body of a standard push challenge. > The number matching push challenge [response body](https://developer.okta.com/docs/api/openapi/okta-management/management/tag/UserFactor/#tag/UserFactor/operation/getFactorTransactionStatus!c=200&path=1/_embedded&t=r…",
+    "tags": [
+      "UserFactor"
+    ],
+    "method": "GET",
+    "pathTemplate": "/api/v1/users/{userId}/factors/{factorId}/transactions/{transactionId}",
+    "pathParams": [
+      "userId",
+      "factorId",
+      "transactionId"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "description": "ID of an existing Okta user"
+        },
+        "factorId": {
+          "type": "string",
+          "description": "ID of an existing user factor"
+        },
+        "transactionId": {
+          "type": "string",
+          "description": "ID of an existing factor verification transaction"
+        }
+      },
+      "required": [
+        "userId",
+        "factorId",
+        "transactionId"
+      ]
+    }
+  },
+  {
+    "name": "verifyFactor",
+    "description": "Verify a factor. Verifies an OTP for a factor. Some factors (`call`, `email`, `push`, `sms`, `u2f`, and `webauthn`) must first issue a challenge before you can verify the factor. Do this by making a request without a body. After a challenge is issued, make another request to verify the factor. > **Notes:** > - You can send standard push challenges or number matching push challenges to Okta Verify `push` factor enrollments. Use a [request body](https://developer.okta.com/docs/api/openapi/okta-ma…",
+    "tags": [
+      "UserFactor"
+    ],
+    "method": "POST",
+    "pathTemplate": "/api/v1/users/{userId}/factors/{factorId}/verify",
+    "pathParams": [
+      "userId",
+      "factorId"
+    ],
+    "queryParams": [
+      "templateId",
+      "tokenLifetimeSeconds"
+    ],
+    "hasBody": true,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "description": "ID of an existing Okta user"
+        },
+        "factorId": {
+          "type": "string",
+          "description": "ID of an existing user factor"
+        },
+        "templateId": {
+          "type": "string",
+          "description": "ID of an existing custom SMS template. See the [SMS Templates API](../Template). This parameter is only used by `sms` factors."
+        },
+        "tokenLifetimeSeconds": {
+          "type": "number",
+          "description": "Defines how long the token remains valid"
+        },
+        "requestBody": {
+          "type": "object",
+          "description": "The JSON request body. Refer to the Okta API docs for the schema."
+        }
+      },
+      "required": [
+        "userId",
+        "factorId"
+      ]
+    }
+  },
+  {
+    "name": "listUserGrants",
+    "description": "List all user grants. Lists all grants for the specified user",
+    "tags": [
+      "UserGrant"
+    ],
+    "method": "GET",
+    "pathTemplate": "/api/v1/users/{userId}/grants",
+    "pathParams": [
+      "userId"
+    ],
+    "queryParams": [
+      "scopeId",
+      "expand",
+      "after",
+      "limit"
+    ],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "description": "ID of an existing Okta user"
+        },
+        "scopeId": {
+          "type": "string",
+          "description": "The scope ID to filter on"
+        },
+        "expand": {
+          "type": "string",
+          "description": "Valid value: `scope`. If specified, scope details are included in the `_embedded` attribute."
+        },
+        "after": {
+          "type": "string",
+          "description": "The cursor to use for pagination. It is an opaque string that specifies your current location in the list and is obtained from the `Link` response header. See [Pagination](https://developer.okta.com/docs/api/#pagination)."
+        },
+        "limit": {
+          "type": "number",
+          "description": "Specifies the number of grants to return"
+        }
+      },
+      "required": [
+        "userId"
+      ]
+    }
+  },
+  {
+    "name": "revokeUserGrants",
+    "description": "Revoke all user grants. Revokes all grants for a specified user",
+    "tags": [
+      "UserGrant"
+    ],
+    "method": "DELETE",
+    "pathTemplate": "/api/v1/users/{userId}/grants",
+    "pathParams": [
+      "userId"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "description": "ID of an existing Okta user"
+        }
+      },
+      "required": [
+        "userId"
+      ]
+    }
+  },
+  {
+    "name": "getUserGrant",
+    "description": "Retrieve a user grant. Retrieves a grant for the specified user",
+    "tags": [
+      "UserGrant"
+    ],
+    "method": "GET",
+    "pathTemplate": "/api/v1/users/{userId}/grants/{grantId}",
+    "pathParams": [
+      "userId",
+      "grantId"
+    ],
+    "queryParams": [
+      "expand"
+    ],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "description": "ID of an existing Okta user"
+        },
+        "grantId": {
+          "type": "string",
+          "description": "Grant ID"
+        },
+        "expand": {
+          "type": "string",
+          "description": "Valid value: `scope`. If specified, scope details are included in the `_embedded` attribute."
+        }
+      },
+      "required": [
+        "userId",
+        "grantId"
+      ]
+    }
+  },
+  {
+    "name": "revokeUserGrant",
+    "description": "Revoke a user grant. Revokes one grant for a specified user",
+    "tags": [
+      "UserGrant"
+    ],
+    "method": "DELETE",
+    "pathTemplate": "/api/v1/users/{userId}/grants/{grantId}",
+    "pathParams": [
+      "userId",
+      "grantId"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "description": "ID of an existing Okta user"
+        },
+        "grantId": {
+          "type": "string",
+          "description": "Grant ID"
+        }
+      },
+      "required": [
+        "userId",
+        "grantId"
+      ]
+    }
+  },
+  {
+    "name": "getUserRisk",
+    "description": "Retrieve the user's risk. Retrieves the user risk object for a user ID",
+    "tags": [
+      "UserRisk"
+    ],
+    "method": "GET",
+    "pathTemplate": "/api/v1/users/{userId}/risk",
+    "pathParams": [
+      "userId"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "description": "ID of an existing Okta user"
+        }
+      },
+      "required": [
+        "userId"
+      ]
+    }
+  },
+  {
+    "name": "upsertUserRisk",
+    "description": "Upsert the user's risk. Upserts (creates or updates) the user risk object for a user ID",
+    "tags": [
+      "UserRisk"
+    ],
+    "method": "PUT",
+    "pathTemplate": "/api/v1/users/{userId}/risk",
+    "pathParams": [
+      "userId"
+    ],
+    "queryParams": [],
+    "hasBody": true,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "description": "ID of an existing Okta user"
+        },
+        "requestBody": {
+          "type": "object",
+          "description": "The JSON request body. Refer to the Okta API docs for the schema."
+        }
+      },
+      "required": [
+        "userId",
+        "requestBody"
+      ]
+    }
+  },
+  {
+    "name": "revokeUserSessions",
+    "description": "Revoke all user sessions. Revokes all active identity provider sessions of the user. This forces the user to authenticate on the next operation. Optionally revokes OpenID Connect and OAuth refresh and access tokens issued to the user. You can also clear the user's remembered factors for all devices using the `forgetDevices` parameter. See [forgetDevices](https://developer.okta.com/docs/api/openapi/okta-management/management/tag/UserSessions/#tag/UserSessions/operation/revokeUserSessions!in=quer…",
+    "tags": [
+      "UserSessions"
+    ],
+    "method": "DELETE",
+    "pathTemplate": "/api/v1/users/{userId}/sessions",
+    "pathParams": [
+      "userId"
+    ],
+    "queryParams": [
+      "oauthTokens",
+      "forgetDevices"
+    ],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "description": "ID of an existing Okta user"
+        },
+        "oauthTokens": {
+          "type": "boolean",
+          "description": "Revokes issued OpenID Connect and OAuth refresh and access tokens"
+        },
+        "forgetDevices": {
+          "type": "boolean",
+          "description": "Clears the user's remembered factors for all devices. > **Note:** This parameter defaults to false in Classic Engine."
+        }
+      },
+      "required": [
+        "userId"
+      ]
+    }
+  }
+]

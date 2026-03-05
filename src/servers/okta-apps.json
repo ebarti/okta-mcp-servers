@@ -1,0 +1,2487 @@
+[
+  {
+    "name": "listApplications",
+    "description": "List all applications. Lists all apps in the org with pagination. A subset of apps can be returned that match a supported filter expression or query. The results are [paginated](/#pagination) according to the `limit` parameter. If there are multiple pages of results, the header contains a `next` link. Treat the link as an opaque value (follow it, don't parse it). > **Note:** To list all of a member's assigned app links, use the [List all assigned app links endpoint in the User Resources API](/o…",
+    "tags": [
+      "Application"
+    ],
+    "method": "GET",
+    "pathTemplate": "/api/v1/apps",
+    "pathParams": [],
+    "queryParams": [
+      "q",
+      "after",
+      "useOptimization",
+      "alwaysIncludeVpnSettings",
+      "limit",
+      "filter",
+      "expand",
+      "includeNonDeleted"
+    ],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "q": {
+          "type": "string",
+          "description": "Searches for apps with `name` or `label` properties that starts with the `q` value using the `startsWith` operation"
+        },
+        "after": {
+          "type": "string",
+          "description": "Specifies the [pagination](/#pagination) cursor for the next page of results. Treat this as an opaque value obtained through the `next` link relationship."
+        },
+        "useOptimization": {
+          "type": "boolean",
+          "description": "Specifies whether to use query optimization. If you specify `useOptimization=true` in the request query, the response contains a subset of app instance properties."
+        },
+        "alwaysIncludeVpnSettings": {
+          "type": "boolean",
+          "description": "Specifies whether to include the VPN configuration for existing notifications in the result, regardless of whether VPN notifications are configured"
+        },
+        "limit": {
+          "type": "number",
+          "description": "Specifies the number of results per page"
+        },
+        "filter": {
+          "type": "string",
+          "description": "Filters apps with a supported expression for a subset of properties. Filtering supports the following limited number of properties: `id`, `status`, `credentials.signing.kid`, `settings.slo.enabled`, or `name`. See [Filter](https://developer.okta.com/docs/api/#filter)."
+        },
+        "expand": {
+          "type": "string",
+          "description": "An optional parameter used for link expansion to embed more resources in the response. Only supports `expand=user/{userId}` and must be used with the `user.id eq \"{userId}\"` filter query for the same user. Returns the assigned [application user](/openapi/okta-management/management/tag/ApplicationUs…"
+        },
+        "includeNonDeleted": {
+          "type": "boolean",
+          "description": "Specifies whether to include non-active, but not deleted apps in the results"
+        }
+      }
+    }
+  },
+  {
+    "name": "createApplication",
+    "description": "Create an application. Creates an app instance in your Okta org. You can either create an OIN app instance or a custom app instance: * OIN app instances have prescribed `name` (key app definition) and `signOnMode` options. See the [OIN schemas](/openapi/okta-management/management/tag/Application/#tag/Application/schema/GoogleApplication) for the request body. * For custom app instances, select the [signOnMode](/openapi/okta-management/management/tag/Application/#tag/Application/operation/create…",
+    "tags": [
+      "Application"
+    ],
+    "method": "POST",
+    "pathTemplate": "/api/v1/apps",
+    "pathParams": [],
+    "queryParams": [
+      "activate"
+    ],
+    "hasBody": true,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "activate": {
+          "type": "boolean",
+          "description": "Executes activation lifecycle operation when creating the app"
+        },
+        "requestBody": {
+          "type": "object",
+          "description": "The JSON request body. Refer to the Okta API docs for the schema."
+        }
+      },
+      "required": [
+        "requestBody"
+      ]
+    }
+  },
+  {
+    "name": "getApplication",
+    "description": "Retrieve an application. Retrieves an application from your Okta organization by `id`",
+    "tags": [
+      "Application"
+    ],
+    "method": "GET",
+    "pathTemplate": "/api/v1/apps/{appId}",
+    "pathParams": [
+      "appId"
+    ],
+    "queryParams": [
+      "expand"
+    ],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "appId": {
+          "type": "string",
+          "description": "Application ID"
+        },
+        "expand": {
+          "type": "string",
+          "description": "An optional query parameter to return the specified [Application User](/openapi/okta-management/management/tag/ApplicationUsers/) in the `_embedded` property. Valid value: `expand=user/{userId}`"
+        }
+      },
+      "required": [
+        "appId"
+      ]
+    }
+  },
+  {
+    "name": "replaceApplication",
+    "description": "Replace an application. Replaces properties for an application > **Notes:** > * All required properties must be specified in the request body > * You can't modify system-assigned properties, such as `id`, `name`, `status`, `created`, and `lastUpdated`. The values for these properties in the PUT request body are ignored.",
+    "tags": [
+      "Application"
+    ],
+    "method": "PUT",
+    "pathTemplate": "/api/v1/apps/{appId}",
+    "pathParams": [
+      "appId"
+    ],
+    "queryParams": [],
+    "hasBody": true,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "appId": {
+          "type": "string",
+          "description": "Application ID"
+        },
+        "requestBody": {
+          "type": "object",
+          "description": "The JSON request body. Refer to the Okta API docs for the schema."
+        }
+      },
+      "required": [
+        "appId",
+        "requestBody"
+      ]
+    }
+  },
+  {
+    "name": "deleteApplication",
+    "description": "Delete an application. Deletes an inactive application",
+    "tags": [
+      "Application"
+    ],
+    "method": "DELETE",
+    "pathTemplate": "/api/v1/apps/{appId}",
+    "pathParams": [
+      "appId"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "appId": {
+          "type": "string",
+          "description": "Application ID"
+        }
+      },
+      "required": [
+        "appId"
+      ]
+    }
+  },
+  {
+    "name": "getDefaultProvisioningConnectionForApplication",
+    "description": "Retrieve the default provisioning connection. Retrieves the default provisioning connection for an app",
+    "tags": [
+      "ApplicationConnections"
+    ],
+    "method": "GET",
+    "pathTemplate": "/api/v1/apps/{appId}/connections/default",
+    "pathParams": [
+      "appId"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "appId": {
+          "type": "string",
+          "description": "Application ID"
+        }
+      },
+      "required": [
+        "appId"
+      ]
+    }
+  },
+  {
+    "name": "updateDefaultProvisioningConnectionForApplication",
+    "description": "Update the default provisioning connection. Updates the default provisioning connection for an app",
+    "tags": [
+      "ApplicationConnections"
+    ],
+    "method": "POST",
+    "pathTemplate": "/api/v1/apps/{appId}/connections/default",
+    "pathParams": [
+      "appId"
+    ],
+    "queryParams": [
+      "activate"
+    ],
+    "hasBody": true,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "appId": {
+          "type": "string",
+          "description": "Application ID"
+        },
+        "activate": {
+          "type": "boolean",
+          "description": "Activates the provisioning connection"
+        },
+        "requestBody": {
+          "type": "object",
+          "description": "The JSON request body. Refer to the Okta API docs for the schema."
+        }
+      },
+      "required": [
+        "appId",
+        "requestBody"
+      ]
+    }
+  },
+  {
+    "name": "getUserProvisioningConnectionJWKS",
+    "description": "Retrieve a JSON Web Key Set (JWKS) for the default provisioning connection. Retrieves a JWKS for the default provisioning connection. This can be used by the OAuth 2.0 app's `jwk_uri` property in the target org.",
+    "tags": [
+      "ApplicationConnections"
+    ],
+    "method": "GET",
+    "pathTemplate": "/api/v1/apps/{appId}/connections/default/jwks",
+    "pathParams": [
+      "appId"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "appId": {
+          "type": "string",
+          "description": "Application ID"
+        }
+      },
+      "required": [
+        "appId"
+      ]
+    }
+  },
+  {
+    "name": "activateDefaultProvisioningConnectionForApplication",
+    "description": "Activate the default provisioning connection. Activates the default provisioning connection for an app",
+    "tags": [
+      "ApplicationConnections"
+    ],
+    "method": "POST",
+    "pathTemplate": "/api/v1/apps/{appId}/connections/default/lifecycle/activate",
+    "pathParams": [
+      "appId"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "appId": {
+          "type": "string",
+          "description": "Application ID"
+        }
+      },
+      "required": [
+        "appId"
+      ]
+    }
+  },
+  {
+    "name": "deactivateDefaultProvisioningConnectionForApplication",
+    "description": "Deactivate the default provisioning connection. Deactivates the default provisioning connection for an app",
+    "tags": [
+      "ApplicationConnections"
+    ],
+    "method": "POST",
+    "pathTemplate": "/api/v1/apps/{appId}/connections/default/lifecycle/deactivate",
+    "pathParams": [
+      "appId"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "appId": {
+          "type": "string",
+          "description": "Application ID"
+        }
+      },
+      "required": [
+        "appId"
+      ]
+    }
+  },
+  {
+    "name": "listCsrsForApplication",
+    "description": "List all certificate signing requests. Lists all Certificate Signing Requests for an application",
+    "tags": [
+      "ApplicationSSOCredentialKey"
+    ],
+    "method": "GET",
+    "pathTemplate": "/api/v1/apps/{appId}/credentials/csrs",
+    "pathParams": [
+      "appId"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "appId": {
+          "type": "string",
+          "description": "Application ID"
+        }
+      },
+      "required": [
+        "appId"
+      ]
+    }
+  },
+  {
+    "name": "generateCsrForApplication",
+    "description": "Generate a certificate signing request. Generates a new key pair and returns the Certificate Signing Request(CSR) for it. The information in a CSR is used by the Certificate Authority (CA) to verify and create your certificate. It also contains the public key that is included in your certificate. Returns CSR in `pkcs#10` format if the `Accept` media type is `application/pkcs10` or a CSR object if the `Accept` media type is `application/json`. > **Note:** The key pair isn't listed in the Key Cre…",
+    "tags": [
+      "ApplicationSSOCredentialKey"
+    ],
+    "method": "POST",
+    "pathTemplate": "/api/v1/apps/{appId}/credentials/csrs",
+    "pathParams": [
+      "appId"
+    ],
+    "queryParams": [],
+    "hasBody": true,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "appId": {
+          "type": "string",
+          "description": "Application ID"
+        },
+        "requestBody": {
+          "type": "object",
+          "description": "The JSON request body. Refer to the Okta API docs for the schema."
+        }
+      },
+      "required": [
+        "appId",
+        "requestBody"
+      ]
+    }
+  },
+  {
+    "name": "getCsrForApplication",
+    "description": "Retrieve a certificate signing request. Retrieves a Certificate Signing Request (CSR) for the app by `csrId`. Returns a Base64-encoded CSR in DER format if the `Accept` media type is `application/pkcs10` or a CSR object if the `Accept` media type is `application/json`.",
+    "tags": [
+      "ApplicationSSOCredentialKey"
+    ],
+    "method": "GET",
+    "pathTemplate": "/api/v1/apps/{appId}/credentials/csrs/{csrId}",
+    "pathParams": [
+      "appId",
+      "csrId"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "appId": {
+          "type": "string",
+          "description": "Application ID"
+        },
+        "csrId": {
+          "type": "string",
+          "description": "`id` of the CSR"
+        }
+      },
+      "required": [
+        "appId",
+        "csrId"
+      ]
+    }
+  },
+  {
+    "name": "revokeCsrFromApplication",
+    "description": "Revoke a certificate signing request. Revokes a Certificate Signing Request and deletes the key pair from the app",
+    "tags": [
+      "ApplicationSSOCredentialKey"
+    ],
+    "method": "DELETE",
+    "pathTemplate": "/api/v1/apps/{appId}/credentials/csrs/{csrId}",
+    "pathParams": [
+      "appId",
+      "csrId"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "appId": {
+          "type": "string",
+          "description": "Application ID"
+        },
+        "csrId": {
+          "type": "string",
+          "description": "`id` of the CSR"
+        }
+      },
+      "required": [
+        "appId",
+        "csrId"
+      ]
+    }
+  },
+  {
+    "name": "publishCsrFromApplication",
+    "description": "Publish a certificate signing request. Publishes a Certificate Signing Request (CSR) for the app with a signed X.509 certificate and adds it into the Application Key Credentials. > **Note:** Publishing a certificate completes the lifecycle of the CSR and it's no longer accessible.",
+    "tags": [
+      "ApplicationSSOCredentialKey"
+    ],
+    "method": "POST",
+    "pathTemplate": "/api/v1/apps/{appId}/credentials/csrs/{csrId}/lifecycle/publish",
+    "pathParams": [
+      "appId",
+      "csrId"
+    ],
+    "queryParams": [],
+    "hasBody": true,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "appId": {
+          "type": "string",
+          "description": "Application ID"
+        },
+        "csrId": {
+          "type": "string",
+          "description": "`id` of the CSR"
+        },
+        "requestBody": {
+          "type": "object",
+          "description": "The JSON request body. Refer to the Okta API docs for the schema."
+        }
+      },
+      "required": [
+        "appId",
+        "csrId",
+        "requestBody"
+      ]
+    }
+  },
+  {
+    "name": "listJwk",
+    "description": "List all the OAuth 2.0 client JSON Web Keys. Lists all JSON Web Keys for an OAuth 2.0 client app",
+    "tags": [
+      "ApplicationSSOPublicKeys"
+    ],
+    "method": "GET",
+    "pathTemplate": "/api/v1/apps/{appId}/credentials/jwks",
+    "pathParams": [
+      "appId"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "appId": {
+          "type": "string",
+          "description": "Application ID"
+        }
+      },
+      "required": [
+        "appId"
+      ]
+    }
+  },
+  {
+    "name": "addJwk",
+    "description": "Add a JSON Web Key. Adds a new JSON Web Key to the client`s JSON Web Keys. > **Note:** This API doesn't allow you to add a key if the existing key doesn't have a `kid`. This is also consistent with how the [Dynamic Client Registration](/openapi/okta-oauth/oauth/tag/Client/) or [Applications](/openapi/okta-management/management/tag/Application/) APIs behave, as they don't allow the creation of multiple keys without `kids`. Use the [Replace an Application](/openapi/okta-management/management/tag/…",
+    "tags": [
+      "ApplicationSSOPublicKeys"
+    ],
+    "method": "POST",
+    "pathTemplate": "/api/v1/apps/{appId}/credentials/jwks",
+    "pathParams": [
+      "appId"
+    ],
+    "queryParams": [],
+    "hasBody": true,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "appId": {
+          "type": "string",
+          "description": "Application ID"
+        },
+        "requestBody": {
+          "type": "object",
+          "description": "The JSON request body. Refer to the Okta API docs for the schema."
+        }
+      },
+      "required": [
+        "appId",
+        "requestBody"
+      ]
+    }
+  },
+  {
+    "name": "getJwk",
+    "description": "Retrieve an OAuth 2.0 client JSON Web Key. Retrieves an OAuth 2.0 Client JSON Web Key by `keyId`.",
+    "tags": [
+      "ApplicationSSOPublicKeys"
+    ],
+    "method": "GET",
+    "pathTemplate": "/api/v1/apps/{appId}/credentials/jwks/{keyId}",
+    "pathParams": [
+      "appId",
+      "keyId"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "appId": {
+          "type": "string",
+          "description": "Application ID"
+        },
+        "keyId": {
+          "type": "string",
+          "description": "Unique `id` of the OAuth 2.0 Client JSON Web Key"
+        }
+      },
+      "required": [
+        "appId",
+        "keyId"
+      ]
+    }
+  },
+  {
+    "name": "deletejwk",
+    "description": "Delete an OAuth 2.0 client JSON Web Key. Deletes an OAuth 2.0 Client JSON Web Key by `keyId`. You can only delete an inactive key.",
+    "tags": [
+      "ApplicationSSOPublicKeys"
+    ],
+    "method": "DELETE",
+    "pathTemplate": "/api/v1/apps/{appId}/credentials/jwks/{keyId}",
+    "pathParams": [
+      "appId",
+      "keyId"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "appId": {
+          "type": "string",
+          "description": "Application ID"
+        },
+        "keyId": {
+          "type": "string",
+          "description": "Unique `id` of the OAuth 2.0 Client JSON Web Key"
+        }
+      },
+      "required": [
+        "appId",
+        "keyId"
+      ]
+    }
+  },
+  {
+    "name": "activateOAuth2ClientJsonWebKey",
+    "description": "Activate an OAuth 2.0 client JSON Web Key. Activates an OAuth 2.0 Client JSON Web Key by `keyId` > **Note:** You can have only one active encryption key at any given time for app. When you activate an inactive key, the current active key is automatically deactivated.",
+    "tags": [
+      "ApplicationSSOPublicKeys"
+    ],
+    "method": "POST",
+    "pathTemplate": "/api/v1/apps/{appId}/credentials/jwks/{keyId}/lifecycle/activate",
+    "pathParams": [
+      "appId",
+      "keyId"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "appId": {
+          "type": "string",
+          "description": "Application ID"
+        },
+        "keyId": {
+          "type": "string",
+          "description": "Unique `id` of the OAuth 2.0 Client JSON Web Key"
+        }
+      },
+      "required": [
+        "appId",
+        "keyId"
+      ]
+    }
+  },
+  {
+    "name": "deactivateOAuth2ClientJsonWebKey",
+    "description": "Deactivate an OAuth 2.0 client JSON Web Key. Deactivates an OAuth 2.0 Client JSON Web Key by `keyId`. > **Note:** You can only deactivate signing keys. Deactivating the active encryption key isn't allowed if the client has ID token encryption enabled. You can activate another encryption key, which makes the current key inactive.",
+    "tags": [
+      "ApplicationSSOPublicKeys"
+    ],
+    "method": "POST",
+    "pathTemplate": "/api/v1/apps/{appId}/credentials/jwks/{keyId}/lifecycle/deactivate",
+    "pathParams": [
+      "appId",
+      "keyId"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "appId": {
+          "type": "string",
+          "description": "Application ID"
+        },
+        "keyId": {
+          "type": "string",
+          "description": "Unique `id` of the OAuth 2.0 Client JSON Web Key"
+        }
+      },
+      "required": [
+        "appId",
+        "keyId"
+      ]
+    }
+  },
+  {
+    "name": "listApplicationKeys",
+    "description": "List all key credentials. Lists all key credentials for an app",
+    "tags": [
+      "ApplicationSSOCredentialKey"
+    ],
+    "method": "GET",
+    "pathTemplate": "/api/v1/apps/{appId}/credentials/keys",
+    "pathParams": [
+      "appId"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "appId": {
+          "type": "string",
+          "description": "Application ID"
+        }
+      },
+      "required": [
+        "appId"
+      ]
+    }
+  },
+  {
+    "name": "generateApplicationKey",
+    "description": "Generate a key credential. Generates a new X.509 certificate for an app key credential > **Note:** To update an Application with the newly generated key credential, use the [Replace an Application](/openapi/okta-management/management/tag/Application/#tag/Application/operation/replaceApplication) request with the new [credentials.signing.kid](/openapi/okta-management/management/tag/Application/#tag/Application/operation/replaceApplication!path=4/credentials/signing/kid&t=request) value in the re…",
+    "tags": [
+      "ApplicationSSOCredentialKey"
+    ],
+    "method": "POST",
+    "pathTemplate": "/api/v1/apps/{appId}/credentials/keys/generate",
+    "pathParams": [
+      "appId"
+    ],
+    "queryParams": [
+      "validityYears"
+    ],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "appId": {
+          "type": "string",
+          "description": "Application ID"
+        },
+        "validityYears": {
+          "type": "number",
+          "description": "Expiry years of the Application Key Credential"
+        }
+      },
+      "required": [
+        "appId",
+        "validityYears"
+      ]
+    }
+  },
+  {
+    "name": "getApplicationKey",
+    "description": "Retrieve a key credential. Retrieves a specific Application Key Credential by `kid`",
+    "tags": [
+      "ApplicationSSOCredentialKey"
+    ],
+    "method": "GET",
+    "pathTemplate": "/api/v1/apps/{appId}/credentials/keys/{keyId}",
+    "pathParams": [
+      "appId",
+      "keyId"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "appId": {
+          "type": "string",
+          "description": "Application ID"
+        },
+        "keyId": {
+          "type": "string",
+          "description": "ID of the Key Credential for the application"
+        }
+      },
+      "required": [
+        "appId",
+        "keyId"
+      ]
+    }
+  },
+  {
+    "name": "cloneApplicationKey",
+    "description": "Clone a key credential. Clones an X.509 certificate for an Application Key Credential from a source app to a target app. For step-by-step instructions to clone a credential, see [Share application key credentials for IdPs across apps](https://developer.okta.com/docs/guides/sharing-cert/main/). > **Note:** Sharing certificates isn't a recommended security practice.",
+    "tags": [
+      "ApplicationSSOCredentialKey"
+    ],
+    "method": "POST",
+    "pathTemplate": "/api/v1/apps/{appId}/credentials/keys/{keyId}/clone",
+    "pathParams": [
+      "appId",
+      "keyId"
+    ],
+    "queryParams": [
+      "targetAid"
+    ],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "appId": {
+          "type": "string",
+          "description": "Application ID"
+        },
+        "keyId": {
+          "type": "string",
+          "description": "ID of the Key Credential for the application"
+        },
+        "targetAid": {
+          "type": "string",
+          "description": "Unique key of the target Application"
+        }
+      },
+      "required": [
+        "appId",
+        "keyId",
+        "targetAid"
+      ]
+    }
+  },
+  {
+    "name": "listOAuth2ClientSecrets",
+    "description": "List all OAuth 2.0 client secrets. Lists all client secrets for an OAuth 2.0 client app",
+    "tags": [
+      "ApplicationSSOPublicKeys"
+    ],
+    "method": "GET",
+    "pathTemplate": "/api/v1/apps/{appId}/credentials/secrets",
+    "pathParams": [
+      "appId"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "appId": {
+          "type": "string",
+          "description": "Application ID"
+        }
+      },
+      "required": [
+        "appId"
+      ]
+    }
+  },
+  {
+    "name": "createOAuth2ClientSecret",
+    "description": "Create an OAuth 2.0 client secret. Creates an OAuth 2.0 Client Secret object with a new active client secret. You can create up to two Secret objects. An error is returned if you attempt to create more than two Secret objects. > **Note:** This API lets you bring your own secret. If [token_endpoint_auth_method](/openapi/okta-management/management/tag/Application/#tag/Application/operation/createApplication!path=4/credentials/oauthClient/token_endpoint_auth_method&t=request) of the app is `client…",
+    "tags": [
+      "ApplicationSSOPublicKeys"
+    ],
+    "method": "POST",
+    "pathTemplate": "/api/v1/apps/{appId}/credentials/secrets",
+    "pathParams": [
+      "appId"
+    ],
+    "queryParams": [],
+    "hasBody": true,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "appId": {
+          "type": "string",
+          "description": "Application ID"
+        },
+        "requestBody": {
+          "type": "object",
+          "description": "The JSON request body. Refer to the Okta API docs for the schema."
+        }
+      },
+      "required": [
+        "appId"
+      ]
+    }
+  },
+  {
+    "name": "getOAuth2ClientSecret",
+    "description": "Retrieve an OAuth 2.0 client secret. Retrieves an OAuth 2.0 Client Secret by `secretId`",
+    "tags": [
+      "ApplicationSSOPublicKeys"
+    ],
+    "method": "GET",
+    "pathTemplate": "/api/v1/apps/{appId}/credentials/secrets/{secretId}",
+    "pathParams": [
+      "appId",
+      "secretId"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "appId": {
+          "type": "string",
+          "description": "Application ID"
+        },
+        "secretId": {
+          "type": "string",
+          "description": "Unique `id` of the OAuth 2.0 Client Secret"
+        }
+      },
+      "required": [
+        "appId",
+        "secretId"
+      ]
+    }
+  },
+  {
+    "name": "deleteOAuth2ClientSecret",
+    "description": "Delete an OAuth 2.0 client secret. Deletes an OAuth 2.0 Client Secret by `secretId`. You can only delete an inactive Secret.",
+    "tags": [
+      "ApplicationSSOPublicKeys"
+    ],
+    "method": "DELETE",
+    "pathTemplate": "/api/v1/apps/{appId}/credentials/secrets/{secretId}",
+    "pathParams": [
+      "appId",
+      "secretId"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "appId": {
+          "type": "string",
+          "description": "Application ID"
+        },
+        "secretId": {
+          "type": "string",
+          "description": "Unique `id` of the OAuth 2.0 Client Secret"
+        }
+      },
+      "required": [
+        "appId",
+        "secretId"
+      ]
+    }
+  },
+  {
+    "name": "activateOAuth2ClientSecret",
+    "description": "Activate an OAuth 2.0 client secret. Activates an OAuth 2.0 Client Secret by `secretId`",
+    "tags": [
+      "ApplicationSSOPublicKeys"
+    ],
+    "method": "POST",
+    "pathTemplate": "/api/v1/apps/{appId}/credentials/secrets/{secretId}/lifecycle/activate",
+    "pathParams": [
+      "appId",
+      "secretId"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "appId": {
+          "type": "string",
+          "description": "Application ID"
+        },
+        "secretId": {
+          "type": "string",
+          "description": "Unique `id` of the OAuth 2.0 Client Secret"
+        }
+      },
+      "required": [
+        "appId",
+        "secretId"
+      ]
+    }
+  },
+  {
+    "name": "deactivateOAuth2ClientSecret",
+    "description": "Deactivate an OAuth 2.0 client secret. Deactivates an OAuth 2.0 Client Secret by `secretId`. You can't deactivate a secret if it's the only secret of the client.",
+    "tags": [
+      "ApplicationSSOPublicKeys"
+    ],
+    "method": "POST",
+    "pathTemplate": "/api/v1/apps/{appId}/credentials/secrets/{secretId}/lifecycle/deactivate",
+    "pathParams": [
+      "appId",
+      "secretId"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "appId": {
+          "type": "string",
+          "description": "Application ID"
+        },
+        "secretId": {
+          "type": "string",
+          "description": "Unique `id` of the OAuth 2.0 Client Secret"
+        }
+      },
+      "required": [
+        "appId",
+        "secretId"
+      ]
+    }
+  },
+  {
+    "name": "getAllCrossAppAccessConnections",
+    "description": "Retrieve all Cross App Access connections. Retrieves inbound and outbound Cross App Access connections associated with an app",
+    "tags": [
+      "ApplicationCrossAppAccessConnections"
+    ],
+    "method": "GET",
+    "pathTemplate": "/api/v1/apps/{appId}/cwo/connections",
+    "pathParams": [
+      "appId"
+    ],
+    "queryParams": [
+      "after",
+      "limit"
+    ],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "appId": {
+          "type": "string",
+          "description": "Application ID"
+        },
+        "after": {
+          "type": "string",
+          "description": "Specifies the pagination cursor for the next page of connection results"
+        },
+        "limit": {
+          "type": "number",
+          "description": "Specifies the number of results to return per page. The values: * -1: Return all results (up to system maximum) * 0: Return an empty result set * Positive integer: Return up to that many results (capped at system maximum)"
+        }
+      },
+      "required": [
+        "appId"
+      ]
+    }
+  },
+  {
+    "name": "createCrossAppAccessConnection",
+    "description": "Create a Cross App Access connection. Creates a Cross App Access connection",
+    "tags": [
+      "ApplicationCrossAppAccessConnections"
+    ],
+    "method": "POST",
+    "pathTemplate": "/api/v1/apps/{appId}/cwo/connections",
+    "pathParams": [
+      "appId"
+    ],
+    "queryParams": [],
+    "hasBody": true,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "appId": {
+          "type": "string",
+          "description": "Application ID"
+        },
+        "requestBody": {
+          "type": "object",
+          "description": "The JSON request body. Refer to the Okta API docs for the schema."
+        }
+      },
+      "required": [
+        "appId",
+        "requestBody"
+      ]
+    }
+  },
+  {
+    "name": "getCrossAppAccessConnection",
+    "description": "Retrieve a Cross App Access connection. Retrieves the Cross App Access connection with the specified ID",
+    "tags": [
+      "ApplicationCrossAppAccessConnections"
+    ],
+    "method": "GET",
+    "pathTemplate": "/api/v1/apps/{appId}/cwo/connections/{connectionId}",
+    "pathParams": [
+      "appId",
+      "connectionId"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "appId": {
+          "type": "string",
+          "description": "Application ID"
+        },
+        "connectionId": {
+          "type": "string",
+          "description": "Connection ID"
+        }
+      },
+      "required": [
+        "appId",
+        "connectionId"
+      ]
+    }
+  },
+  {
+    "name": "updateCrossAppAccessConnection",
+    "description": "Update a Cross App Access connection. Updates the Cross App Access connection with the specified ID",
+    "tags": [
+      "ApplicationCrossAppAccessConnections"
+    ],
+    "method": "PATCH",
+    "pathTemplate": "/api/v1/apps/{appId}/cwo/connections/{connectionId}",
+    "pathParams": [
+      "appId",
+      "connectionId"
+    ],
+    "queryParams": [],
+    "hasBody": true,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "appId": {
+          "type": "string",
+          "description": "Application ID"
+        },
+        "connectionId": {
+          "type": "string",
+          "description": "Connection ID"
+        },
+        "requestBody": {
+          "type": "object",
+          "description": "The JSON request body. Refer to the Okta API docs for the schema."
+        }
+      },
+      "required": [
+        "appId",
+        "connectionId",
+        "requestBody"
+      ]
+    }
+  },
+  {
+    "name": "deleteCrossAppAccessConnection",
+    "description": "Delete a Cross App Access connection. Deletes a Cross App Access connection with the specified ID",
+    "tags": [
+      "ApplicationCrossAppAccessConnections"
+    ],
+    "method": "DELETE",
+    "pathTemplate": "/api/v1/apps/{appId}/cwo/connections/{connectionId}",
+    "pathParams": [
+      "appId",
+      "connectionId"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "appId": {
+          "type": "string",
+          "description": "Application ID"
+        },
+        "connectionId": {
+          "type": "string",
+          "description": "Connection ID"
+        }
+      },
+      "required": [
+        "appId",
+        "connectionId"
+      ]
+    }
+  },
+  {
+    "name": "listFeaturesForApplication",
+    "description": "List all features. Lists all features for an app > **Note:** This request returns an error if provisioning isn't enabled for the app. > To set up provisioning, see [Update the default provisioning connection](/openapi/okta-management/management/tag/ApplicationConnections/#tag/ApplicationConnections/operation/updateDefaultProvisioningConnectionForApplication).",
+    "tags": [
+      "ApplicationFeatures"
+    ],
+    "method": "GET",
+    "pathTemplate": "/api/v1/apps/{appId}/features",
+    "pathParams": [
+      "appId"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "appId": {
+          "type": "string",
+          "description": "Application ID"
+        }
+      },
+      "required": [
+        "appId"
+      ]
+    }
+  },
+  {
+    "name": "getFeatureForApplication",
+    "description": "Retrieve a feature. Retrieves a Feature object for an app",
+    "tags": [
+      "ApplicationFeatures"
+    ],
+    "method": "GET",
+    "pathTemplate": "/api/v1/apps/{appId}/features/{featureName}",
+    "pathParams": [
+      "appId",
+      "featureName"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "appId": {
+          "type": "string",
+          "description": "Application ID"
+        },
+        "featureName": {
+          "type": "string",
+          "description": "Name of the Feature"
+        }
+      },
+      "required": [
+        "appId",
+        "featureName"
+      ]
+    }
+  },
+  {
+    "name": "updateFeatureForApplication",
+    "description": "Update a feature. Updates a Feature object for an app > **Note:** This endpoint supports partial updates.",
+    "tags": [
+      "ApplicationFeatures"
+    ],
+    "method": "PUT",
+    "pathTemplate": "/api/v1/apps/{appId}/features/{featureName}",
+    "pathParams": [
+      "appId",
+      "featureName"
+    ],
+    "queryParams": [],
+    "hasBody": true,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "appId": {
+          "type": "string",
+          "description": "Application ID"
+        },
+        "featureName": {
+          "type": "string",
+          "description": "Name of the Feature"
+        },
+        "requestBody": {
+          "type": "object",
+          "description": "The JSON request body. Refer to the Okta API docs for the schema."
+        }
+      },
+      "required": [
+        "appId",
+        "featureName",
+        "requestBody"
+      ]
+    }
+  },
+  {
+    "name": "listFederatedClaims",
+    "description": "List all configured federated claims. Lists all federated claims for your app",
+    "tags": [
+      "ApplicationSSOFederatedClaims"
+    ],
+    "method": "GET",
+    "pathTemplate": "/api/v1/apps/{appId}/federated-claims",
+    "pathParams": [
+      "appId"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "appId": {
+          "type": "string",
+          "description": "Application ID"
+        }
+      },
+      "required": [
+        "appId"
+      ]
+    }
+  },
+  {
+    "name": "createFederatedClaim",
+    "description": "Create a federated claim. Creates a claim that will be included in tokens produced by federation protocols (for example: OIDC `id_tokens` or SAML Assertions)",
+    "tags": [
+      "ApplicationSSOFederatedClaims"
+    ],
+    "method": "POST",
+    "pathTemplate": "/api/v1/apps/{appId}/federated-claims",
+    "pathParams": [
+      "appId"
+    ],
+    "queryParams": [],
+    "hasBody": true,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "appId": {
+          "type": "string",
+          "description": "Application ID"
+        },
+        "requestBody": {
+          "type": "object",
+          "description": "The JSON request body. Refer to the Okta API docs for the schema."
+        }
+      },
+      "required": [
+        "appId",
+        "requestBody"
+      ]
+    }
+  },
+  {
+    "name": "getFederatedClaim",
+    "description": "Retrieve a federated claim. Retrieves a federated claim by `claimId`",
+    "tags": [
+      "ApplicationSSOFederatedClaims"
+    ],
+    "method": "GET",
+    "pathTemplate": "/api/v1/apps/{appId}/federated-claims/{claimId}",
+    "pathParams": [
+      "appId",
+      "claimId"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "appId": {
+          "type": "string",
+          "description": "Application ID"
+        },
+        "claimId": {
+          "type": "string",
+          "description": "The unique `id` of the federated claim"
+        }
+      },
+      "required": [
+        "appId",
+        "claimId"
+      ]
+    }
+  },
+  {
+    "name": "replaceFederatedClaim",
+    "description": "Replace a federated claim. Replaces a claim that will be included in tokens produced by federation protocols (for example: OIDC `id_tokens` or SAML Assertions)",
+    "tags": [
+      "ApplicationSSOFederatedClaims"
+    ],
+    "method": "PUT",
+    "pathTemplate": "/api/v1/apps/{appId}/federated-claims/{claimId}",
+    "pathParams": [
+      "appId",
+      "claimId"
+    ],
+    "queryParams": [],
+    "hasBody": true,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "appId": {
+          "type": "string",
+          "description": "Application ID"
+        },
+        "claimId": {
+          "type": "string",
+          "description": "The unique `id` of the federated claim"
+        },
+        "requestBody": {
+          "type": "object",
+          "description": "The JSON request body. Refer to the Okta API docs for the schema."
+        }
+      },
+      "required": [
+        "appId",
+        "claimId"
+      ]
+    }
+  },
+  {
+    "name": "deleteFederatedClaim",
+    "description": "Delete a federated claim. Deletes a federated claim by `claimId`",
+    "tags": [
+      "ApplicationSSOFederatedClaims"
+    ],
+    "method": "DELETE",
+    "pathTemplate": "/api/v1/apps/{appId}/federated-claims/{claimId}",
+    "pathParams": [
+      "appId",
+      "claimId"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "appId": {
+          "type": "string",
+          "description": "Application ID"
+        },
+        "claimId": {
+          "type": "string",
+          "description": "The unique `id` of the federated claim"
+        }
+      },
+      "required": [
+        "appId",
+        "claimId"
+      ]
+    }
+  },
+  {
+    "name": "listScopeConsentGrants",
+    "description": "List all app grants. Lists all scope consent Grants for the app",
+    "tags": [
+      "ApplicationGrants"
+    ],
+    "method": "GET",
+    "pathTemplate": "/api/v1/apps/{appId}/grants",
+    "pathParams": [
+      "appId"
+    ],
+    "queryParams": [
+      "expand"
+    ],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "appId": {
+          "type": "string",
+          "description": "Application ID"
+        },
+        "expand": {
+          "type": "string",
+          "description": "An optional parameter to return scope details in the `_embedded` property. Valid value: `scope`"
+        }
+      },
+      "required": [
+        "appId"
+      ]
+    }
+  },
+  {
+    "name": "grantConsentToScope",
+    "description": "Grant consent to scope. Grants consent for the app to request an OAuth 2.0 Okta scope",
+    "tags": [
+      "ApplicationGrants"
+    ],
+    "method": "POST",
+    "pathTemplate": "/api/v1/apps/{appId}/grants",
+    "pathParams": [
+      "appId"
+    ],
+    "queryParams": [],
+    "hasBody": true,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "appId": {
+          "type": "string",
+          "description": "Application ID"
+        },
+        "requestBody": {
+          "type": "object",
+          "description": "The JSON request body. Refer to the Okta API docs for the schema."
+        }
+      },
+      "required": [
+        "appId",
+        "requestBody"
+      ]
+    }
+  },
+  {
+    "name": "getScopeConsentGrant",
+    "description": "Retrieve an app grant. Retrieves a single scope consent Grant object for the app",
+    "tags": [
+      "ApplicationGrants"
+    ],
+    "method": "GET",
+    "pathTemplate": "/api/v1/apps/{appId}/grants/{grantId}",
+    "pathParams": [
+      "appId",
+      "grantId"
+    ],
+    "queryParams": [
+      "expand"
+    ],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "appId": {
+          "type": "string",
+          "description": "Application ID"
+        },
+        "grantId": {
+          "type": "string",
+          "description": "Grant ID"
+        },
+        "expand": {
+          "type": "string",
+          "description": "An optional parameter to return scope details in the `_embedded` property. Valid value: `scope`"
+        }
+      },
+      "required": [
+        "appId",
+        "grantId"
+      ]
+    }
+  },
+  {
+    "name": "revokeScopeConsentGrant",
+    "description": "Revoke an app grant. Revokes permission for the app to grant the given scope",
+    "tags": [
+      "ApplicationGrants"
+    ],
+    "method": "DELETE",
+    "pathTemplate": "/api/v1/apps/{appId}/grants/{grantId}",
+    "pathParams": [
+      "appId",
+      "grantId"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "appId": {
+          "type": "string",
+          "description": "Application ID"
+        },
+        "grantId": {
+          "type": "string",
+          "description": "Grant ID"
+        }
+      },
+      "required": [
+        "appId",
+        "grantId"
+      ]
+    }
+  },
+  {
+    "name": "listGroupPushMappings",
+    "description": "List all group push mappings. Lists all group push mappings with pagination support",
+    "tags": [
+      "GroupPushMapping"
+    ],
+    "method": "GET",
+    "pathTemplate": "/api/v1/apps/{appId}/group-push/mappings",
+    "pathParams": [
+      "appId"
+    ],
+    "queryParams": [
+      "after",
+      "limit",
+      "lastUpdated",
+      "sourceGroupId",
+      "status"
+    ],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "appId": {
+          "type": "string",
+          "description": "Application ID"
+        },
+        "after": {
+          "type": "string",
+          "description": "Specifies the pagination cursor for the next page of mappings"
+        },
+        "limit": {
+          "type": "number",
+          "description": "Specifies the number of results returned"
+        },
+        "lastUpdated": {
+          "type": "string",
+          "description": "Filters group push mappings by last updated date. The `lastUpdated` parameter supports the following format: `YYYY-MM-DDTHH:mm:ssZ`. This filters mappings updated on or after the specified date and time in UTC. If you don't specify a value, all group push mappings are returned."
+        },
+        "sourceGroupId": {
+          "type": "string",
+          "description": "Filters group push mappings by source group ID. If you don't specify a value, all group push mappings are returned."
+        },
+        "status": {
+          "type": "string",
+          "description": "Filters group push mappings by status. If you don't specify a value, all group push mappings are returned."
+        }
+      },
+      "required": [
+        "appId"
+      ]
+    }
+  },
+  {
+    "name": "createGroupPushMapping",
+    "description": "Create a group push mapping. Creates or links a group push mapping. **Note:** Either `targetGroupId` or `targetGroupName` must be provided, but not both. If `targetGroupId` is provided, it links to an existing group. If `targetGroupName` is provided, it creates a new group.",
+    "tags": [
+      "GroupPushMapping"
+    ],
+    "method": "POST",
+    "pathTemplate": "/api/v1/apps/{appId}/group-push/mappings",
+    "pathParams": [
+      "appId"
+    ],
+    "queryParams": [],
+    "hasBody": true,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "appId": {
+          "type": "string",
+          "description": "Application ID"
+        },
+        "requestBody": {
+          "type": "object",
+          "description": "The JSON request body. Refer to the Okta API docs for the schema."
+        }
+      },
+      "required": [
+        "appId",
+        "requestBody"
+      ]
+    }
+  },
+  {
+    "name": "getGroupPushMapping",
+    "description": "Retrieve a group push mapping. Retrieves a group push mapping by ID",
+    "tags": [
+      "GroupPushMapping"
+    ],
+    "method": "GET",
+    "pathTemplate": "/api/v1/apps/{appId}/group-push/mappings/{mappingId}",
+    "pathParams": [
+      "appId",
+      "mappingId"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "appId": {
+          "type": "string",
+          "description": "Application ID"
+        },
+        "mappingId": {
+          "type": "string",
+          "description": "Group push mapping ID"
+        }
+      },
+      "required": [
+        "appId",
+        "mappingId"
+      ]
+    }
+  },
+  {
+    "name": "updateGroupPushMapping",
+    "description": "Update a group push mapping. Updates the status of a group push mapping",
+    "tags": [
+      "GroupPushMapping"
+    ],
+    "method": "PATCH",
+    "pathTemplate": "/api/v1/apps/{appId}/group-push/mappings/{mappingId}",
+    "pathParams": [
+      "appId",
+      "mappingId"
+    ],
+    "queryParams": [],
+    "hasBody": true,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "appId": {
+          "type": "string",
+          "description": "Application ID"
+        },
+        "mappingId": {
+          "type": "string",
+          "description": "Group push mapping ID"
+        },
+        "requestBody": {
+          "type": "object",
+          "description": "The JSON request body. Refer to the Okta API docs for the schema."
+        }
+      },
+      "required": [
+        "appId",
+        "mappingId",
+        "requestBody"
+      ]
+    }
+  },
+  {
+    "name": "deleteGroupPushMapping",
+    "description": "Delete a group push mapping. Deletes a specific group push mapping. The group push mapping must be in an `INACTIVE` state.",
+    "tags": [
+      "GroupPushMapping"
+    ],
+    "method": "DELETE",
+    "pathTemplate": "/api/v1/apps/{appId}/group-push/mappings/{mappingId}",
+    "pathParams": [
+      "appId",
+      "mappingId"
+    ],
+    "queryParams": [
+      "deleteTargetGroup"
+    ],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "appId": {
+          "type": "string",
+          "description": "Application ID"
+        },
+        "mappingId": {
+          "type": "string",
+          "description": "Group push mapping ID"
+        },
+        "deleteTargetGroup": {
+          "type": "boolean",
+          "description": "If set to `true`, the target group is also deleted. If set to `false`, the target group isn't deleted."
+        }
+      },
+      "required": [
+        "appId",
+        "mappingId",
+        "deleteTargetGroup"
+      ]
+    }
+  },
+  {
+    "name": "listApplicationGroupAssignments",
+    "description": "List all application groups. Lists all app group assignments",
+    "tags": [
+      "ApplicationGroups"
+    ],
+    "method": "GET",
+    "pathTemplate": "/api/v1/apps/{appId}/groups",
+    "pathParams": [
+      "appId"
+    ],
+    "queryParams": [
+      "q",
+      "after",
+      "limit",
+      "expand"
+    ],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "appId": {
+          "type": "string",
+          "description": "Application ID"
+        },
+        "q": {
+          "type": "string",
+          "description": "Specifies a filter for a list of assigned groups returned based on their names. The value of `q` is matched against the group `name`. This filter only supports the `startsWith` operation that matches the `q` string against the beginning of the [group name](https://developer.okta.com/docs/api/openap…"
+        },
+        "after": {
+          "type": "string",
+          "description": "Specifies the pagination cursor for the `next` page of results. Treat this as an opaque value obtained through the next link relationship. See [Pagination](https://developer.okta.com/docs/api/#pagination)."
+        },
+        "limit": {
+          "type": "number",
+          "description": "Specifies the number of objects to return per page. If there are multiple pages of results, the Link header contains a `next` link that you need to use as an opaque value (follow it, don't parse it). See [Pagination](/#pagination)."
+        },
+        "expand": {
+          "type": "string",
+          "description": "An optional query parameter to return the corresponding assigned [group](https://developer.okta.com/docs/api/openapi/okta-management/management/tag/Group/) or the group assignment metadata details in the `_embedded` property."
+        }
+      },
+      "required": [
+        "appId"
+      ]
+    }
+  },
+  {
+    "name": "getApplicationGroupAssignment",
+    "description": "Retrieve an application group. Retrieves an app group assignment",
+    "tags": [
+      "ApplicationGroups"
+    ],
+    "method": "GET",
+    "pathTemplate": "/api/v1/apps/{appId}/groups/{groupId}",
+    "pathParams": [
+      "appId",
+      "groupId"
+    ],
+    "queryParams": [
+      "expand"
+    ],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "appId": {
+          "type": "string",
+          "description": "Application ID"
+        },
+        "groupId": {
+          "type": "string",
+          "description": "The `id` of the group"
+        },
+        "expand": {
+          "type": "string",
+          "description": "An optional query parameter to return the corresponding assigned [group](https://developer.okta.com/docs/api/openapi/okta-management/management/tag/Group/) or the group assignment metadata details in the `_embedded` property."
+        }
+      },
+      "required": [
+        "appId",
+        "groupId"
+      ]
+    }
+  },
+  {
+    "name": "assignGroupToApplication",
+    "description": "Assign an application group. Assigns a [Group](https://developer.okta.com/docs/api/openapi/okta-management/management/tag/Group/) to an app, which in turn assigns the app to each [User](https://developer.okta.com/docs/api/openapi/okta-management/management/tag/User/) that belongs to the group. The resulting application user [scope](https://developer.okta.com/docs/api/openapi/okta-management/management/tag/ApplicationUsers/#tag/ApplicationUsers/operation/listApplicationUsers!c=200&path=scope&t=r…",
+    "tags": [
+      "ApplicationGroups"
+    ],
+    "method": "PUT",
+    "pathTemplate": "/api/v1/apps/{appId}/groups/{groupId}",
+    "pathParams": [
+      "appId",
+      "groupId"
+    ],
+    "queryParams": [],
+    "hasBody": true,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "appId": {
+          "type": "string",
+          "description": "Application ID"
+        },
+        "groupId": {
+          "type": "string",
+          "description": "The `id` of the group"
+        },
+        "requestBody": {
+          "type": "object",
+          "description": "The JSON request body. Refer to the Okta API docs for the schema."
+        }
+      },
+      "required": [
+        "appId",
+        "groupId"
+      ]
+    }
+  },
+  {
+    "name": "updateGroupAssignmentToApplication",
+    "description": "Update an application group. Updates a group assignment to an app",
+    "tags": [
+      "ApplicationGroups"
+    ],
+    "method": "PATCH",
+    "pathTemplate": "/api/v1/apps/{appId}/groups/{groupId}",
+    "pathParams": [
+      "appId",
+      "groupId"
+    ],
+    "queryParams": [],
+    "hasBody": true,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "appId": {
+          "type": "string",
+          "description": "Application ID"
+        },
+        "groupId": {
+          "type": "string",
+          "description": "The `id` of the group"
+        },
+        "requestBody": {
+          "type": "object",
+          "description": "The JSON request body. Refer to the Okta API docs for the schema."
+        }
+      },
+      "required": [
+        "appId",
+        "groupId"
+      ]
+    }
+  },
+  {
+    "name": "unassignApplicationFromGroup",
+    "description": "Unassign an application group. Unassigns a Group from an app",
+    "tags": [
+      "ApplicationGroups"
+    ],
+    "method": "DELETE",
+    "pathTemplate": "/api/v1/apps/{appId}/groups/{groupId}",
+    "pathParams": [
+      "appId",
+      "groupId"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "appId": {
+          "type": "string",
+          "description": "Application ID"
+        },
+        "groupId": {
+          "type": "string",
+          "description": "The `id` of the group"
+        }
+      },
+      "required": [
+        "appId",
+        "groupId"
+      ]
+    }
+  },
+  {
+    "name": "activateApplication",
+    "description": "Activate an application. Activates an inactive application",
+    "tags": [
+      "Application"
+    ],
+    "method": "POST",
+    "pathTemplate": "/api/v1/apps/{appId}/lifecycle/activate",
+    "pathParams": [
+      "appId"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "appId": {
+          "type": "string",
+          "description": "Application ID"
+        }
+      },
+      "required": [
+        "appId"
+      ]
+    }
+  },
+  {
+    "name": "deactivateApplication",
+    "description": "Deactivate an application. Deactivates an active application > **Note:** Deactivating an app triggers a full reconciliation of all users assigned to the app by groups. This reconcile process removes the app assignment for the deactivated app, and might also correct assignments that were supposed to be removed but failed previously.",
+    "tags": [
+      "Application"
+    ],
+    "method": "POST",
+    "pathTemplate": "/api/v1/apps/{appId}/lifecycle/deactivate",
+    "pathParams": [
+      "appId"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "appId": {
+          "type": "string",
+          "description": "Application ID"
+        }
+      },
+      "required": [
+        "appId"
+      ]
+    }
+  },
+  {
+    "name": "uploadApplicationLogo",
+    "description": "Upload an application logo. Uploads a logo for the app instance. If the app already has a logo, this operation replaces the previous logo. The logo is visible in the Admin Console as an icon for your app instance. If you have one `appLink` object configured, this logo also appears in the End-User Dashboard as an icon for your app. > **Note:** If you have multiple `appLink` objects, use the Admin Console to add logos for each app link. > You can't use the API to add logos for multiple app links.",
+    "tags": [
+      "ApplicationLogos"
+    ],
+    "method": "POST",
+    "pathTemplate": "/api/v1/apps/{appId}/logo",
+    "pathParams": [
+      "appId"
+    ],
+    "queryParams": [],
+    "hasBody": true,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "appId": {
+          "type": "string",
+          "description": "Application ID"
+        },
+        "requestBody": {
+          "type": "object",
+          "description": "The JSON request body. Refer to the Okta API docs for the schema."
+        }
+      },
+      "required": [
+        "appId"
+      ]
+    }
+  },
+  {
+    "name": "assignApplicationPolicy",
+    "description": "Assign an app sign-in policy. Assigns an app to an [app sign-in policy](/openapi/okta-management/management/tag/Policy/), identified by `policyId`. If the app was previously assigned to another policy, this operation replaces that assignment with the updated policy identified by `policyId`. > **Note:** When you [merge duplicate app sign-in policies](https://help.okta.com/okta_help.htm?type=oie&id=ext-merge-auth-policies), the policy and mapping CRUD operations may be unavailable during the cons…",
+    "tags": [
+      "ApplicationPolicies"
+    ],
+    "method": "PUT",
+    "pathTemplate": "/api/v1/apps/{appId}/policies/{policyId}",
+    "pathParams": [
+      "appId",
+      "policyId"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "appId": {
+          "type": "string",
+          "description": "Application ID"
+        },
+        "policyId": {
+          "type": "string",
+          "description": "`id` of the Policy"
+        }
+      },
+      "required": [
+        "appId",
+        "policyId"
+      ]
+    }
+  },
+  {
+    "name": "previewSAMLmetadataForApplication",
+    "description": "Preview the application SAML metadata. Previews the SSO SAML metadata for an application",
+    "tags": [
+      "ApplicationSSO"
+    ],
+    "method": "GET",
+    "pathTemplate": "/api/v1/apps/{appId}/sso/saml/metadata",
+    "pathParams": [
+      "appId"
+    ],
+    "queryParams": [
+      "kid"
+    ],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "appId": {
+          "type": "string",
+          "description": "Application ID"
+        },
+        "kid": {
+          "type": "string",
+          "description": ""
+        }
+      },
+      "required": [
+        "appId",
+        "kid"
+      ]
+    }
+  },
+  {
+    "name": "listOAuth2TokensForApplication",
+    "description": "List all application refresh tokens. Lists all refresh tokens for an app > **Note:** The results are [paginated](/#pagination) according to the `limit` parameter. > If there are multiple pages of results, the Link header contains a `next` link that you need to use as an opaque value (follow it, don't parse it).",
+    "tags": [
+      "ApplicationTokens"
+    ],
+    "method": "GET",
+    "pathTemplate": "/api/v1/apps/{appId}/tokens",
+    "pathParams": [
+      "appId"
+    ],
+    "queryParams": [
+      "expand",
+      "after",
+      "limit"
+    ],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "appId": {
+          "type": "string",
+          "description": "Application ID"
+        },
+        "expand": {
+          "type": "string",
+          "description": "An optional parameter to return scope details in the `_embedded` property. Valid value: `scope`"
+        },
+        "after": {
+          "type": "string",
+          "description": "Specifies the pagination cursor for the next page of results. Treat this as an opaque value obtained through the next link relationship. See [Pagination](/#pagination)."
+        },
+        "limit": {
+          "type": "number",
+          "description": "A limit on the number of objects to return"
+        }
+      },
+      "required": [
+        "appId"
+      ]
+    }
+  },
+  {
+    "name": "revokeOAuth2TokensForApplication",
+    "description": "Revoke all application tokens. Revokes all OAuth 2.0 refresh tokens for the specified app. Any access tokens issued with these refresh tokens are also revoked, but access tokens issued without a refresh token aren't affected.",
+    "tags": [
+      "ApplicationTokens"
+    ],
+    "method": "DELETE",
+    "pathTemplate": "/api/v1/apps/{appId}/tokens",
+    "pathParams": [
+      "appId"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "appId": {
+          "type": "string",
+          "description": "Application ID"
+        }
+      },
+      "required": [
+        "appId"
+      ]
+    }
+  },
+  {
+    "name": "getOAuth2TokenForApplication",
+    "description": "Retrieve an application token. Retrieves a refresh token for the specified app",
+    "tags": [
+      "ApplicationTokens"
+    ],
+    "method": "GET",
+    "pathTemplate": "/api/v1/apps/{appId}/tokens/{tokenId}",
+    "pathParams": [
+      "appId",
+      "tokenId"
+    ],
+    "queryParams": [
+      "expand"
+    ],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "appId": {
+          "type": "string",
+          "description": "Application ID"
+        },
+        "tokenId": {
+          "type": "string",
+          "description": "`id` of Token"
+        },
+        "expand": {
+          "type": "string",
+          "description": "An optional parameter to return scope details in the `_embedded` property. Valid value: `scope`"
+        }
+      },
+      "required": [
+        "appId",
+        "tokenId"
+      ]
+    }
+  },
+  {
+    "name": "revokeOAuth2TokenForApplication",
+    "description": "Revoke an application token. Revokes the specified token for the specified app",
+    "tags": [
+      "ApplicationTokens"
+    ],
+    "method": "DELETE",
+    "pathTemplate": "/api/v1/apps/{appId}/tokens/{tokenId}",
+    "pathParams": [
+      "appId",
+      "tokenId"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "appId": {
+          "type": "string",
+          "description": "Application ID"
+        },
+        "tokenId": {
+          "type": "string",
+          "description": "`id` of Token"
+        }
+      },
+      "required": [
+        "appId",
+        "tokenId"
+      ]
+    }
+  },
+  {
+    "name": "listApplicationUsers",
+    "description": "List all application users. Lists all assigned users for an app",
+    "tags": [
+      "ApplicationUsers"
+    ],
+    "method": "GET",
+    "pathTemplate": "/api/v1/apps/{appId}/users",
+    "pathParams": [
+      "appId"
+    ],
+    "queryParams": [
+      "after",
+      "limit",
+      "q",
+      "expand"
+    ],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "appId": {
+          "type": "string",
+          "description": "Application ID"
+        },
+        "after": {
+          "type": "string",
+          "description": "Specifies the pagination cursor for the next page of results. Treat this as an opaque value obtained through the next link relationship. See [Pagination](/#pagination)."
+        },
+        "limit": {
+          "type": "number",
+          "description": "Specifies the number of objects to return per page. If there are multiple pages of results, the Link header contains a `next` link that you need to use as an opaque value (follow it, don't parse it). See [Pagination](/#pagination)."
+        },
+        "q": {
+          "type": "string",
+          "description": "Specifies a filter for the list of application users returned based on their profile attributes. The value of `q` is matched against the beginning of the following profile attributes: `userName`, `firstName`, `lastName`, and `email`. This filter only supports the `startsWith` operation that matches…"
+        },
+        "expand": {
+          "type": "string",
+          "description": "An optional query parameter to return the corresponding [User](/openapi/okta-management/management/tag/User/) object in the `_embedded` property. Valid value: `user`"
+        }
+      },
+      "required": [
+        "appId"
+      ]
+    }
+  },
+  {
+    "name": "assignUserToApplication",
+    "description": "Assign an application user. Assigns a user to an app for: * SSO only<br> Assignments to SSO apps typically don't include a user profile. However, if your SSO app requires a profile but doesn't have provisioning enabled, you can add profile attributes in the request body. * SSO and provisioning<br> Assignments to SSO and provisioning apps typically include credentials and an app-specific profile. Profile mappings defined for the app are applied first before applying any profile properties that a…",
+    "tags": [
+      "ApplicationUsers"
+    ],
+    "method": "POST",
+    "pathTemplate": "/api/v1/apps/{appId}/users",
+    "pathParams": [
+      "appId"
+    ],
+    "queryParams": [],
+    "hasBody": true,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "appId": {
+          "type": "string",
+          "description": "Application ID"
+        },
+        "requestBody": {
+          "type": "object",
+          "description": "The JSON request body. Refer to the Okta API docs for the schema."
+        }
+      },
+      "required": [
+        "appId",
+        "requestBody"
+      ]
+    }
+  },
+  {
+    "name": "getApplicationUser",
+    "description": "Retrieve an application user. Retrieves a specific user assignment for a specific app",
+    "tags": [
+      "ApplicationUsers"
+    ],
+    "method": "GET",
+    "pathTemplate": "/api/v1/apps/{appId}/users/{userId}",
+    "pathParams": [
+      "appId",
+      "userId"
+    ],
+    "queryParams": [
+      "expand"
+    ],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "appId": {
+          "type": "string",
+          "description": "Application ID"
+        },
+        "userId": {
+          "type": "string",
+          "description": "ID of an existing Okta user"
+        },
+        "expand": {
+          "type": "string",
+          "description": "An optional query parameter to return the corresponding [User](/openapi/okta-management/management/tag/User/) object in the `_embedded` property. Valid value: `user`"
+        }
+      },
+      "required": [
+        "appId",
+        "userId"
+      ]
+    }
+  },
+  {
+    "name": "updateApplicationUser",
+    "description": "Update an application user. Updates the profile or credentials of a user assigned to an app",
+    "tags": [
+      "ApplicationUsers"
+    ],
+    "method": "POST",
+    "pathTemplate": "/api/v1/apps/{appId}/users/{userId}",
+    "pathParams": [
+      "appId",
+      "userId"
+    ],
+    "queryParams": [],
+    "hasBody": true,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "appId": {
+          "type": "string",
+          "description": "Application ID"
+        },
+        "userId": {
+          "type": "string",
+          "description": "ID of an existing Okta user"
+        },
+        "requestBody": {
+          "type": "object",
+          "description": "The JSON request body. Refer to the Okta API docs for the schema."
+        }
+      },
+      "required": [
+        "appId",
+        "userId",
+        "requestBody"
+      ]
+    }
+  },
+  {
+    "name": "unassignUserFromApplication",
+    "description": "Unassign an application user. Unassigns a user from an app For directories like Active Directory and LDAP, they act as the owner of the user's credential with Okta delegating authentication (DelAuth) to that directory. If this request is successful for a user when DelAuth is enabled, then the user is in a state with no password. You can then reset the user's password. > **Important:** This is a destructive operation. You can't recover the user's app profile. If the app is enabled for provisioni…",
+    "tags": [
+      "ApplicationUsers"
+    ],
+    "method": "DELETE",
+    "pathTemplate": "/api/v1/apps/{appId}/users/{userId}",
+    "pathParams": [
+      "appId",
+      "userId"
+    ],
+    "queryParams": [
+      "sendEmail"
+    ],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "appId": {
+          "type": "string",
+          "description": "Application ID"
+        },
+        "userId": {
+          "type": "string",
+          "description": "ID of an existing Okta user"
+        },
+        "sendEmail": {
+          "type": "boolean",
+          "description": "Sends a deactivation email to the administrator if `true`"
+        }
+      },
+      "required": [
+        "appId",
+        "userId"
+      ]
+    }
+  },
+  {
+    "name": "verifyProvisioningConnectionForApplication",
+    "description": "Verify the provisioning connection. Verifies the OAuth 2.0-based connection as part of the OAuth 2.0 consent flow. The validation of the consent flow is the last step of the provisioning setup for an OAuth 2.0-based connection. Currently, this operation only supports `office365`,`google`, `zoomus`, and `slack` apps.",
+    "tags": [
+      "ApplicationConnections"
+    ],
+    "method": "POST",
+    "pathTemplate": "/api/v1/apps/{appName}/{appId}/oauth2/callback",
+    "pathParams": [
+      "appName",
+      "appId"
+    ],
+    "queryParams": [
+      "code",
+      "state"
+    ],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "appName": {
+          "type": "string",
+          "description": ""
+        },
+        "appId": {
+          "type": "string",
+          "description": "Application ID"
+        },
+        "code": {
+          "type": "string",
+          "description": ""
+        },
+        "state": {
+          "type": "string",
+          "description": ""
+        }
+      },
+      "required": [
+        "appName",
+        "appId"
+      ]
+    }
+  },
+  {
+    "name": "getFirstPartyAppSettings",
+    "description": "Retrieve the Okta application settings. Retrieves the settings for an Okta app (also known as an Okta first-party app)",
+    "tags": [
+      "OktaApplicationSettings"
+    ],
+    "method": "GET",
+    "pathTemplate": "/api/v1/first-party-app-settings/{appName}",
+    "pathParams": [
+      "appName"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "appName": {
+          "type": "string",
+          "description": "The key name for the Okta app.<br> Supported apps: * Okta Admin Console (`admin-console`)"
+        }
+      },
+      "required": [
+        "appName"
+      ]
+    }
+  },
+  {
+    "name": "replaceFirstPartyAppSettings",
+    "description": "Replace the Okta application settings. Replaces the settings for an Okta app (also known as an Okta first-party app)",
+    "tags": [
+      "OktaApplicationSettings"
+    ],
+    "method": "PUT",
+    "pathTemplate": "/api/v1/first-party-app-settings/{appName}",
+    "pathParams": [
+      "appName"
+    ],
+    "queryParams": [],
+    "hasBody": true,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "appName": {
+          "type": "string",
+          "description": "The key name for the Okta app.<br> Supported apps: * Okta Admin Console (`admin-console`)"
+        },
+        "requestBody": {
+          "type": "object",
+          "description": "The JSON request body. Refer to the Okta API docs for the schema."
+        }
+      },
+      "required": [
+        "appName",
+        "requestBody"
+      ]
+    }
+  }
+]

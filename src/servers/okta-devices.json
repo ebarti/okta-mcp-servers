@@ -1,0 +1,1455 @@
+[
+  {
+    "name": "listAgentPools",
+    "description": "List all agent pools. Lists all agent pools with pagination support",
+    "tags": [
+      "AgentPools"
+    ],
+    "method": "GET",
+    "pathTemplate": "/api/v1/agentPools",
+    "pathParams": [],
+    "queryParams": [
+      "limitPerPoolType",
+      "poolType",
+      "after"
+    ],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "limitPerPoolType": {
+          "type": "number",
+          "description": "Maximum number of agent pools returned"
+        },
+        "poolType": {
+          "type": "string",
+          "description": "Agent type to search for"
+        },
+        "after": {
+          "type": "string",
+          "description": "The cursor to use for pagination. It is an opaque string that specifies your current location in the list and is obtained from the `Link` response header. See [Pagination](https://developer.okta.com/docs/api/#pagination)."
+        }
+      }
+    }
+  },
+  {
+    "name": "listAgentPoolsUpdates",
+    "description": "List all agent pool updates. Lists all agent pool updates",
+    "tags": [
+      "AgentPools"
+    ],
+    "method": "GET",
+    "pathTemplate": "/api/v1/agentPools/{poolId}/updates",
+    "pathParams": [
+      "poolId"
+    ],
+    "queryParams": [
+      "scheduled"
+    ],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "poolId": {
+          "type": "string",
+          "description": "ID of the agent pool for which the settings apply to"
+        },
+        "scheduled": {
+          "type": "boolean",
+          "description": "Return only scheduled or ad-hoc updates. If this parameter isn't provided, Okta returns the entire list of updates."
+        }
+      },
+      "required": [
+        "poolId"
+      ]
+    }
+  },
+  {
+    "name": "createAgentPoolsUpdate",
+    "description": "Create an agent pool update. Creates an agent pool update",
+    "tags": [
+      "AgentPools"
+    ],
+    "method": "POST",
+    "pathTemplate": "/api/v1/agentPools/{poolId}/updates",
+    "pathParams": [
+      "poolId"
+    ],
+    "queryParams": [],
+    "hasBody": true,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "poolId": {
+          "type": "string",
+          "description": "ID of the agent pool for which the settings apply to"
+        },
+        "requestBody": {
+          "type": "object",
+          "description": "The JSON request body. Refer to the Okta API docs for the schema."
+        }
+      },
+      "required": [
+        "poolId",
+        "requestBody"
+      ]
+    }
+  },
+  {
+    "name": "getAgentPoolsUpdateSettings",
+    "description": "Retrieve an agent pool update's settings. Retrieves the current state of the agent pool update instance settings",
+    "tags": [
+      "AgentPools"
+    ],
+    "method": "GET",
+    "pathTemplate": "/api/v1/agentPools/{poolId}/updates/settings",
+    "pathParams": [
+      "poolId"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "poolId": {
+          "type": "string",
+          "description": "ID of the agent pool for which the settings apply to"
+        }
+      },
+      "required": [
+        "poolId"
+      ]
+    }
+  },
+  {
+    "name": "updateAgentPoolsUpdateSettings",
+    "description": "Update an agent pool update settings. Updates an agent pool update instance settings",
+    "tags": [
+      "AgentPools"
+    ],
+    "method": "POST",
+    "pathTemplate": "/api/v1/agentPools/{poolId}/updates/settings",
+    "pathParams": [
+      "poolId"
+    ],
+    "queryParams": [],
+    "hasBody": true,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "poolId": {
+          "type": "string",
+          "description": "ID of the agent pool for which the settings apply to"
+        },
+        "requestBody": {
+          "type": "object",
+          "description": "The JSON request body. Refer to the Okta API docs for the schema."
+        }
+      },
+      "required": [
+        "poolId",
+        "requestBody"
+      ]
+    }
+  },
+  {
+    "name": "getAgentPoolsUpdateInstance",
+    "description": "Retrieve an agent pool update by ID. Retrieves an agent pool update by its `updateId`",
+    "tags": [
+      "AgentPools"
+    ],
+    "method": "GET",
+    "pathTemplate": "/api/v1/agentPools/{poolId}/updates/{updateId}",
+    "pathParams": [
+      "poolId",
+      "updateId"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "poolId": {
+          "type": "string",
+          "description": "ID of the agent pool for which the settings apply to"
+        },
+        "updateId": {
+          "type": "string",
+          "description": "ID of the update"
+        }
+      },
+      "required": [
+        "poolId",
+        "updateId"
+      ]
+    }
+  },
+  {
+    "name": "updateAgentPoolsUpdate",
+    "description": "Update an agent pool update by ID. Updates an agent pool update instance and returns the latest agent pool update",
+    "tags": [
+      "AgentPools"
+    ],
+    "method": "POST",
+    "pathTemplate": "/api/v1/agentPools/{poolId}/updates/{updateId}",
+    "pathParams": [
+      "poolId",
+      "updateId"
+    ],
+    "queryParams": [],
+    "hasBody": true,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "poolId": {
+          "type": "string",
+          "description": "ID of the agent pool for which the settings apply to"
+        },
+        "updateId": {
+          "type": "string",
+          "description": "ID of the update"
+        },
+        "requestBody": {
+          "type": "object",
+          "description": "The JSON request body. Refer to the Okta API docs for the schema."
+        }
+      },
+      "required": [
+        "poolId",
+        "updateId",
+        "requestBody"
+      ]
+    }
+  },
+  {
+    "name": "deleteAgentPoolsUpdate",
+    "description": "Delete an agent pool update. Deletes agent pool update",
+    "tags": [
+      "AgentPools"
+    ],
+    "method": "DELETE",
+    "pathTemplate": "/api/v1/agentPools/{poolId}/updates/{updateId}",
+    "pathParams": [
+      "poolId",
+      "updateId"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "poolId": {
+          "type": "string",
+          "description": "ID of the agent pool for which the settings apply to"
+        },
+        "updateId": {
+          "type": "string",
+          "description": "ID of the update"
+        }
+      },
+      "required": [
+        "poolId",
+        "updateId"
+      ]
+    }
+  },
+  {
+    "name": "activateAgentPoolsUpdate",
+    "description": "Activate an agent pool update. Activates a scheduled agent pool update",
+    "tags": [
+      "AgentPools"
+    ],
+    "method": "POST",
+    "pathTemplate": "/api/v1/agentPools/{poolId}/updates/{updateId}/activate",
+    "pathParams": [
+      "poolId",
+      "updateId"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "poolId": {
+          "type": "string",
+          "description": "ID of the agent pool for which the settings apply to"
+        },
+        "updateId": {
+          "type": "string",
+          "description": "ID of the update"
+        }
+      },
+      "required": [
+        "poolId",
+        "updateId"
+      ]
+    }
+  },
+  {
+    "name": "deactivateAgentPoolsUpdate",
+    "description": "Deactivate an agent pool update. Deactivates scheduled agent pool update",
+    "tags": [
+      "AgentPools"
+    ],
+    "method": "POST",
+    "pathTemplate": "/api/v1/agentPools/{poolId}/updates/{updateId}/deactivate",
+    "pathParams": [
+      "poolId",
+      "updateId"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "poolId": {
+          "type": "string",
+          "description": "ID of the agent pool for which the settings apply to"
+        },
+        "updateId": {
+          "type": "string",
+          "description": "ID of the update"
+        }
+      },
+      "required": [
+        "poolId",
+        "updateId"
+      ]
+    }
+  },
+  {
+    "name": "pauseAgentPoolsUpdate",
+    "description": "Pause an agent pool update. Pauses a running or queued agent pool update",
+    "tags": [
+      "AgentPools"
+    ],
+    "method": "POST",
+    "pathTemplate": "/api/v1/agentPools/{poolId}/updates/{updateId}/pause",
+    "pathParams": [
+      "poolId",
+      "updateId"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "poolId": {
+          "type": "string",
+          "description": "ID of the agent pool for which the settings apply to"
+        },
+        "updateId": {
+          "type": "string",
+          "description": "ID of the update"
+        }
+      },
+      "required": [
+        "poolId",
+        "updateId"
+      ]
+    }
+  },
+  {
+    "name": "resumeAgentPoolsUpdate",
+    "description": "Resume an agent pool update. Resumes a running or queued agent pool update",
+    "tags": [
+      "AgentPools"
+    ],
+    "method": "POST",
+    "pathTemplate": "/api/v1/agentPools/{poolId}/updates/{updateId}/resume",
+    "pathParams": [
+      "poolId",
+      "updateId"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "poolId": {
+          "type": "string",
+          "description": "ID of the agent pool for which the settings apply to"
+        },
+        "updateId": {
+          "type": "string",
+          "description": "ID of the update"
+        }
+      },
+      "required": [
+        "poolId",
+        "updateId"
+      ]
+    }
+  },
+  {
+    "name": "retryAgentPoolsUpdate",
+    "description": "Retry an agent pool update. Retries an agent pool update if the update is unsuccessful or communication with Okta was interrupted during an agent auto-update",
+    "tags": [
+      "AgentPools"
+    ],
+    "method": "POST",
+    "pathTemplate": "/api/v1/agentPools/{poolId}/updates/{updateId}/retry",
+    "pathParams": [
+      "poolId",
+      "updateId"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "poolId": {
+          "type": "string",
+          "description": "ID of the agent pool for which the settings apply to"
+        },
+        "updateId": {
+          "type": "string",
+          "description": "ID of the update"
+        }
+      },
+      "required": [
+        "poolId",
+        "updateId"
+      ]
+    }
+  },
+  {
+    "name": "stopAgentPoolsUpdate",
+    "description": "Stop an agent pool update. Stops an agent pool update",
+    "tags": [
+      "AgentPools"
+    ],
+    "method": "POST",
+    "pathTemplate": "/api/v1/agentPools/{poolId}/updates/{updateId}/stop",
+    "pathParams": [
+      "poolId",
+      "updateId"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "poolId": {
+          "type": "string",
+          "description": "ID of the agent pool for which the settings apply to"
+        },
+        "updateId": {
+          "type": "string",
+          "description": "ID of the update"
+        }
+      },
+      "required": [
+        "poolId",
+        "updateId"
+      ]
+    }
+  },
+  {
+    "name": "listDeviceIntegrations",
+    "description": "List all device integrations. Lists all device integrations for your org. Examples include Device Posture Provider, Windows Security Center, Chrome Device Trust, OSQuery, and Android Device Trust.",
+    "tags": [
+      "DeviceIntegrations"
+    ],
+    "method": "GET",
+    "pathTemplate": "/api/v1/device-integrations",
+    "pathParams": [],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {}
+    }
+  },
+  {
+    "name": "getDeviceIntegration",
+    "description": "Retrieve a device integration. Retrieves a device integration by `deviceIntegrationId`",
+    "tags": [
+      "DeviceIntegrations"
+    ],
+    "method": "GET",
+    "pathTemplate": "/api/v1/device-integrations/{deviceIntegrationId}",
+    "pathParams": [
+      "deviceIntegrationId"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "deviceIntegrationId": {
+          "type": "string",
+          "description": "The ID of the device integration"
+        }
+      },
+      "required": [
+        "deviceIntegrationId"
+      ]
+    }
+  },
+  {
+    "name": "activateDeviceIntegration",
+    "description": "Activate a device integration. Activates a device integration and populates the related configurations by `deviceIntegrationId`",
+    "tags": [
+      "DeviceIntegrations"
+    ],
+    "method": "POST",
+    "pathTemplate": "/api/v1/device-integrations/{deviceIntegrationId}/lifecycle/activate",
+    "pathParams": [
+      "deviceIntegrationId"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "deviceIntegrationId": {
+          "type": "string",
+          "description": "The ID of the device integration"
+        }
+      },
+      "required": [
+        "deviceIntegrationId"
+      ]
+    }
+  },
+  {
+    "name": "deactivateDeviceIntegration",
+    "description": "Deactivate a device integration. Deactivates a device integration by `deviceIntegrationId`",
+    "tags": [
+      "DeviceIntegrations"
+    ],
+    "method": "POST",
+    "pathTemplate": "/api/v1/device-integrations/{deviceIntegrationId}/lifecycle/deactivate",
+    "pathParams": [
+      "deviceIntegrationId"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "deviceIntegrationId": {
+          "type": "string",
+          "description": "The ID of the device integration"
+        }
+      },
+      "required": [
+        "deviceIntegrationId"
+      ]
+    }
+  },
+  {
+    "name": "listDevices",
+    "description": "List all devices. Lists all devices with pagination support. >**Note:** To list all devices enrolled by a user, use the [List all devices endpoint in the User Resources API](/openapi/okta-management/management/tag/UserResources/#tag/UserResources/operation/listUserDevices). You can return a subset of devices that match a supported search criteria using the `search` query parameter. Searches for devices based on the properties specified in the `search` parameter conforming SCIM filter specificat…",
+    "tags": [
+      "Device"
+    ],
+    "method": "GET",
+    "pathTemplate": "/api/v1/devices",
+    "pathParams": [],
+    "queryParams": [
+      "after",
+      "limit",
+      "search",
+      "expand"
+    ],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "after": {
+          "type": "string",
+          "description": ""
+        },
+        "limit": {
+          "type": "number",
+          "description": "A limit on the number of objects to return (recommend `20`)"
+        },
+        "search": {
+          "type": "string",
+          "description": "A SCIM filter expression that filters the results. Searches include all device `profile` properties and the device `id`, `status`, and `lastUpdated` properties. Searches for devices can be filtered by the contains (`co`) operator. You can only use `co` with these select device profile attributes: `…"
+        },
+        "expand": {
+          "type": "string",
+          "description": "Includes associated user details and management status for the device in the `_embedded` attribute",
+          "enum": [
+            "user",
+            "userSummary"
+          ]
+        }
+      }
+    }
+  },
+  {
+    "name": "getDevice",
+    "description": "Retrieve a device. Retrieves a device by `deviceId`",
+    "tags": [
+      "Device"
+    ],
+    "method": "GET",
+    "pathTemplate": "/api/v1/devices/{deviceId}",
+    "pathParams": [
+      "deviceId"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "deviceId": {
+          "type": "string",
+          "description": "`id` of the device"
+        }
+      },
+      "required": [
+        "deviceId"
+      ]
+    }
+  },
+  {
+    "name": "deleteDevice",
+    "description": "Delete a device. Deletes (permanently) a device by `deviceId` if it has a status of `DEACTIVATED`. You can transition the device to `DEACTIVATED` status using the [Deactivate a Device](/openapi/okta-management/management/tag/Device/#tag/Device/operation/deactivateDevice) endpoint. This request is destructive and deletes all of the profile data related to the device. Once deleted, device data can't be recovered. However, reenrollment creates a new device record. > **Note:** Attempts to delete a …",
+    "tags": [
+      "Device"
+    ],
+    "method": "DELETE",
+    "pathTemplate": "/api/v1/devices/{deviceId}",
+    "pathParams": [
+      "deviceId"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "deviceId": {
+          "type": "string",
+          "description": "`id` of the device"
+        }
+      },
+      "required": [
+        "deviceId"
+      ]
+    }
+  },
+  {
+    "name": "activateDevice",
+    "description": "Activate a device. Activates a device by setting its status to `ACTIVE` by `deviceId`. Activated devices are used to create and delete device user links.",
+    "tags": [
+      "Device"
+    ],
+    "method": "POST",
+    "pathTemplate": "/api/v1/devices/{deviceId}/lifecycle/activate",
+    "pathParams": [
+      "deviceId"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "deviceId": {
+          "type": "string",
+          "description": "`id` of the device"
+        }
+      },
+      "required": [
+        "deviceId"
+      ]
+    }
+  },
+  {
+    "name": "deactivateDevice",
+    "description": "Deactivate a device. Deactivates a device by setting its status to `DEACTIVATED` by `deviceId`. Deactivation causes a device to lose all device user links. Set the device status to `DEACTIVATED` before deleting it. > **Note:** When deactivating a Device, keep in mind the following: - Device deactivation is a destructive operation for device factors and client certificates. Device reenrollment using Okta Verify allows end users to set up new factors on the device. - Device deletion removes the d…",
+    "tags": [
+      "Device"
+    ],
+    "method": "POST",
+    "pathTemplate": "/api/v1/devices/{deviceId}/lifecycle/deactivate",
+    "pathParams": [
+      "deviceId"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "deviceId": {
+          "type": "string",
+          "description": "`id` of the device"
+        }
+      },
+      "required": [
+        "deviceId"
+      ]
+    }
+  },
+  {
+    "name": "suspendDevice",
+    "description": "Suspend a Device. Suspends a device by setting its status to `SUSPENDED`. Use suspended devices to create and delete device user links. You can only unsuspend or deactivate suspended devices. > **Note:** `SUSPENDED` status is meant to be temporary, so it isn't destructive.",
+    "tags": [
+      "Device"
+    ],
+    "method": "POST",
+    "pathTemplate": "/api/v1/devices/{deviceId}/lifecycle/suspend",
+    "pathParams": [
+      "deviceId"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "deviceId": {
+          "type": "string",
+          "description": "`id` of the device"
+        }
+      },
+      "required": [
+        "deviceId"
+      ]
+    }
+  },
+  {
+    "name": "unsuspendDevice",
+    "description": "Unsuspend a Device. Unsuspends a device by returning its `status` to `ACTIVE`. >**Note:** Only devices with a `SUSPENDED` status can be unsuspended.",
+    "tags": [
+      "Device"
+    ],
+    "method": "POST",
+    "pathTemplate": "/api/v1/devices/{deviceId}/lifecycle/unsuspend",
+    "pathParams": [
+      "deviceId"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "deviceId": {
+          "type": "string",
+          "description": "`id` of the device"
+        }
+      },
+      "required": [
+        "deviceId"
+      ]
+    }
+  },
+  {
+    "name": "listDeviceUsers",
+    "description": "List all users for a device. Lists all Users for a device by `deviceId`",
+    "tags": [
+      "Device"
+    ],
+    "method": "GET",
+    "pathTemplate": "/api/v1/devices/{deviceId}/users",
+    "pathParams": [
+      "deviceId"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "deviceId": {
+          "type": "string",
+          "description": "`id` of the device"
+        }
+      },
+      "required": [
+        "deviceId"
+      ]
+    }
+  },
+  {
+    "name": "updateADGroupMembership",
+    "description": "Update an Active Directory group membership. Updates an Active Directory group membership directly in Active Directory > **Note:** See **Before you begin: Active Directory integration with the following setup** in the [Use Okta Access Certifications to manage AD group membership](https://help.okta.com/okta_help.htm?type=oie&id=ad-bidirectional-group-mgt-configure) product documentation.",
+    "tags": [
+      "DirectoriesIntegration"
+    ],
+    "method": "POST",
+    "pathTemplate": "/api/v1/directories/{appInstanceId}/groups/modify",
+    "pathParams": [
+      "appInstanceId"
+    ],
+    "queryParams": [],
+    "hasBody": true,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "appInstanceId": {
+          "type": "string",
+          "description": "ID of the Active Directory app instance in Okta"
+        },
+        "requestBody": {
+          "type": "object",
+          "description": "The JSON request body. Refer to the Okta API docs for the schema."
+        }
+      },
+      "required": [
+        "appInstanceId",
+        "requestBody"
+      ]
+    }
+  },
+  {
+    "name": "listPushProviders",
+    "description": "List all push providers. Lists all push providers",
+    "tags": [
+      "PushProvider"
+    ],
+    "method": "GET",
+    "pathTemplate": "/api/v1/push-providers",
+    "pathParams": [],
+    "queryParams": [
+      "type"
+    ],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "description": "Filters push providers by `providerType`"
+        }
+      }
+    }
+  },
+  {
+    "name": "createPushProvider",
+    "description": "Create a push provider. Creates a new push provider. Each Push Provider must have a unique `name`.",
+    "tags": [
+      "PushProvider"
+    ],
+    "method": "POST",
+    "pathTemplate": "/api/v1/push-providers",
+    "pathParams": [],
+    "queryParams": [],
+    "hasBody": true,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "requestBody": {
+          "type": "object",
+          "description": "The JSON request body. Refer to the Okta API docs for the schema."
+        }
+      },
+      "required": [
+        "requestBody"
+      ]
+    }
+  },
+  {
+    "name": "getPushProvider",
+    "description": "Retrieve a push provider. Retrieves a push provider by `pushProviderId`",
+    "tags": [
+      "PushProvider"
+    ],
+    "method": "GET",
+    "pathTemplate": "/api/v1/push-providers/{pushProviderId}",
+    "pathParams": [
+      "pushProviderId"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "pushProviderId": {
+          "type": "string",
+          "description": "Id of the push provider"
+        }
+      },
+      "required": [
+        "pushProviderId"
+      ]
+    }
+  },
+  {
+    "name": "replacePushProvider",
+    "description": "Replace a push provider. Replaces a push provider by `pushProviderId`",
+    "tags": [
+      "PushProvider"
+    ],
+    "method": "PUT",
+    "pathTemplate": "/api/v1/push-providers/{pushProviderId}",
+    "pathParams": [
+      "pushProviderId"
+    ],
+    "queryParams": [],
+    "hasBody": true,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "pushProviderId": {
+          "type": "string",
+          "description": "Id of the push provider"
+        },
+        "requestBody": {
+          "type": "object",
+          "description": "The JSON request body. Refer to the Okta API docs for the schema."
+        }
+      },
+      "required": [
+        "pushProviderId",
+        "requestBody"
+      ]
+    }
+  },
+  {
+    "name": "deletePushProvider",
+    "description": "Delete a push provider. Deletes a push provider by `pushProviderId`. If the push provider is currently being used in the org by a custom authenticator, the delete will not be allowed.",
+    "tags": [
+      "PushProvider"
+    ],
+    "method": "DELETE",
+    "pathTemplate": "/api/v1/push-providers/{pushProviderId}",
+    "pathParams": [
+      "pushProviderId"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "pushProviderId": {
+          "type": "string",
+          "description": "Id of the push provider"
+        }
+      },
+      "required": [
+        "pushProviderId"
+      ]
+    }
+  },
+  {
+    "name": "listRealmAssignments",
+    "description": "List all realm assignments. Lists all realm assignments",
+    "tags": [
+      "RealmAssignment"
+    ],
+    "method": "GET",
+    "pathTemplate": "/api/v1/realm-assignments",
+    "pathParams": [],
+    "queryParams": [
+      "limit",
+      "after"
+    ],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "limit": {
+          "type": "number",
+          "description": "A limit on the number of objects to return"
+        },
+        "after": {
+          "type": "string",
+          "description": "The cursor used for pagination. It represents the priority of the last realm assignment returned in the previous fetch operation."
+        }
+      }
+    }
+  },
+  {
+    "name": "createRealmAssignment",
+    "description": "Create a realm assignment. Creates a new realm assignment",
+    "tags": [
+      "RealmAssignment"
+    ],
+    "method": "POST",
+    "pathTemplate": "/api/v1/realm-assignments",
+    "pathParams": [],
+    "queryParams": [],
+    "hasBody": true,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "requestBody": {
+          "type": "object",
+          "description": "The JSON request body. Refer to the Okta API docs for the schema."
+        }
+      },
+      "required": [
+        "requestBody"
+      ]
+    }
+  },
+  {
+    "name": "listRealmAssignmentOperations",
+    "description": "List all realm assignment operations. Lists all realm assignment operations. The upper limit is 200 and operations are sorted in descending order from most recent to oldest by ID.",
+    "tags": [
+      "RealmAssignment"
+    ],
+    "method": "GET",
+    "pathTemplate": "/api/v1/realm-assignments/operations",
+    "pathParams": [],
+    "queryParams": [
+      "limit",
+      "after"
+    ],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "limit": {
+          "type": "number",
+          "description": "A limit on the number of objects to return"
+        },
+        "after": {
+          "type": "string",
+          "description": "The cursor to use for pagination. It is an opaque string that specifies your current location in the list and is obtained from the `Link` response header. See [Pagination](https://developer.okta.com/docs/api/#pagination)."
+        }
+      }
+    }
+  },
+  {
+    "name": "executeRealmAssignment",
+    "description": "Execute a realm assignment. Executes a realm assignment",
+    "tags": [
+      "RealmAssignment"
+    ],
+    "method": "POST",
+    "pathTemplate": "/api/v1/realm-assignments/operations",
+    "pathParams": [],
+    "queryParams": [],
+    "hasBody": true,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "requestBody": {
+          "type": "object",
+          "description": "The JSON request body. Refer to the Okta API docs for the schema."
+        }
+      },
+      "required": [
+        "requestBody"
+      ]
+    }
+  },
+  {
+    "name": "getRealmAssignment",
+    "description": "Retrieve a realm assignment. Retrieves a realm assignment",
+    "tags": [
+      "RealmAssignment"
+    ],
+    "method": "GET",
+    "pathTemplate": "/api/v1/realm-assignments/{assignmentId}",
+    "pathParams": [
+      "assignmentId"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "assignmentId": {
+          "type": "string",
+          "description": "ID of the realm assignment"
+        }
+      },
+      "required": [
+        "assignmentId"
+      ]
+    }
+  },
+  {
+    "name": "replaceRealmAssignment",
+    "description": "Replace a realm assignment. Replaces a realm assignment",
+    "tags": [
+      "RealmAssignment"
+    ],
+    "method": "PUT",
+    "pathTemplate": "/api/v1/realm-assignments/{assignmentId}",
+    "pathParams": [
+      "assignmentId"
+    ],
+    "queryParams": [],
+    "hasBody": true,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "assignmentId": {
+          "type": "string",
+          "description": "ID of the realm assignment"
+        },
+        "requestBody": {
+          "type": "object",
+          "description": "The JSON request body. Refer to the Okta API docs for the schema."
+        }
+      },
+      "required": [
+        "assignmentId",
+        "requestBody"
+      ]
+    }
+  },
+  {
+    "name": "deleteRealmAssignment",
+    "description": "Delete a realm assignment. Deletes a realm assignment",
+    "tags": [
+      "RealmAssignment"
+    ],
+    "method": "DELETE",
+    "pathTemplate": "/api/v1/realm-assignments/{assignmentId}",
+    "pathParams": [
+      "assignmentId"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "assignmentId": {
+          "type": "string",
+          "description": "ID of the realm assignment"
+        }
+      },
+      "required": [
+        "assignmentId"
+      ]
+    }
+  },
+  {
+    "name": "activateRealmAssignment",
+    "description": "Activate a realm assignment. Activates a realm assignment",
+    "tags": [
+      "RealmAssignment"
+    ],
+    "method": "POST",
+    "pathTemplate": "/api/v1/realm-assignments/{assignmentId}/lifecycle/activate",
+    "pathParams": [
+      "assignmentId"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "assignmentId": {
+          "type": "string",
+          "description": "ID of the realm assignment"
+        }
+      },
+      "required": [
+        "assignmentId"
+      ]
+    }
+  },
+  {
+    "name": "deactivateRealmAssignment",
+    "description": "Deactivate a realm assignment. Deactivates a realm assignment",
+    "tags": [
+      "RealmAssignment"
+    ],
+    "method": "POST",
+    "pathTemplate": "/api/v1/realm-assignments/{assignmentId}/lifecycle/deactivate",
+    "pathParams": [
+      "assignmentId"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "assignmentId": {
+          "type": "string",
+          "description": "ID of the realm assignment"
+        }
+      },
+      "required": [
+        "assignmentId"
+      ]
+    }
+  },
+  {
+    "name": "listRealms",
+    "description": "List all realms. Lists all realms. > **Note:** The `search` parameter results are sourced from an eventually consistent datasource and may not reflect the latest information.",
+    "tags": [
+      "Realm"
+    ],
+    "method": "GET",
+    "pathTemplate": "/api/v1/realms",
+    "pathParams": [],
+    "queryParams": [
+      "limit",
+      "after",
+      "search",
+      "sortBy",
+      "sortOrder"
+    ],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "limit": {
+          "type": "number",
+          "description": "Specifies the number of results returned. Defaults to 10 if `search` is provided."
+        },
+        "after": {
+          "type": "string",
+          "description": "The cursor to use for pagination. It is an opaque string that specifies your current location in the list and is obtained from the `Link` response header. See [Pagination](https://developer.okta.com/docs/api/#pagination)."
+        },
+        "search": {
+          "type": "string",
+          "description": "Searches for realms with a supported filtering expression for most properties. Searches for realms can be filtered by the contains (`co`) operator. You can only use `co` with the `profile.name` property. See [Operators](https://developer.okta.com/docs/api/#operators)."
+        },
+        "sortBy": {
+          "type": "string",
+          "description": "Specifies the field to sort by and can be any single property (for search queries only)"
+        },
+        "sortOrder": {
+          "type": "string",
+          "description": "Specifies the sort order: `asc` or `desc` (for search queries only). This parameter is ignored if `sortBy` isn't present."
+        }
+      }
+    }
+  },
+  {
+    "name": "createRealm",
+    "description": "Create a realm. Creates a new realm",
+    "tags": [
+      "Realm"
+    ],
+    "method": "POST",
+    "pathTemplate": "/api/v1/realms",
+    "pathParams": [],
+    "queryParams": [],
+    "hasBody": true,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "requestBody": {
+          "type": "object",
+          "description": "The JSON request body. Refer to the Okta API docs for the schema."
+        }
+      },
+      "required": [
+        "requestBody"
+      ]
+    }
+  },
+  {
+    "name": "getRealm",
+    "description": "Retrieve a realm. Retrieves a realm",
+    "tags": [
+      "Realm"
+    ],
+    "method": "GET",
+    "pathTemplate": "/api/v1/realms/{realmId}",
+    "pathParams": [
+      "realmId"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "realmId": {
+          "type": "string",
+          "description": "ID of the realm"
+        }
+      },
+      "required": [
+        "realmId"
+      ]
+    }
+  },
+  {
+    "name": "replaceRealm",
+    "description": "Replace the realm profile. Replaces the realm profile",
+    "tags": [
+      "Realm"
+    ],
+    "method": "PUT",
+    "pathTemplate": "/api/v1/realms/{realmId}",
+    "pathParams": [
+      "realmId"
+    ],
+    "queryParams": [],
+    "hasBody": true,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "realmId": {
+          "type": "string",
+          "description": "ID of the realm"
+        },
+        "requestBody": {
+          "type": "object",
+          "description": "The JSON request body. Refer to the Okta API docs for the schema."
+        }
+      },
+      "required": [
+        "realmId",
+        "requestBody"
+      ]
+    }
+  },
+  {
+    "name": "deleteRealm",
+    "description": "Delete a realm. Deletes a realm permanently. This operation can only be performed after disassociating other entities like users and identity providers from a realm.",
+    "tags": [
+      "Realm"
+    ],
+    "method": "DELETE",
+    "pathTemplate": "/api/v1/realms/{realmId}",
+    "pathParams": [
+      "realmId"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "realmId": {
+          "type": "string",
+          "description": "ID of the realm"
+        }
+      },
+      "required": [
+        "realmId"
+      ]
+    }
+  },
+  {
+    "name": "listAppServiceAccounts",
+    "description": "List all app service accounts. Lists all app service accounts",
+    "tags": [
+      "ServiceAccount"
+    ],
+    "method": "GET",
+    "pathTemplate": "/privileged-access/api/v1/service-accounts",
+    "pathParams": [],
+    "queryParams": [
+      "limit",
+      "after",
+      "match"
+    ],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "limit": {
+          "type": "number",
+          "description": "A limit on the number of objects to return"
+        },
+        "after": {
+          "type": "string",
+          "description": "The cursor to use for pagination. It is an opaque string that specifies your current location in the list and is obtained from the `Link` response header. See [Pagination](https://developer.okta.com/docs/api/#pagination)."
+        },
+        "match": {
+          "type": "string",
+          "description": "Searches for app service accounts where the account name (`name`), username (`username`), app instance label (`containerInstanceName`), or OIN app key name (`containerGlobalName`) contains the given value"
+        }
+      }
+    }
+  },
+  {
+    "name": "createAppServiceAccount",
+    "description": "Create an app service account. Creates a new app service account for managing an app account",
+    "tags": [
+      "ServiceAccount"
+    ],
+    "method": "POST",
+    "pathTemplate": "/privileged-access/api/v1/service-accounts",
+    "pathParams": [],
+    "queryParams": [],
+    "hasBody": true,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "requestBody": {
+          "type": "object",
+          "description": "The JSON request body. Refer to the Okta API docs for the schema."
+        }
+      },
+      "required": [
+        "requestBody"
+      ]
+    }
+  },
+  {
+    "name": "getAppServiceAccount",
+    "description": "Retrieve an app service account. Retrieves an app service account specified by ID",
+    "tags": [
+      "ServiceAccount"
+    ],
+    "method": "GET",
+    "pathTemplate": "/privileged-access/api/v1/service-accounts/{id}",
+    "pathParams": [
+      "id"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "ID of an existing service account"
+        }
+      },
+      "required": [
+        "id"
+      ]
+    }
+  },
+  {
+    "name": "updateAppServiceAccount",
+    "description": "Update an existing app service account. Updates an existing app service account specified by ID",
+    "tags": [
+      "ServiceAccount"
+    ],
+    "method": "PATCH",
+    "pathTemplate": "/privileged-access/api/v1/service-accounts/{id}",
+    "pathParams": [
+      "id"
+    ],
+    "queryParams": [],
+    "hasBody": true,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "ID of an existing service account"
+        },
+        "requestBody": {
+          "type": "object",
+          "description": "The JSON request body. Refer to the Okta API docs for the schema."
+        }
+      },
+      "required": [
+        "id"
+      ]
+    }
+  },
+  {
+    "name": "deleteAppServiceAccount",
+    "description": "Delete an app service account. Deletes an app service account specified by ID",
+    "tags": [
+      "ServiceAccount"
+    ],
+    "method": "DELETE",
+    "pathTemplate": "/privileged-access/api/v1/service-accounts/{id}",
+    "pathParams": [
+      "id"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "ID of an existing service account"
+        }
+      },
+      "required": [
+        "id"
+      ]
+    }
+  }
+]

@@ -1,0 +1,2750 @@
+[
+  {
+    "name": "listGroupAssignedRoles",
+    "description": "List all group role assignments. Lists all assigned roles of a group by `groupId`",
+    "tags": [
+      "RoleAssignmentBGroup"
+    ],
+    "method": "GET",
+    "pathTemplate": "/api/v1/groups/{groupId}/roles",
+    "pathParams": [
+      "groupId"
+    ],
+    "queryParams": [
+      "expand"
+    ],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "groupId": {
+          "type": "string",
+          "description": "The `id` of the group"
+        },
+        "expand": {
+          "type": "string",
+          "description": "An optional parameter used to return targets configured for the standard role assignment in the `embedded` property. Supported values: `targets/groups` or `targets/catalog/apps`"
+        }
+      },
+      "required": [
+        "groupId"
+      ]
+    }
+  },
+  {
+    "name": "assignRoleToGroup",
+    "description": "Assign a role to a group. Assigns a [standard role](/openapi/okta-management/guides/roles/#standard-roles) to a group. You can also assign a custom role to a group, but the preferred method to assign a custom role to a group is to create a binding between the custom role, the resource set, and the group. See [Create a role resource set binding](/openapi/okta-management/management/tag/RoleDResourceSetBinding/#tag/RoleDResourceSetBinding/operation/createResourceSetBinding). > **Notes:** > * The r…",
+    "tags": [
+      "RoleAssignmentBGroup"
+    ],
+    "method": "POST",
+    "pathTemplate": "/api/v1/groups/{groupId}/roles",
+    "pathParams": [
+      "groupId"
+    ],
+    "queryParams": [
+      "disableNotifications"
+    ],
+    "hasBody": true,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "groupId": {
+          "type": "string",
+          "description": "The `id` of the group"
+        },
+        "disableNotifications": {
+          "type": "boolean",
+          "description": "Grants the group third-party admin status when set to `true`"
+        },
+        "requestBody": {
+          "type": "object",
+          "description": "The JSON request body. Refer to the Okta API docs for the schema."
+        }
+      },
+      "required": [
+        "groupId",
+        "requestBody"
+      ]
+    }
+  },
+  {
+    "name": "getGroupAssignedRole",
+    "description": "Retrieve a group role assignment. Retrieves a role assigned to a group (identified by the `groupId`). The `roleAssignmentId` is the unique identifier for either a standard role group assignment object or a custom role resource set binding object.",
+    "tags": [
+      "RoleAssignmentBGroup"
+    ],
+    "method": "GET",
+    "pathTemplate": "/api/v1/groups/{groupId}/roles/{roleAssignmentId}",
+    "pathParams": [
+      "groupId",
+      "roleAssignmentId"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "groupId": {
+          "type": "string",
+          "description": "The `id` of the group"
+        },
+        "roleAssignmentId": {
+          "type": "string",
+          "description": "The `id` of the role assignment"
+        }
+      },
+      "required": [
+        "groupId",
+        "roleAssignmentId"
+      ]
+    }
+  },
+  {
+    "name": "unassignRoleFromGroup",
+    "description": "Unassign a group role. Unassigns a role assignment (identified by `roleAssignmentId`) from a group (identified by the `groupId`)",
+    "tags": [
+      "RoleAssignmentBGroup"
+    ],
+    "method": "DELETE",
+    "pathTemplate": "/api/v1/groups/{groupId}/roles/{roleAssignmentId}",
+    "pathParams": [
+      "groupId",
+      "roleAssignmentId"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "groupId": {
+          "type": "string",
+          "description": "The `id` of the group"
+        },
+        "roleAssignmentId": {
+          "type": "string",
+          "description": "The `id` of the role assignment"
+        }
+      },
+      "required": [
+        "groupId",
+        "roleAssignmentId"
+      ]
+    }
+  },
+  {
+    "name": "listApplicationTargetsForApplicationAdministratorRoleForGroup",
+    "description": "List all group role app targets. Lists all app targets for an `APP_ADMIN` role assignment to a group. The response includes a list of OIN-cataloged apps or app instances. The response payload for an app instance contains the `id` property, but an OIN-cataloged app doesn't.",
+    "tags": [
+      "RoleBTargetBGroup"
+    ],
+    "method": "GET",
+    "pathTemplate": "/api/v1/groups/{groupId}/roles/{roleAssignmentId}/targets/catalog/apps",
+    "pathParams": [
+      "groupId",
+      "roleAssignmentId"
+    ],
+    "queryParams": [
+      "after",
+      "limit"
+    ],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "groupId": {
+          "type": "string",
+          "description": "The `id` of the group"
+        },
+        "roleAssignmentId": {
+          "type": "string",
+          "description": "The `id` of the role assignment"
+        },
+        "after": {
+          "type": "string",
+          "description": "The cursor to use for pagination. It is an opaque string that specifies your current location in the list and is obtained from the `Link` response header. See [Pagination](https://developer.okta.com/docs/api/#pagination)."
+        },
+        "limit": {
+          "type": "number",
+          "description": "A limit on the number of objects to return"
+        }
+      },
+      "required": [
+        "groupId",
+        "roleAssignmentId"
+      ]
+    }
+  },
+  {
+    "name": "assignAppTargetToAdminRoleForGroup",
+    "description": "Assign a group role app target. Assigns an OIN app target to an `APP_ADMIN` role assignment to a group. When you assign the first OIN app target, you reduce the scope of the role assignment. The role no longer applies to all app targets, but applies only to the specified target. An OIN app target that's assigned to the role overrides any existing instance targets of the OIN app. For example, if a user is assigned to administer a specific Facebook instance, a successful request to add an OIN app…",
+    "tags": [
+      "RoleBTargetBGroup"
+    ],
+    "method": "PUT",
+    "pathTemplate": "/api/v1/groups/{groupId}/roles/{roleAssignmentId}/targets/catalog/apps/{appName}",
+    "pathParams": [
+      "groupId",
+      "roleAssignmentId",
+      "appName"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "groupId": {
+          "type": "string",
+          "description": "The `id` of the group"
+        },
+        "roleAssignmentId": {
+          "type": "string",
+          "description": "The `id` of the role assignment"
+        },
+        "appName": {
+          "type": "string",
+          "description": "Name of the app definition (the OIN catalog app key name)"
+        }
+      },
+      "required": [
+        "groupId",
+        "roleAssignmentId",
+        "appName"
+      ]
+    }
+  },
+  {
+    "name": "unassignAppTargetToAdminRoleForGroup",
+    "description": "Unassign a group role app target. Unassigns an OIN app target from an `APP_ADMIN` role assignment to a group > **Note:** You can't remove the last app target from a role assignment. > If you need a role assignment that applies to all apps, delete the `APP_ADMIN` role assignment with the target and create another one. See [Unassign a group role](/openapi/okta-management/management/tag/RoleAssignmentBGroup/#tag/RoleAssignmentBGroup/operation/unassignRoleFromGroup).",
+    "tags": [
+      "RoleBTargetBGroup"
+    ],
+    "method": "DELETE",
+    "pathTemplate": "/api/v1/groups/{groupId}/roles/{roleAssignmentId}/targets/catalog/apps/{appName}",
+    "pathParams": [
+      "groupId",
+      "roleAssignmentId",
+      "appName"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "groupId": {
+          "type": "string",
+          "description": "The `id` of the group"
+        },
+        "roleAssignmentId": {
+          "type": "string",
+          "description": "The `id` of the role assignment"
+        },
+        "appName": {
+          "type": "string",
+          "description": "Name of the app definition (the OIN catalog app key name)"
+        }
+      },
+      "required": [
+        "groupId",
+        "roleAssignmentId",
+        "appName"
+      ]
+    }
+  },
+  {
+    "name": "assignAppInstanceTargetToAppAdminRoleForGroup",
+    "description": "Assign a group role app instance target. Assigns an app instance target to an `APP_ADMIN` role assignment to a group. When you assign the first OIN app or app instance target, you reduce the scope of the role assignment. The role no longer applies to all app targets, but applies only to the specified target. > **Note:** You can target a mixture of both OIN app and app instance targets, but you can't assign permissions to manage all instances of an OIN app and then assign a subset of permissions…",
+    "tags": [
+      "RoleBTargetBGroup"
+    ],
+    "method": "PUT",
+    "pathTemplate": "/api/v1/groups/{groupId}/roles/{roleAssignmentId}/targets/catalog/apps/{appName}/{appId}",
+    "pathParams": [
+      "groupId",
+      "roleAssignmentId",
+      "appName",
+      "appId"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "groupId": {
+          "type": "string",
+          "description": "The `id` of the group"
+        },
+        "roleAssignmentId": {
+          "type": "string",
+          "description": "The `id` of the role assignment"
+        },
+        "appName": {
+          "type": "string",
+          "description": "Name of the app definition (the OIN catalog app key name)"
+        },
+        "appId": {
+          "type": "string",
+          "description": "Application ID"
+        }
+      },
+      "required": [
+        "groupId",
+        "roleAssignmentId",
+        "appName",
+        "appId"
+      ]
+    }
+  },
+  {
+    "name": "unassignAppInstanceTargetToAppAdminRoleForGroup",
+    "description": "Unassign a group role app instance target. Unassigns an app instance target from an `APP_ADMIN` role assignment to a group > **Note:** You can't remove the last app instance target from a role assignment. > If you need a role assignment that applies to all apps, delete the `APP_ADMIN` role assignment with the target and create another one. See [Unassign a group role](/openapi/okta-management/management/tag/RoleAssignmentBGroup/#tag/RoleAssignmentBGroup/operation/unassignRoleFromGroup).",
+    "tags": [
+      "RoleBTargetBGroup"
+    ],
+    "method": "DELETE",
+    "pathTemplate": "/api/v1/groups/{groupId}/roles/{roleAssignmentId}/targets/catalog/apps/{appName}/{appId}",
+    "pathParams": [
+      "groupId",
+      "roleAssignmentId",
+      "appName",
+      "appId"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "groupId": {
+          "type": "string",
+          "description": "The `id` of the group"
+        },
+        "roleAssignmentId": {
+          "type": "string",
+          "description": "The `id` of the role assignment"
+        },
+        "appName": {
+          "type": "string",
+          "description": "Name of the app definition (the OIN catalog app key name)"
+        },
+        "appId": {
+          "type": "string",
+          "description": "Application ID"
+        }
+      },
+      "required": [
+        "groupId",
+        "roleAssignmentId",
+        "appName",
+        "appId"
+      ]
+    }
+  },
+  {
+    "name": "listGroupTargetsForGroupRole",
+    "description": "List all group role group targets. Lists all group targets for a [`USER_ADMIN`](/openapi/okta-management/guides/roles/#standard-roles), `HELP_DESK_ADMIN`, or `GROUP_MEMBERSHIP_ADMIN` role assignment to a group. If the role isn't scoped to specific group targets, Okta returns an empty array `[]`.",
+    "tags": [
+      "RoleBTargetBGroup"
+    ],
+    "method": "GET",
+    "pathTemplate": "/api/v1/groups/{groupId}/roles/{roleAssignmentId}/targets/groups",
+    "pathParams": [
+      "groupId",
+      "roleAssignmentId"
+    ],
+    "queryParams": [
+      "after",
+      "limit"
+    ],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "groupId": {
+          "type": "string",
+          "description": "The `id` of the group"
+        },
+        "roleAssignmentId": {
+          "type": "string",
+          "description": "The `id` of the role assignment"
+        },
+        "after": {
+          "type": "string",
+          "description": "The cursor to use for pagination. It is an opaque string that specifies your current location in the list and is obtained from the `Link` response header. See [Pagination](https://developer.okta.com/docs/api/#pagination)."
+        },
+        "limit": {
+          "type": "number",
+          "description": "A limit on the number of objects to return"
+        }
+      },
+      "required": [
+        "groupId",
+        "roleAssignmentId"
+      ]
+    }
+  },
+  {
+    "name": "assignGroupTargetToGroupAdminRole",
+    "description": "Assign a group role group target. Assigns a group target to a [`USER_ADMIN`](/openapi/okta-management/guides/roles/#standard-roles), `HELP_DESK_ADMIN`, or `GROUP_MEMBERSHIP_ADMIN` role assignment to a group. When you assign the first group target, you reduce the scope of the role assignment. The role no longer applies to all targets but applies only to the specified target.",
+    "tags": [
+      "RoleBTargetBGroup"
+    ],
+    "method": "PUT",
+    "pathTemplate": "/api/v1/groups/{groupId}/roles/{roleAssignmentId}/targets/groups/{targetGroupId}",
+    "pathParams": [
+      "groupId",
+      "roleAssignmentId",
+      "targetGroupId"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "groupId": {
+          "type": "string",
+          "description": "The `id` of the group"
+        },
+        "roleAssignmentId": {
+          "type": "string",
+          "description": "The `id` of the role assignment"
+        },
+        "targetGroupId": {
+          "type": "string",
+          "description": ""
+        }
+      },
+      "required": [
+        "groupId",
+        "roleAssignmentId",
+        "targetGroupId"
+      ]
+    }
+  },
+  {
+    "name": "unassignGroupTargetFromGroupAdminRole",
+    "description": "Unassign a group role group target. Unassigns a group target from a [`USER_ADMIN`](/openapi/okta-management/guides/roles/#standard-roles), `HELP_DESK_ADMIN`, or `GROUP_MEMBERSHIP_ADMIN` role assignment to a group.",
+    "tags": [
+      "RoleBTargetBGroup"
+    ],
+    "method": "DELETE",
+    "pathTemplate": "/api/v1/groups/{groupId}/roles/{roleAssignmentId}/targets/groups/{targetGroupId}",
+    "pathParams": [
+      "groupId",
+      "roleAssignmentId",
+      "targetGroupId"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "groupId": {
+          "type": "string",
+          "description": "The `id` of the group"
+        },
+        "roleAssignmentId": {
+          "type": "string",
+          "description": "The `id` of the role assignment"
+        },
+        "targetGroupId": {
+          "type": "string",
+          "description": ""
+        }
+      },
+      "required": [
+        "groupId",
+        "roleAssignmentId",
+        "targetGroupId"
+      ]
+    }
+  },
+  {
+    "name": "listUsersWithRoleAssignments",
+    "description": "List all users with role assignments. Lists all users with role assignments",
+    "tags": [
+      "RoleAssignmentAUser"
+    ],
+    "method": "GET",
+    "pathTemplate": "/api/v1/iam/assignees/users",
+    "pathParams": [],
+    "queryParams": [
+      "after",
+      "limit"
+    ],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "after": {
+          "type": "string",
+          "description": "Specifies the pagination cursor for the next page of targets"
+        },
+        "limit": {
+          "type": "number",
+          "description": "Specifies the number of results returned. Defaults to `100`."
+        }
+      }
+    }
+  },
+  {
+    "name": "listGovernanceBundles",
+    "description": "List all governance bundles. Lists all governance bundles for the Admin Console in your org",
+    "tags": [
+      "GovernanceBundle"
+    ],
+    "method": "GET",
+    "pathTemplate": "/api/v1/iam/governance/bundles",
+    "pathParams": [],
+    "queryParams": [
+      "after",
+      "limit"
+    ],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "after": {
+          "type": "string",
+          "description": "The cursor to use for pagination. It is an opaque string that specifies your current location in the list and is obtained from the `Link` response header. See [Pagination](https://developer.okta.com/docs/api/#pagination)."
+        },
+        "limit": {
+          "type": "number",
+          "description": "A limit on the number of objects to return"
+        }
+      }
+    }
+  },
+  {
+    "name": "createGovernanceBundle",
+    "description": "Create a governance bundle. Creates a governance bundle of entitlements for the Admin Console",
+    "tags": [
+      "GovernanceBundle"
+    ],
+    "method": "POST",
+    "pathTemplate": "/api/v1/iam/governance/bundles",
+    "pathParams": [],
+    "queryParams": [],
+    "hasBody": true,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "requestBody": {
+          "type": "object",
+          "description": "The JSON request body. Refer to the Okta API docs for the schema."
+        }
+      },
+      "required": [
+        "requestBody"
+      ]
+    }
+  },
+  {
+    "name": "getGovernanceBundle",
+    "description": "Retrieve a governance bundle. Retrieves a governance bundle for the Admin Console",
+    "tags": [
+      "GovernanceBundle"
+    ],
+    "method": "GET",
+    "pathTemplate": "/api/v1/iam/governance/bundles/{bundleId}",
+    "pathParams": [
+      "bundleId"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "bundleId": {
+          "type": "string",
+          "description": "The `id` of a bundle"
+        }
+      },
+      "required": [
+        "bundleId"
+      ]
+    }
+  },
+  {
+    "name": "replaceGovernanceBundle",
+    "description": "Replace a governance bundle. Replaces the properties of a governance bundle for the Admin Console",
+    "tags": [
+      "GovernanceBundle"
+    ],
+    "method": "PUT",
+    "pathTemplate": "/api/v1/iam/governance/bundles/{bundleId}",
+    "pathParams": [
+      "bundleId"
+    ],
+    "queryParams": [],
+    "hasBody": true,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "bundleId": {
+          "type": "string",
+          "description": "The `id` of a bundle"
+        },
+        "requestBody": {
+          "type": "object",
+          "description": "The JSON request body. Refer to the Okta API docs for the schema."
+        }
+      },
+      "required": [
+        "bundleId",
+        "requestBody"
+      ]
+    }
+  },
+  {
+    "name": "deleteGovernanceBundle",
+    "description": "Delete a governance bundle. Deletes an Admin Console governance bundle",
+    "tags": [
+      "GovernanceBundle"
+    ],
+    "method": "DELETE",
+    "pathTemplate": "/api/v1/iam/governance/bundles/{bundleId}",
+    "pathParams": [
+      "bundleId"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "bundleId": {
+          "type": "string",
+          "description": "The `id` of a bundle"
+        }
+      },
+      "required": [
+        "bundleId"
+      ]
+    }
+  },
+  {
+    "name": "listBundleEntitlements",
+    "description": "List all entitlements for a governance bundle. Lists all entitlements specific to a governance bundle",
+    "tags": [
+      "GovernanceBundle"
+    ],
+    "method": "GET",
+    "pathTemplate": "/api/v1/iam/governance/bundles/{bundleId}/entitlements",
+    "pathParams": [
+      "bundleId"
+    ],
+    "queryParams": [
+      "after",
+      "limit"
+    ],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "bundleId": {
+          "type": "string",
+          "description": "The `id` of a bundle"
+        },
+        "after": {
+          "type": "string",
+          "description": "The cursor to use for pagination. It is an opaque string that specifies your current location in the list and is obtained from the `Link` response header. See [Pagination](https://developer.okta.com/docs/api/#pagination)."
+        },
+        "limit": {
+          "type": "number",
+          "description": "A limit on the number of objects to return"
+        }
+      },
+      "required": [
+        "bundleId"
+      ]
+    }
+  },
+  {
+    "name": "listBundleEntitlementValues",
+    "description": "List all values for a governance bundle entitlement. Lists all entitlement values that are specific to a governance bundle entitlement",
+    "tags": [
+      "GovernanceBundle"
+    ],
+    "method": "GET",
+    "pathTemplate": "/api/v1/iam/governance/bundles/{bundleId}/entitlements/{entitlementId}/values",
+    "pathParams": [
+      "bundleId",
+      "entitlementId"
+    ],
+    "queryParams": [
+      "after",
+      "limit"
+    ],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "bundleId": {
+          "type": "string",
+          "description": "The `id` of a bundle"
+        },
+        "entitlementId": {
+          "type": "string",
+          "description": "The `id` of a bundle entitlement"
+        },
+        "after": {
+          "type": "string",
+          "description": "The cursor to use for pagination. It is an opaque string that specifies your current location in the list and is obtained from the `Link` response header. See [Pagination](https://developer.okta.com/docs/api/#pagination)."
+        },
+        "limit": {
+          "type": "number",
+          "description": "A limit on the number of objects to return"
+        }
+      },
+      "required": [
+        "bundleId",
+        "entitlementId"
+      ]
+    }
+  },
+  {
+    "name": "getOptInStatus",
+    "description": "Retrieve the Admin Console opt-in status. Retrieves the entitlement management opt-in status for the Admin Console",
+    "tags": [
+      "GovernanceBundle"
+    ],
+    "method": "GET",
+    "pathTemplate": "/api/v1/iam/governance/optIn",
+    "pathParams": [],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {}
+    }
+  },
+  {
+    "name": "optIn",
+    "description": "Opt in the Admin Console to entitlement management. Opts in the Admin Console to entitlement management",
+    "tags": [
+      "GovernanceBundle"
+    ],
+    "method": "POST",
+    "pathTemplate": "/api/v1/iam/governance/optIn",
+    "pathParams": [],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {}
+    }
+  },
+  {
+    "name": "optOut",
+    "description": "Opt out the Admin Console from entitlement management. Opts out the Admin Console from entitlement management",
+    "tags": [
+      "GovernanceBundle"
+    ],
+    "method": "POST",
+    "pathTemplate": "/api/v1/iam/governance/optOut",
+    "pathParams": [],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {}
+    }
+  },
+  {
+    "name": "listResourceSets",
+    "description": "List all resource sets. Lists all resource sets with pagination support",
+    "tags": [
+      "RoleCResourceSet"
+    ],
+    "method": "GET",
+    "pathTemplate": "/api/v1/iam/resource-sets",
+    "pathParams": [],
+    "queryParams": [
+      "after"
+    ],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "after": {
+          "type": "string",
+          "description": "The cursor to use for pagination. It is an opaque string that specifies your current location in the list and is obtained from the `Link` response header. See [Pagination](https://developer.okta.com/docs/api/#pagination)."
+        }
+      }
+    }
+  },
+  {
+    "name": "createResourceSet",
+    "description": "Create a resource set. Creates a new resource set. See [Supported resources](/openapi/okta-management/guides/roles/#supported-resources). > **Note:** The maximum number of `resources` allowed in a resource set object is 1000. Resources are identified by either an Okta Resource Name (ORN) or by a REST URL format. See [Okta Resource Name](/openapi/okta-management/guides/roles/#okta-resource-name-orn).",
+    "tags": [
+      "RoleCResourceSet"
+    ],
+    "method": "POST",
+    "pathTemplate": "/api/v1/iam/resource-sets",
+    "pathParams": [],
+    "queryParams": [],
+    "hasBody": true,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "requestBody": {
+          "type": "object",
+          "description": "The JSON request body. Refer to the Okta API docs for the schema."
+        }
+      },
+      "required": [
+        "requestBody"
+      ]
+    }
+  },
+  {
+    "name": "getResourceSet",
+    "description": "Retrieve a resource set. Retrieves a resource set by `resourceSetIdOrLabel`",
+    "tags": [
+      "RoleCResourceSet"
+    ],
+    "method": "GET",
+    "pathTemplate": "/api/v1/iam/resource-sets/{resourceSetIdOrLabel}",
+    "pathParams": [
+      "resourceSetIdOrLabel"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "resourceSetIdOrLabel": {
+          "type": "string",
+          "description": "`id` or `label` of the resource set"
+        }
+      },
+      "required": [
+        "resourceSetIdOrLabel"
+      ]
+    }
+  },
+  {
+    "name": "replaceResourceSet",
+    "description": "Replace a resource set. Replaces the label and description of a resource set. See [Supported resources](/openapi/okta-management/guides/roles/#supported-resources).",
+    "tags": [
+      "RoleCResourceSet"
+    ],
+    "method": "PUT",
+    "pathTemplate": "/api/v1/iam/resource-sets/{resourceSetIdOrLabel}",
+    "pathParams": [
+      "resourceSetIdOrLabel"
+    ],
+    "queryParams": [],
+    "hasBody": true,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "resourceSetIdOrLabel": {
+          "type": "string",
+          "description": "`id` or `label` of the resource set"
+        },
+        "requestBody": {
+          "type": "object",
+          "description": "The JSON request body. Refer to the Okta API docs for the schema."
+        }
+      },
+      "required": [
+        "resourceSetIdOrLabel",
+        "requestBody"
+      ]
+    }
+  },
+  {
+    "name": "deleteResourceSet",
+    "description": "Delete a resource set. Deletes a resource set by `resourceSetIdOrLabel`",
+    "tags": [
+      "RoleCResourceSet"
+    ],
+    "method": "DELETE",
+    "pathTemplate": "/api/v1/iam/resource-sets/{resourceSetIdOrLabel}",
+    "pathParams": [
+      "resourceSetIdOrLabel"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "resourceSetIdOrLabel": {
+          "type": "string",
+          "description": "`id` or `label` of the resource set"
+        }
+      },
+      "required": [
+        "resourceSetIdOrLabel"
+      ]
+    }
+  },
+  {
+    "name": "listBindings",
+    "description": "List all role resource set bindings. Lists all bindings for a resource set with pagination support. The returned `roles` array contains the roles for each binding associated with the specified resource set. If there are more than 100 bindings for the specified resource set, `links.next` provides the resource with pagination for the next list of bindings.",
+    "tags": [
+      "RoleDResourceSetBinding"
+    ],
+    "method": "GET",
+    "pathTemplate": "/api/v1/iam/resource-sets/{resourceSetIdOrLabel}/bindings",
+    "pathParams": [
+      "resourceSetIdOrLabel"
+    ],
+    "queryParams": [
+      "after"
+    ],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "resourceSetIdOrLabel": {
+          "type": "string",
+          "description": "`id` or `label` of the resource set"
+        },
+        "after": {
+          "type": "string",
+          "description": "The cursor to use for pagination. It is an opaque string that specifies your current location in the list and is obtained from the `Link` response header. See [Pagination](https://developer.okta.com/docs/api/#pagination)."
+        }
+      },
+      "required": [
+        "resourceSetIdOrLabel"
+      ]
+    }
+  },
+  {
+    "name": "createResourceSetBinding",
+    "description": "Create a role resource set binding. Creates a binding for the resource set, custom role, and members (users or groups) > **Note:** If you use a custom role with permissions that don't apply to the resources in the resource set, it doesn't affect the admin role. For example, the `okta.users.userprofile.manage` permission gives the admin no privileges if it's granted to a resource set that only includes `https://{yourOktaDomain}/api/v1/groups/{targetGroupId}` resources. If you want the admin to b…",
+    "tags": [
+      "RoleDResourceSetBinding"
+    ],
+    "method": "POST",
+    "pathTemplate": "/api/v1/iam/resource-sets/{resourceSetIdOrLabel}/bindings",
+    "pathParams": [
+      "resourceSetIdOrLabel"
+    ],
+    "queryParams": [],
+    "hasBody": true,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "resourceSetIdOrLabel": {
+          "type": "string",
+          "description": "`id` or `label` of the resource set"
+        },
+        "requestBody": {
+          "type": "object",
+          "description": "The JSON request body. Refer to the Okta API docs for the schema."
+        }
+      },
+      "required": [
+        "resourceSetIdOrLabel",
+        "requestBody"
+      ]
+    }
+  },
+  {
+    "name": "getBinding",
+    "description": "Retrieve a role resource set binding. Retrieves the binding of a role (identified by `roleIdOrLabel`) for a resource set (identified by `resourceSetIdOrLabel`)",
+    "tags": [
+      "RoleDResourceSetBinding"
+    ],
+    "method": "GET",
+    "pathTemplate": "/api/v1/iam/resource-sets/{resourceSetIdOrLabel}/bindings/{roleIdOrLabel}",
+    "pathParams": [
+      "resourceSetIdOrLabel",
+      "roleIdOrLabel"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "resourceSetIdOrLabel": {
+          "type": "string",
+          "description": "`id` or `label` of the resource set"
+        },
+        "roleIdOrLabel": {
+          "type": "string",
+          "description": "`id` or `label` of the role"
+        }
+      },
+      "required": [
+        "resourceSetIdOrLabel",
+        "roleIdOrLabel"
+      ]
+    }
+  },
+  {
+    "name": "deleteBinding",
+    "description": "Delete a role resource set binding. Deletes a binding of a role (identified by `roleIdOrLabel`) and a resource set (identified by `resourceSetIdOrLabel`)",
+    "tags": [
+      "RoleDResourceSetBinding"
+    ],
+    "method": "DELETE",
+    "pathTemplate": "/api/v1/iam/resource-sets/{resourceSetIdOrLabel}/bindings/{roleIdOrLabel}",
+    "pathParams": [
+      "resourceSetIdOrLabel",
+      "roleIdOrLabel"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "resourceSetIdOrLabel": {
+          "type": "string",
+          "description": "`id` or `label` of the resource set"
+        },
+        "roleIdOrLabel": {
+          "type": "string",
+          "description": "`id` or `label` of the role"
+        }
+      },
+      "required": [
+        "resourceSetIdOrLabel",
+        "roleIdOrLabel"
+      ]
+    }
+  },
+  {
+    "name": "listMembersOfBinding",
+    "description": "List all role resource set binding members. Lists all members of a role resource set binding with pagination support",
+    "tags": [
+      "RoleDResourceSetBindingMember"
+    ],
+    "method": "GET",
+    "pathTemplate": "/api/v1/iam/resource-sets/{resourceSetIdOrLabel}/bindings/{roleIdOrLabel}/members",
+    "pathParams": [
+      "resourceSetIdOrLabel",
+      "roleIdOrLabel"
+    ],
+    "queryParams": [
+      "after"
+    ],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "resourceSetIdOrLabel": {
+          "type": "string",
+          "description": "`id` or `label` of the resource set"
+        },
+        "roleIdOrLabel": {
+          "type": "string",
+          "description": "`id` or `label` of the role"
+        },
+        "after": {
+          "type": "string",
+          "description": "The cursor to use for pagination. It is an opaque string that specifies your current location in the list and is obtained from the `Link` response header. See [Pagination](https://developer.okta.com/docs/api/#pagination)."
+        }
+      },
+      "required": [
+        "resourceSetIdOrLabel",
+        "roleIdOrLabel"
+      ]
+    }
+  },
+  {
+    "name": "addMembersToBinding",
+    "description": "Add more role resource set binding members. Adds more members to a role resource set binding",
+    "tags": [
+      "RoleDResourceSetBindingMember"
+    ],
+    "method": "PATCH",
+    "pathTemplate": "/api/v1/iam/resource-sets/{resourceSetIdOrLabel}/bindings/{roleIdOrLabel}/members",
+    "pathParams": [
+      "resourceSetIdOrLabel",
+      "roleIdOrLabel"
+    ],
+    "queryParams": [],
+    "hasBody": true,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "resourceSetIdOrLabel": {
+          "type": "string",
+          "description": "`id` or `label` of the resource set"
+        },
+        "roleIdOrLabel": {
+          "type": "string",
+          "description": "`id` or `label` of the role"
+        },
+        "requestBody": {
+          "type": "object",
+          "description": "The JSON request body. Refer to the Okta API docs for the schema."
+        }
+      },
+      "required": [
+        "resourceSetIdOrLabel",
+        "roleIdOrLabel",
+        "requestBody"
+      ]
+    }
+  },
+  {
+    "name": "getMemberOfBinding",
+    "description": "Retrieve a role resource set binding member. Retrieves a member (identified by `memberId`) that belongs to a role resource set binding",
+    "tags": [
+      "RoleDResourceSetBindingMember"
+    ],
+    "method": "GET",
+    "pathTemplate": "/api/v1/iam/resource-sets/{resourceSetIdOrLabel}/bindings/{roleIdOrLabel}/members/{memberId}",
+    "pathParams": [
+      "resourceSetIdOrLabel",
+      "roleIdOrLabel",
+      "memberId"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "resourceSetIdOrLabel": {
+          "type": "string",
+          "description": "`id` or `label` of the resource set"
+        },
+        "roleIdOrLabel": {
+          "type": "string",
+          "description": "`id` or `label` of the role"
+        },
+        "memberId": {
+          "type": "string",
+          "description": "`id` of the member"
+        }
+      },
+      "required": [
+        "resourceSetIdOrLabel",
+        "roleIdOrLabel",
+        "memberId"
+      ]
+    }
+  },
+  {
+    "name": "unassignMemberFromBinding",
+    "description": "Unassign a role resource set binding member. Unassigns a member (identified by `memberId`) from a role resource set binding",
+    "tags": [
+      "RoleDResourceSetBindingMember"
+    ],
+    "method": "DELETE",
+    "pathTemplate": "/api/v1/iam/resource-sets/{resourceSetIdOrLabel}/bindings/{roleIdOrLabel}/members/{memberId}",
+    "pathParams": [
+      "resourceSetIdOrLabel",
+      "roleIdOrLabel",
+      "memberId"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "resourceSetIdOrLabel": {
+          "type": "string",
+          "description": "`id` or `label` of the resource set"
+        },
+        "roleIdOrLabel": {
+          "type": "string",
+          "description": "`id` or `label` of the role"
+        },
+        "memberId": {
+          "type": "string",
+          "description": "`id` of the member"
+        }
+      },
+      "required": [
+        "resourceSetIdOrLabel",
+        "roleIdOrLabel",
+        "memberId"
+      ]
+    }
+  },
+  {
+    "name": "listResourceSetResources",
+    "description": "List all resource set resources. Lists all resources for the resource set",
+    "tags": [
+      "RoleCResourceSetResource"
+    ],
+    "method": "GET",
+    "pathTemplate": "/api/v1/iam/resource-sets/{resourceSetIdOrLabel}/resources",
+    "pathParams": [
+      "resourceSetIdOrLabel"
+    ],
+    "queryParams": [
+      "after",
+      "limit"
+    ],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "resourceSetIdOrLabel": {
+          "type": "string",
+          "description": "`id` or `label` of the resource set"
+        },
+        "after": {
+          "type": "string",
+          "description": "Specifies the pagination cursor for the next page of targets"
+        },
+        "limit": {
+          "type": "number",
+          "description": "Specifies the number of results returned. Defaults to `100`."
+        }
+      },
+      "required": [
+        "resourceSetIdOrLabel"
+      ]
+    }
+  },
+  {
+    "name": "addResourceSetResource",
+    "description": "Add a resource set resource with conditions. Adds a resource with conditions for a resource set",
+    "tags": [
+      "RoleCResourceSetResource"
+    ],
+    "method": "POST",
+    "pathTemplate": "/api/v1/iam/resource-sets/{resourceSetIdOrLabel}/resources",
+    "pathParams": [
+      "resourceSetIdOrLabel"
+    ],
+    "queryParams": [],
+    "hasBody": true,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "resourceSetIdOrLabel": {
+          "type": "string",
+          "description": "`id` or `label` of the resource set"
+        },
+        "requestBody": {
+          "type": "object",
+          "description": "The JSON request body. Refer to the Okta API docs for the schema."
+        }
+      },
+      "required": [
+        "resourceSetIdOrLabel",
+        "requestBody"
+      ]
+    }
+  },
+  {
+    "name": "addResourceSetResources",
+    "description": "Add more resources to a resource set. Adds more resources to a resource set",
+    "tags": [
+      "RoleCResourceSetResource"
+    ],
+    "method": "PATCH",
+    "pathTemplate": "/api/v1/iam/resource-sets/{resourceSetIdOrLabel}/resources",
+    "pathParams": [
+      "resourceSetIdOrLabel"
+    ],
+    "queryParams": [],
+    "hasBody": true,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "resourceSetIdOrLabel": {
+          "type": "string",
+          "description": "`id` or `label` of the resource set"
+        },
+        "requestBody": {
+          "type": "object",
+          "description": "The JSON request body. Refer to the Okta API docs for the schema."
+        }
+      },
+      "required": [
+        "resourceSetIdOrLabel",
+        "requestBody"
+      ]
+    }
+  },
+  {
+    "name": "getResourceSetResource",
+    "description": "Retrieve a resource set resource. Retrieves a resource identified by `resourceId` in a resource set",
+    "tags": [
+      "RoleCResourceSetResource"
+    ],
+    "method": "GET",
+    "pathTemplate": "/api/v1/iam/resource-sets/{resourceSetIdOrLabel}/resources/{resourceId}",
+    "pathParams": [
+      "resourceSetIdOrLabel",
+      "resourceId"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "resourceSetIdOrLabel": {
+          "type": "string",
+          "description": "`id` or `label` of the resource set"
+        },
+        "resourceId": {
+          "type": "string",
+          "description": "`id` of the resource"
+        }
+      },
+      "required": [
+        "resourceSetIdOrLabel",
+        "resourceId"
+      ]
+    }
+  },
+  {
+    "name": "replaceResourceSetResource",
+    "description": "Replace the resource set resource conditions. Replaces the conditions of a resource identified by `resourceId` in a resource set",
+    "tags": [
+      "RoleCResourceSetResource"
+    ],
+    "method": "PUT",
+    "pathTemplate": "/api/v1/iam/resource-sets/{resourceSetIdOrLabel}/resources/{resourceId}",
+    "pathParams": [
+      "resourceSetIdOrLabel",
+      "resourceId"
+    ],
+    "queryParams": [],
+    "hasBody": true,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "resourceSetIdOrLabel": {
+          "type": "string",
+          "description": "`id` or `label` of the resource set"
+        },
+        "resourceId": {
+          "type": "string",
+          "description": "`id` of the resource"
+        },
+        "requestBody": {
+          "type": "object",
+          "description": "The JSON request body. Refer to the Okta API docs for the schema."
+        }
+      },
+      "required": [
+        "resourceSetIdOrLabel",
+        "resourceId",
+        "requestBody"
+      ]
+    }
+  },
+  {
+    "name": "deleteResourceSetResource",
+    "description": "Delete a resource set resource. Deletes a resource (identified by `resourceId`) from a resource set",
+    "tags": [
+      "RoleCResourceSetResource"
+    ],
+    "method": "DELETE",
+    "pathTemplate": "/api/v1/iam/resource-sets/{resourceSetIdOrLabel}/resources/{resourceId}",
+    "pathParams": [
+      "resourceSetIdOrLabel",
+      "resourceId"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "resourceSetIdOrLabel": {
+          "type": "string",
+          "description": "`id` or `label` of the resource set"
+        },
+        "resourceId": {
+          "type": "string",
+          "description": "`id` of the resource"
+        }
+      },
+      "required": [
+        "resourceSetIdOrLabel",
+        "resourceId"
+      ]
+    }
+  },
+  {
+    "name": "listRoles",
+    "description": "List all custom roles. Lists all custom roles with pagination support",
+    "tags": [
+      "RoleECustom"
+    ],
+    "method": "GET",
+    "pathTemplate": "/api/v1/iam/roles",
+    "pathParams": [],
+    "queryParams": [
+      "after"
+    ],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "after": {
+          "type": "string",
+          "description": "The cursor to use for pagination. It is an opaque string that specifies your current location in the list and is obtained from the `Link` response header. See [Pagination](https://developer.okta.com/docs/api/#pagination)."
+        }
+      }
+    }
+  },
+  {
+    "name": "createRole",
+    "description": "Create a custom role. Creates a custom role",
+    "tags": [
+      "RoleECustom"
+    ],
+    "method": "POST",
+    "pathTemplate": "/api/v1/iam/roles",
+    "pathParams": [],
+    "queryParams": [],
+    "hasBody": true,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "requestBody": {
+          "type": "object",
+          "description": "The JSON request body. Refer to the Okta API docs for the schema."
+        }
+      },
+      "required": [
+        "requestBody"
+      ]
+    }
+  },
+  {
+    "name": "getRole",
+    "description": "Retrieve a role. Retrieves a role by `roleIdOrLabel`",
+    "tags": [
+      "RoleECustom"
+    ],
+    "method": "GET",
+    "pathTemplate": "/api/v1/iam/roles/{roleIdOrLabel}",
+    "pathParams": [
+      "roleIdOrLabel"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "roleIdOrLabel": {
+          "type": "string",
+          "description": "`id` or `label` of the role"
+        }
+      },
+      "required": [
+        "roleIdOrLabel"
+      ]
+    }
+  },
+  {
+    "name": "replaceRole",
+    "description": "Replace a custom role. Replaces the label and description for a custom role by `roleIdOrLabel`",
+    "tags": [
+      "RoleECustom"
+    ],
+    "method": "PUT",
+    "pathTemplate": "/api/v1/iam/roles/{roleIdOrLabel}",
+    "pathParams": [
+      "roleIdOrLabel"
+    ],
+    "queryParams": [],
+    "hasBody": true,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "roleIdOrLabel": {
+          "type": "string",
+          "description": "`id` or `label` of the role"
+        },
+        "requestBody": {
+          "type": "object",
+          "description": "The JSON request body. Refer to the Okta API docs for the schema."
+        }
+      },
+      "required": [
+        "roleIdOrLabel",
+        "requestBody"
+      ]
+    }
+  },
+  {
+    "name": "deleteRole",
+    "description": "Delete a custom role. Deletes a custom role by `roleIdOrLabel`",
+    "tags": [
+      "RoleECustom"
+    ],
+    "method": "DELETE",
+    "pathTemplate": "/api/v1/iam/roles/{roleIdOrLabel}",
+    "pathParams": [
+      "roleIdOrLabel"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "roleIdOrLabel": {
+          "type": "string",
+          "description": "`id` or `label` of the role"
+        }
+      },
+      "required": [
+        "roleIdOrLabel"
+      ]
+    }
+  },
+  {
+    "name": "listRolePermissions",
+    "description": "List all custom role permissions. Lists all permissions for a custom role by `roleIdOrLabel`",
+    "tags": [
+      "RoleECustomPermission"
+    ],
+    "method": "GET",
+    "pathTemplate": "/api/v1/iam/roles/{roleIdOrLabel}/permissions",
+    "pathParams": [
+      "roleIdOrLabel"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "roleIdOrLabel": {
+          "type": "string",
+          "description": "`id` or `label` of the role"
+        }
+      },
+      "required": [
+        "roleIdOrLabel"
+      ]
+    }
+  },
+  {
+    "name": "getRolePermission",
+    "description": "Retrieve a custom role permission. Retrieves a permission (identified by `permissionType`) for a custom role",
+    "tags": [
+      "RoleECustomPermission"
+    ],
+    "method": "GET",
+    "pathTemplate": "/api/v1/iam/roles/{roleIdOrLabel}/permissions/{permissionType}",
+    "pathParams": [
+      "roleIdOrLabel",
+      "permissionType"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "roleIdOrLabel": {
+          "type": "string",
+          "description": "`id` or `label` of the role"
+        },
+        "permissionType": {
+          "type": "string",
+          "description": "An Okta [permission](/openapi/okta-management/guides/permissions)"
+        }
+      },
+      "required": [
+        "roleIdOrLabel",
+        "permissionType"
+      ]
+    }
+  },
+  {
+    "name": "createRolePermission",
+    "description": "Create a custom role permission. Creates a permission (specified by `permissionType`) for a custom role",
+    "tags": [
+      "RoleECustomPermission"
+    ],
+    "method": "POST",
+    "pathTemplate": "/api/v1/iam/roles/{roleIdOrLabel}/permissions/{permissionType}",
+    "pathParams": [
+      "roleIdOrLabel",
+      "permissionType"
+    ],
+    "queryParams": [],
+    "hasBody": true,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "roleIdOrLabel": {
+          "type": "string",
+          "description": "`id` or `label` of the role"
+        },
+        "permissionType": {
+          "type": "string",
+          "description": "An Okta [permission](/openapi/okta-management/guides/permissions)"
+        },
+        "requestBody": {
+          "type": "object",
+          "description": "The JSON request body. Refer to the Okta API docs for the schema."
+        }
+      },
+      "required": [
+        "roleIdOrLabel",
+        "permissionType"
+      ]
+    }
+  },
+  {
+    "name": "replaceRolePermission",
+    "description": "Replace a custom role permission. Replaces a permission (specified by `permissionType`) for a custom role",
+    "tags": [
+      "RoleECustomPermission"
+    ],
+    "method": "PUT",
+    "pathTemplate": "/api/v1/iam/roles/{roleIdOrLabel}/permissions/{permissionType}",
+    "pathParams": [
+      "roleIdOrLabel",
+      "permissionType"
+    ],
+    "queryParams": [],
+    "hasBody": true,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "roleIdOrLabel": {
+          "type": "string",
+          "description": "`id` or `label` of the role"
+        },
+        "permissionType": {
+          "type": "string",
+          "description": "An Okta [permission](/openapi/okta-management/guides/permissions)"
+        },
+        "requestBody": {
+          "type": "object",
+          "description": "The JSON request body. Refer to the Okta API docs for the schema."
+        }
+      },
+      "required": [
+        "roleIdOrLabel",
+        "permissionType"
+      ]
+    }
+  },
+  {
+    "name": "deleteRolePermission",
+    "description": "Delete a custom role permission. Deletes a permission (identified by `permissionType`) from a custom role",
+    "tags": [
+      "RoleECustomPermission"
+    ],
+    "method": "DELETE",
+    "pathTemplate": "/api/v1/iam/roles/{roleIdOrLabel}/permissions/{permissionType}",
+    "pathParams": [
+      "roleIdOrLabel",
+      "permissionType"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "roleIdOrLabel": {
+          "type": "string",
+          "description": "`id` or `label` of the role"
+        },
+        "permissionType": {
+          "type": "string",
+          "description": "An Okta [permission](/openapi/okta-management/guides/permissions)"
+        }
+      },
+      "required": [
+        "roleIdOrLabel",
+        "permissionType"
+      ]
+    }
+  },
+  {
+    "name": "listAssignedRolesForUser",
+    "description": "List all user role assignments. Lists all roles assigned to a user (identified by `userId`)",
+    "tags": [
+      "RoleAssignmentAUser"
+    ],
+    "method": "GET",
+    "pathTemplate": "/api/v1/users/{userId}/roles",
+    "pathParams": [
+      "userId"
+    ],
+    "queryParams": [
+      "expand"
+    ],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "description": "ID of an existing Okta user"
+        },
+        "expand": {
+          "type": "string",
+          "description": "An optional parameter used to return targets configured for the standard role assignment in the `embedded` property. Supported values: `targets/groups` or `targets/catalog/apps`"
+        }
+      },
+      "required": [
+        "userId"
+      ]
+    }
+  },
+  {
+    "name": "assignRoleToUser",
+    "description": "Assign a user role. Assigns a [standard role](/openapi/okta-management/guides/roles/#standard-roles) to a user. You can also assign a custom role to a user, but the preferred method to assign a custom role to a user is to create a binding between the custom role, the resource set, and the user. See [Create a role resource set binding](/openapi/okta-management/management/tag/RoleDResourceSetBinding/#tag/RoleDResourceSetBinding/operation/createResourceSetBinding). > **Notes:** > * The request pay…",
+    "tags": [
+      "RoleAssignmentAUser"
+    ],
+    "method": "POST",
+    "pathTemplate": "/api/v1/users/{userId}/roles",
+    "pathParams": [
+      "userId"
+    ],
+    "queryParams": [
+      "disableNotifications"
+    ],
+    "hasBody": true,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "description": "ID of an existing Okta user"
+        },
+        "disableNotifications": {
+          "type": "boolean",
+          "description": "Setting this to `true` grants the user third-party admin status"
+        },
+        "requestBody": {
+          "type": "object",
+          "description": "The JSON request body. Refer to the Okta API docs for the schema."
+        }
+      },
+      "required": [
+        "userId",
+        "requestBody"
+      ]
+    }
+  },
+  {
+    "name": "getUserAssignedRole",
+    "description": "Retrieve a user role assignment. Retrieves a role assigned to a user (identified by `userId`). The `roleAssignmentId` parameter is the unique identifier for either a standard role assignment object or a custom role resource set binding object.",
+    "tags": [
+      "RoleAssignmentAUser"
+    ],
+    "method": "GET",
+    "pathTemplate": "/api/v1/users/{userId}/roles/{roleAssignmentId}",
+    "pathParams": [
+      "userId",
+      "roleAssignmentId"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "description": "ID of an existing Okta user"
+        },
+        "roleAssignmentId": {
+          "type": "string",
+          "description": "The `id` of the role assignment"
+        }
+      },
+      "required": [
+        "userId",
+        "roleAssignmentId"
+      ]
+    }
+  },
+  {
+    "name": "unassignRoleFromUser",
+    "description": "Unassign a user role. Unassigns a role assignment (identified by `roleAssignmentId`) from a user (identified by `userId`)",
+    "tags": [
+      "RoleAssignmentAUser"
+    ],
+    "method": "DELETE",
+    "pathTemplate": "/api/v1/users/{userId}/roles/{roleAssignmentId}",
+    "pathParams": [
+      "userId",
+      "roleAssignmentId"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "description": "ID of an existing Okta user"
+        },
+        "roleAssignmentId": {
+          "type": "string",
+          "description": "The `id` of the role assignment"
+        }
+      },
+      "required": [
+        "userId",
+        "roleAssignmentId"
+      ]
+    }
+  },
+  {
+    "name": "getUserAssignedRoleGovernance",
+    "description": "Retrieve all user role governance sources. Retrieves the governance sources of a role (identified by `roleAssignmentId`) that's assigned to a user (identified by `userId`)",
+    "tags": [
+      "RoleAssignmentAUser"
+    ],
+    "method": "GET",
+    "pathTemplate": "/api/v1/users/{userId}/roles/{roleAssignmentId}/governance",
+    "pathParams": [
+      "userId",
+      "roleAssignmentId"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "description": "ID of an existing Okta user"
+        },
+        "roleAssignmentId": {
+          "type": "string",
+          "description": "The `id` of the role assignment"
+        }
+      },
+      "required": [
+        "userId",
+        "roleAssignmentId"
+      ]
+    }
+  },
+  {
+    "name": "getRoleAssignmentGovernanceGrant",
+    "description": "Retrieve a user role governance source. Retrieves a governance source (identified by `grantId`) for a role (identified by `roleAssignmentId`) that's assigned to a user (identified by `userId`)",
+    "tags": [
+      "RoleAssignmentAUser"
+    ],
+    "method": "GET",
+    "pathTemplate": "/api/v1/users/{userId}/roles/{roleAssignmentId}/governance/{grantId}",
+    "pathParams": [
+      "userId",
+      "roleAssignmentId",
+      "grantId"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "description": "ID of an existing Okta user"
+        },
+        "roleAssignmentId": {
+          "type": "string",
+          "description": "The `id` of the role assignment"
+        },
+        "grantId": {
+          "type": "string",
+          "description": "Grant ID"
+        }
+      },
+      "required": [
+        "userId",
+        "roleAssignmentId",
+        "grantId"
+      ]
+    }
+  },
+  {
+    "name": "getRoleAssignmentGovernanceGrantResources",
+    "description": "Retrieve the user role governance source resources. Retrieves the resources of a governance source (identified by `grantId`) for a role (identified by `roleAssignmentId`) that's assigned to a user (identified by `userId`)",
+    "tags": [
+      "RoleAssignmentAUser"
+    ],
+    "method": "GET",
+    "pathTemplate": "/api/v1/users/{userId}/roles/{roleAssignmentId}/governance/{grantId}/resources",
+    "pathParams": [
+      "userId",
+      "roleAssignmentId",
+      "grantId"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "description": "ID of an existing Okta user"
+        },
+        "roleAssignmentId": {
+          "type": "string",
+          "description": "The `id` of the role assignment"
+        },
+        "grantId": {
+          "type": "string",
+          "description": "Grant ID"
+        }
+      },
+      "required": [
+        "userId",
+        "roleAssignmentId",
+        "grantId"
+      ]
+    }
+  },
+  {
+    "name": "listApplicationTargetsForApplicationAdministratorRoleForUser",
+    "description": "List all admin role app targets. Lists all app targets for an `APP_ADMIN` role assigned to a user. The response is a list that includes OIN-cataloged apps or app instances. The response payload for an app instance contains the `id` property, but an OIN-cataloged app payload doesn't.",
+    "tags": [
+      "RoleBTargetAdmin"
+    ],
+    "method": "GET",
+    "pathTemplate": "/api/v1/users/{userId}/roles/{roleAssignmentId}/targets/catalog/apps",
+    "pathParams": [
+      "userId",
+      "roleAssignmentId"
+    ],
+    "queryParams": [
+      "after",
+      "limit"
+    ],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "description": "ID of an existing Okta user"
+        },
+        "roleAssignmentId": {
+          "type": "string",
+          "description": "The `id` of the role assignment"
+        },
+        "after": {
+          "type": "string",
+          "description": "The cursor to use for pagination. It is an opaque string that specifies your current location in the list and is obtained from the `Link` response header. See [Pagination](https://developer.okta.com/docs/api/#pagination)."
+        },
+        "limit": {
+          "type": "number",
+          "description": "A limit on the number of objects to return"
+        }
+      },
+      "required": [
+        "userId",
+        "roleAssignmentId"
+      ]
+    }
+  },
+  {
+    "name": "assignAllAppsAsTargetToRoleForUser",
+    "description": "Assign all apps as target to admin role. Assigns all apps as target to an `APP_ADMIN` role",
+    "tags": [
+      "RoleBTargetAdmin"
+    ],
+    "method": "PUT",
+    "pathTemplate": "/api/v1/users/{userId}/roles/{roleAssignmentId}/targets/catalog/apps",
+    "pathParams": [
+      "userId",
+      "roleAssignmentId"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "description": "ID of an existing Okta user"
+        },
+        "roleAssignmentId": {
+          "type": "string",
+          "description": "The `id` of the role assignment"
+        }
+      },
+      "required": [
+        "userId",
+        "roleAssignmentId"
+      ]
+    }
+  },
+  {
+    "name": "assignAppTargetToAdminRoleForUser",
+    "description": "Assign an admin role app target. Assigns an OIN app target for an `APP_ADMIN` role assignment to an admin user. When you assign the first app target, you reduce the scope of the role assignment. The role no longer applies to all app targets, but applies only to the specified target. Assigning an OIN app target overrides any existing app instance targets of the OIN app. For example, if a user was assigned to administer a specific Facebook instance, a successful request to add an OIN app target w…",
+    "tags": [
+      "RoleBTargetAdmin"
+    ],
+    "method": "PUT",
+    "pathTemplate": "/api/v1/users/{userId}/roles/{roleAssignmentId}/targets/catalog/apps/{appName}",
+    "pathParams": [
+      "userId",
+      "roleAssignmentId",
+      "appName"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "description": "ID of an existing Okta user"
+        },
+        "roleAssignmentId": {
+          "type": "string",
+          "description": "The `id` of the role assignment"
+        },
+        "appName": {
+          "type": "string",
+          "description": "Name of the app definition (the OIN catalog app key name)"
+        }
+      },
+      "required": [
+        "userId",
+        "roleAssignmentId",
+        "appName"
+      ]
+    }
+  },
+  {
+    "name": "unassignAppTargetFromAppAdminRoleForUser",
+    "description": "Unassign an admin role app target. Unassigns an OIN app target from an `APP_ADMIN` role assignment to an admin user. > **Note:** You can't remove the last OIN app target from a role assignment since this causes an exception. > If you need a role assignment that applies to all apps, delete the `APP_ADMIN` role assignment to the user and recreate a new one.",
+    "tags": [
+      "RoleBTargetAdmin"
+    ],
+    "method": "DELETE",
+    "pathTemplate": "/api/v1/users/{userId}/roles/{roleAssignmentId}/targets/catalog/apps/{appName}",
+    "pathParams": [
+      "userId",
+      "roleAssignmentId",
+      "appName"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "description": "ID of an existing Okta user"
+        },
+        "roleAssignmentId": {
+          "type": "string",
+          "description": "The `id` of the role assignment"
+        },
+        "appName": {
+          "type": "string",
+          "description": "Name of the app definition (the OIN catalog app key name)"
+        }
+      },
+      "required": [
+        "userId",
+        "roleAssignmentId",
+        "appName"
+      ]
+    }
+  },
+  {
+    "name": "assignAppInstanceTargetToAppAdminRoleForUser",
+    "description": "Assign an admin role app instance target. Assigns an app instance target to an `APP_ADMIN` role assignment to an admin user. When you assign the first OIN app or app instance target, you reduce the scope of the role assignment. The role no longer applies to all app targets, but applies only to the specified target. > **Note:** You can target a mixture of both OIN app and app instance targets, but can't assign permissions to manage all instances of an OIN app and then assign a subset of permissi…",
+    "tags": [
+      "RoleBTargetAdmin"
+    ],
+    "method": "PUT",
+    "pathTemplate": "/api/v1/users/{userId}/roles/{roleAssignmentId}/targets/catalog/apps/{appName}/{appId}",
+    "pathParams": [
+      "userId",
+      "roleAssignmentId",
+      "appName",
+      "appId"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "description": "ID of an existing Okta user"
+        },
+        "roleAssignmentId": {
+          "type": "string",
+          "description": "The `id` of the role assignment"
+        },
+        "appName": {
+          "type": "string",
+          "description": "Name of the app definition (the OIN catalog app key name)"
+        },
+        "appId": {
+          "type": "string",
+          "description": "Application ID"
+        }
+      },
+      "required": [
+        "userId",
+        "roleAssignmentId",
+        "appName",
+        "appId"
+      ]
+    }
+  },
+  {
+    "name": "unassignAppInstanceTargetFromAdminRoleForUser",
+    "description": "Unassign an admin role app instance target. Unassigns an app instance target from an `APP_ADMIN` role assignment to an admin user. > **Note:** You can't remove the last app instance target from a role assignment since this causes an exception. > If you need a role assignment that applies to all apps, delete the `APP_ADMIN` role assignment and recreate a new one.",
+    "tags": [
+      "RoleBTargetAdmin"
+    ],
+    "method": "DELETE",
+    "pathTemplate": "/api/v1/users/{userId}/roles/{roleAssignmentId}/targets/catalog/apps/{appName}/{appId}",
+    "pathParams": [
+      "userId",
+      "roleAssignmentId",
+      "appName",
+      "appId"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "description": "ID of an existing Okta user"
+        },
+        "roleAssignmentId": {
+          "type": "string",
+          "description": "The `id` of the role assignment"
+        },
+        "appName": {
+          "type": "string",
+          "description": "Name of the app definition (the OIN catalog app key name)"
+        },
+        "appId": {
+          "type": "string",
+          "description": "Application ID"
+        }
+      },
+      "required": [
+        "userId",
+        "roleAssignmentId",
+        "appName",
+        "appId"
+      ]
+    }
+  },
+  {
+    "name": "listGroupTargetsForRole",
+    "description": "List all admin role group targets. Lists all group targets for a `USER_ADMIN`, `HELP_DESK_ADMIN`, or `GROUP_MEMBERSHIP_ADMIN` role assignment to an admin user. If the role isn't scoped to specific group targets, an empty array `[]` is returned.",
+    "tags": [
+      "RoleBTargetAdmin"
+    ],
+    "method": "GET",
+    "pathTemplate": "/api/v1/users/{userId}/roles/{roleAssignmentId}/targets/groups",
+    "pathParams": [
+      "userId",
+      "roleAssignmentId"
+    ],
+    "queryParams": [
+      "after",
+      "limit"
+    ],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "description": "ID of an existing Okta user"
+        },
+        "roleAssignmentId": {
+          "type": "string",
+          "description": "The `id` of the role assignment"
+        },
+        "after": {
+          "type": "string",
+          "description": "The cursor to use for pagination. It is an opaque string that specifies your current location in the list and is obtained from the `Link` response header. See [Pagination](https://developer.okta.com/docs/api/#pagination)."
+        },
+        "limit": {
+          "type": "number",
+          "description": "A limit on the number of objects to return"
+        }
+      },
+      "required": [
+        "userId",
+        "roleAssignmentId"
+      ]
+    }
+  },
+  {
+    "name": "assignGroupTargetToUserRole",
+    "description": "Assign an admin role group target. Assigns a group target for a `USER_ADMIN`, `HELP_DESK_ADMIN`, or `GROUP_MEMBERSHIP_ADMIN` role assignment to an admin user. When you assign the first group target, you reduce the scope of the role assignment. The role no longer applies to all targets but applies only to the specified target.",
+    "tags": [
+      "RoleBTargetAdmin"
+    ],
+    "method": "PUT",
+    "pathTemplate": "/api/v1/users/{userId}/roles/{roleAssignmentId}/targets/groups/{groupId}",
+    "pathParams": [
+      "userId",
+      "roleAssignmentId",
+      "groupId"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "description": "ID of an existing Okta user"
+        },
+        "roleAssignmentId": {
+          "type": "string",
+          "description": "The `id` of the role assignment"
+        },
+        "groupId": {
+          "type": "string",
+          "description": "The `id` of the group"
+        }
+      },
+      "required": [
+        "userId",
+        "roleAssignmentId",
+        "groupId"
+      ]
+    }
+  },
+  {
+    "name": "unassignGroupTargetFromUserAdminRole",
+    "description": "Unassign an admin role group target. Unassigns a group target from a `USER_ADMIN`, `HELP_DESK_ADMIN`, or `GROUP_MEMBERSHIP_ADMIN` role assignment to an admin user. > **Note:** You can't remove the last group target from a role assignment since this causes an exception. > If you need a role assignment that applies to all groups, delete the role assignment to the user and recreate a new one.",
+    "tags": [
+      "RoleBTargetAdmin"
+    ],
+    "method": "DELETE",
+    "pathTemplate": "/api/v1/users/{userId}/roles/{roleAssignmentId}/targets/groups/{groupId}",
+    "pathParams": [
+      "userId",
+      "roleAssignmentId",
+      "groupId"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "description": "ID of an existing Okta user"
+        },
+        "roleAssignmentId": {
+          "type": "string",
+          "description": "The `id` of the role assignment"
+        },
+        "groupId": {
+          "type": "string",
+          "description": "The `id` of the group"
+        }
+      },
+      "required": [
+        "userId",
+        "roleAssignmentId",
+        "groupId"
+      ]
+    }
+  },
+  {
+    "name": "getRoleTargetsByUserIdAndRoleId",
+    "description": "Retrieve a role target by assignment type. Retrieves all role targets for an `APP_ADMIN`, `USER_ADMIN`, `HELP_DESK_ADMIN`, or `GROUP_MEMBERSHIP_ADMIN` role assignment to an admin user by user or group assignment type. If the role isn't scoped to specific group targets or any app targets, an empty array `[]` is returned.",
+    "tags": [
+      "RoleBTargetAdmin"
+    ],
+    "method": "GET",
+    "pathTemplate": "/api/v1/users/{userId}/roles/{roleIdOrEncodedRoleId}/targets",
+    "pathParams": [
+      "userId",
+      "roleIdOrEncodedRoleId"
+    ],
+    "queryParams": [
+      "assignmentType",
+      "after",
+      "limit"
+    ],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "description": "ID of an existing Okta user"
+        },
+        "roleIdOrEncodedRoleId": {
+          "type": "string",
+          "description": "The `id` of the role or Base32 encoded `id` of the role name"
+        },
+        "assignmentType": {
+          "type": "string",
+          "description": "Specifies the assignment type of the user",
+          "enum": [
+            "USER",
+            "GROUP"
+          ]
+        },
+        "after": {
+          "type": "string",
+          "description": "The cursor to use for pagination. It is an opaque string that specifies your current location in the list and is obtained from the `Link` response header. See [Pagination](https://developer.okta.com/docs/api/#pagination)."
+        },
+        "limit": {
+          "type": "number",
+          "description": "A limit on the number of objects to return"
+        }
+      },
+      "required": [
+        "userId",
+        "roleIdOrEncodedRoleId"
+      ]
+    }
+  },
+  {
+    "name": "listRolesForClient",
+    "description": "List all client role assignments. Lists all roles assigned to a client app identified by `clientId`",
+    "tags": [
+      "RoleAssignmentClient"
+    ],
+    "method": "GET",
+    "pathTemplate": "/oauth2/v1/clients/{clientId}/roles",
+    "pathParams": [
+      "clientId"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "clientId": {
+          "type": "string",
+          "description": "`client_id` of the app"
+        }
+      },
+      "required": [
+        "clientId"
+      ]
+    }
+  },
+  {
+    "name": "assignRoleToClient",
+    "description": "Assign a client role. Assigns a [standard role](/openapi/okta-management/guides/roles/#standard-roles) to a client app. You can also assign a custom role to a client app, but the preferred method to assign a custom role to a client is to create a binding between the custom role, the resource set, and the client app. See [Create a role resource set binding](/openapi/okta-management/management/tag/RoleDResourceSetBinding/#tag/RoleDResourceSetBinding/operation/createResourceSetBinding). > **Notes:…",
+    "tags": [
+      "RoleAssignmentClient"
+    ],
+    "method": "POST",
+    "pathTemplate": "/oauth2/v1/clients/{clientId}/roles",
+    "pathParams": [
+      "clientId"
+    ],
+    "queryParams": [],
+    "hasBody": true,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "clientId": {
+          "type": "string",
+          "description": "`client_id` of the app"
+        },
+        "requestBody": {
+          "type": "object",
+          "description": "The JSON request body. Refer to the Okta API docs for the schema."
+        }
+      },
+      "required": [
+        "clientId",
+        "requestBody"
+      ]
+    }
+  },
+  {
+    "name": "retrieveClientRole",
+    "description": "Retrieve a client role. Retrieves a role assignment (identified by `roleAssignmentId`) for a client app (identified by `clientId`)",
+    "tags": [
+      "RoleAssignmentClient"
+    ],
+    "method": "GET",
+    "pathTemplate": "/oauth2/v1/clients/{clientId}/roles/{roleAssignmentId}",
+    "pathParams": [
+      "clientId",
+      "roleAssignmentId"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "clientId": {
+          "type": "string",
+          "description": "`client_id` of the app"
+        },
+        "roleAssignmentId": {
+          "type": "string",
+          "description": "The `id` of the role assignment"
+        }
+      },
+      "required": [
+        "clientId",
+        "roleAssignmentId"
+      ]
+    }
+  },
+  {
+    "name": "deleteRoleFromClient",
+    "description": "Unassign a client role. Unassigns a role assignment (identified by `roleAssignmentId`) from a client app (identified by `clientId`)",
+    "tags": [
+      "RoleAssignmentClient"
+    ],
+    "method": "DELETE",
+    "pathTemplate": "/oauth2/v1/clients/{clientId}/roles/{roleAssignmentId}",
+    "pathParams": [
+      "clientId",
+      "roleAssignmentId"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "clientId": {
+          "type": "string",
+          "description": "`client_id` of the app"
+        },
+        "roleAssignmentId": {
+          "type": "string",
+          "description": "The `id` of the role assignment"
+        }
+      },
+      "required": [
+        "clientId",
+        "roleAssignmentId"
+      ]
+    }
+  },
+  {
+    "name": "listAppTargetRoleToClient",
+    "description": "List all client role app targets. Lists all OIN app targets for an `APP_ADMIN` role that's assigned to a client (by `clientId`).",
+    "tags": [
+      "RoleBTargetClient"
+    ],
+    "method": "GET",
+    "pathTemplate": "/oauth2/v1/clients/{clientId}/roles/{roleAssignmentId}/targets/catalog/apps",
+    "pathParams": [
+      "clientId",
+      "roleAssignmentId"
+    ],
+    "queryParams": [
+      "after",
+      "limit"
+    ],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "clientId": {
+          "type": "string",
+          "description": "`client_id` of the app"
+        },
+        "roleAssignmentId": {
+          "type": "string",
+          "description": "The `id` of the role assignment"
+        },
+        "after": {
+          "type": "string",
+          "description": "The cursor to use for pagination. It is an opaque string that specifies your current location in the list and is obtained from the `Link` response header. See [Pagination](https://developer.okta.com/docs/api/#pagination)."
+        },
+        "limit": {
+          "type": "number",
+          "description": "A limit on the number of objects to return"
+        }
+      },
+      "required": [
+        "clientId",
+        "roleAssignmentId"
+      ]
+    }
+  },
+  {
+    "name": "assignAppTargetRoleToClient",
+    "description": "Assign a client role app target. Assigns an OIN app target for an `APP_ADMIN` role assignment to a client. When you assign an app target from the OIN catalog, you reduce the scope of the role assignment. The role assignment applies to only app instances that are included in the specified OIN app target. An assigned OIN app target overrides any existing app instance targets. For example, if a user is assigned to administer a specific Facebook instance, a successful request to add an OIN app targ…",
+    "tags": [
+      "RoleBTargetClient"
+    ],
+    "method": "PUT",
+    "pathTemplate": "/oauth2/v1/clients/{clientId}/roles/{roleAssignmentId}/targets/catalog/apps/{appName}",
+    "pathParams": [
+      "clientId",
+      "roleAssignmentId",
+      "appName"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "clientId": {
+          "type": "string",
+          "description": "`client_id` of the app"
+        },
+        "roleAssignmentId": {
+          "type": "string",
+          "description": "The `id` of the role assignment"
+        },
+        "appName": {
+          "type": "string",
+          "description": "Name of the app definition (the OIN catalog app key name)"
+        }
+      },
+      "required": [
+        "clientId",
+        "roleAssignmentId",
+        "appName"
+      ]
+    }
+  },
+  {
+    "name": "removeAppTargetRoleFromClient",
+    "description": "Unassign a client role app target. Unassigns an OIN app target for a role assignment to a client app > **Note:** You can't remove the last OIN app target from a role assignment. > If you need a role assignment that applies to all apps, delete the role assignment with the target and create another one. See [Unassign a client role](/openapi/okta-management/management/tag/RoleAssignmentClient/#tag/RoleAssignmentClient/operation/deleteRoleFromClient).",
+    "tags": [
+      "RoleBTargetClient"
+    ],
+    "method": "DELETE",
+    "pathTemplate": "/oauth2/v1/clients/{clientId}/roles/{roleAssignmentId}/targets/catalog/apps/{appName}",
+    "pathParams": [
+      "clientId",
+      "roleAssignmentId",
+      "appName"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "clientId": {
+          "type": "string",
+          "description": "`client_id` of the app"
+        },
+        "roleAssignmentId": {
+          "type": "string",
+          "description": "The `id` of the role assignment"
+        },
+        "appName": {
+          "type": "string",
+          "description": "Name of the app definition (the OIN catalog app key name)"
+        }
+      },
+      "required": [
+        "clientId",
+        "roleAssignmentId",
+        "appName"
+      ]
+    }
+  },
+  {
+    "name": "assignAppTargetInstanceRoleForClient",
+    "description": "Assign a client role app instance target. Assigns an app instance target to an `APP_ADMIN` role assignment to a client. When you assign the first OIN app or app instance target, you reduce the scope of the role assignment. The role no longer applies to all app targets, but applies only to the specified target. > **Note:** You can target a mixture of both OIN app and app instance targets, but you can't assign permissions to manage all instances of an OIN app and then assign a subset of permissio…",
+    "tags": [
+      "RoleBTargetClient"
+    ],
+    "method": "PUT",
+    "pathTemplate": "/oauth2/v1/clients/{clientId}/roles/{roleAssignmentId}/targets/catalog/apps/{appName}/{appId}",
+    "pathParams": [
+      "clientId",
+      "roleAssignmentId",
+      "appName",
+      "appId"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "clientId": {
+          "type": "string",
+          "description": "`client_id` of the app"
+        },
+        "roleAssignmentId": {
+          "type": "string",
+          "description": "The `id` of the role assignment"
+        },
+        "appName": {
+          "type": "string",
+          "description": "Name of the app definition (the OIN catalog app key name)"
+        },
+        "appId": {
+          "type": "string",
+          "description": "Application ID"
+        }
+      },
+      "required": [
+        "clientId",
+        "roleAssignmentId",
+        "appName",
+        "appId"
+      ]
+    }
+  },
+  {
+    "name": "removeAppTargetInstanceRoleForClient",
+    "description": "Unassign a client role app instance target. Unassigns an app instance target from a role assignment to a client app > **Note:** You can't remove the last app instance target from a role assignment. > If you need a role assignment that applies to all the apps, delete the role assignment with the instance target and create another one. See [Unassign a client role](/openapi/okta-management/management/tag/RoleAssignmentClient/#tag/RoleAssignmentClient/operation/deleteRoleFromClient).",
+    "tags": [
+      "RoleBTargetClient"
+    ],
+    "method": "DELETE",
+    "pathTemplate": "/oauth2/v1/clients/{clientId}/roles/{roleAssignmentId}/targets/catalog/apps/{appName}/{appId}",
+    "pathParams": [
+      "clientId",
+      "roleAssignmentId",
+      "appName",
+      "appId"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "clientId": {
+          "type": "string",
+          "description": "`client_id` of the app"
+        },
+        "roleAssignmentId": {
+          "type": "string",
+          "description": "The `id` of the role assignment"
+        },
+        "appName": {
+          "type": "string",
+          "description": "Name of the app definition (the OIN catalog app key name)"
+        },
+        "appId": {
+          "type": "string",
+          "description": "Application ID"
+        }
+      },
+      "required": [
+        "clientId",
+        "roleAssignmentId",
+        "appName",
+        "appId"
+      ]
+    }
+  },
+  {
+    "name": "listGroupTargetRoleForClient",
+    "description": "List all client role group targets. Lists all group targets for a [`USER_ADMIN`](/openapi/okta-management/guides/roles/#standard-roles), `HELP_DESK_ADMIN`, or `GROUP_MEMBERSHIP_ADMIN` role assignment to a client. If the role isn't scoped to specific group targets, Okta returns an empty array `[]`.",
+    "tags": [
+      "RoleBTargetClient"
+    ],
+    "method": "GET",
+    "pathTemplate": "/oauth2/v1/clients/{clientId}/roles/{roleAssignmentId}/targets/groups",
+    "pathParams": [
+      "clientId",
+      "roleAssignmentId"
+    ],
+    "queryParams": [
+      "after",
+      "limit"
+    ],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "clientId": {
+          "type": "string",
+          "description": "`client_id` of the app"
+        },
+        "roleAssignmentId": {
+          "type": "string",
+          "description": "The `id` of the role assignment"
+        },
+        "after": {
+          "type": "string",
+          "description": "The cursor to use for pagination. It is an opaque string that specifies your current location in the list and is obtained from the `Link` response header. See [Pagination](https://developer.okta.com/docs/api/#pagination)."
+        },
+        "limit": {
+          "type": "number",
+          "description": "A limit on the number of objects to return"
+        }
+      },
+      "required": [
+        "clientId",
+        "roleAssignmentId"
+      ]
+    }
+  },
+  {
+    "name": "assignGroupTargetRoleForClient",
+    "description": "Assign a client role group target. Assigns a group target to a [`USER_ADMIN`](/openapi/okta-management/guides/roles/#standard-roles), `HELP_DESK_ADMIN`, or `GROUP_MEMBERSHIP_ADMIN` role assignment to a client app. When you assign the first group target, you reduce the scope of the role assignment. The role no longer applies to all targets, but applies only to the specified target.",
+    "tags": [
+      "RoleBTargetClient"
+    ],
+    "method": "PUT",
+    "pathTemplate": "/oauth2/v1/clients/{clientId}/roles/{roleAssignmentId}/targets/groups/{groupId}",
+    "pathParams": [
+      "clientId",
+      "roleAssignmentId",
+      "groupId"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "clientId": {
+          "type": "string",
+          "description": "`client_id` of the app"
+        },
+        "roleAssignmentId": {
+          "type": "string",
+          "description": "The `id` of the role assignment"
+        },
+        "groupId": {
+          "type": "string",
+          "description": "The `id` of the group"
+        }
+      },
+      "required": [
+        "clientId",
+        "roleAssignmentId",
+        "groupId"
+      ]
+    }
+  },
+  {
+    "name": "removeGroupTargetRoleFromClient",
+    "description": "Unassign a client role group target. Unassigns a Group target from a `USER_ADMIN`, `HELP_DESK_ADMIN`, or `GROUP_MEMBERSHIP_ADMIN` role assignment to a client app. > **Note:** You can't remove the last group target from a role assignment. If you need a role assignment that applies to all groups, delete the role assignment with the target and create another one. See [Unassign a client role](/openapi/okta-management/management/tag/RoleAssignmentClient/#tag/RoleAssignmentClient/operation/deleteRole…",
+    "tags": [
+      "RoleBTargetClient"
+    ],
+    "method": "DELETE",
+    "pathTemplate": "/oauth2/v1/clients/{clientId}/roles/{roleAssignmentId}/targets/groups/{groupId}",
+    "pathParams": [
+      "clientId",
+      "roleAssignmentId",
+      "groupId"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "clientId": {
+          "type": "string",
+          "description": "`client_id` of the app"
+        },
+        "roleAssignmentId": {
+          "type": "string",
+          "description": "The `id` of the role assignment"
+        },
+        "groupId": {
+          "type": "string",
+          "description": "The `id` of the group"
+        }
+      },
+      "required": [
+        "clientId",
+        "roleAssignmentId",
+        "groupId"
+      ]
+    }
+  }
+]

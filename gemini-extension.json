@@ -1,0 +1,76 @@
+{
+  "name": "okta-mcp-server",
+  "version": "2.0.0",
+  "mcpServers": {
+    "okta-users": {
+      "command": "node",
+      "args": [
+        "${extensionPath}${/}servers${/}okta-users.js"
+      ],
+      "cwd": "${extensionPath}"
+    },
+    "okta-apps": {
+      "command": "node",
+      "args": [
+        "${extensionPath}${/}servers${/}okta-apps.js"
+      ],
+      "cwd": "${extensionPath}"
+    },
+    "okta-authz": {
+      "command": "node",
+      "args": [
+        "${extensionPath}${/}servers${/}okta-authz.js"
+      ],
+      "cwd": "${extensionPath}"
+    },
+    "okta-idps": {
+      "command": "node",
+      "args": [
+        "${extensionPath}${/}servers${/}okta-idps.js"
+      ],
+      "cwd": "${extensionPath}"
+    },
+    "okta-security": {
+      "command": "node",
+      "args": [
+        "${extensionPath}${/}servers${/}okta-security.js"
+      ],
+      "cwd": "${extensionPath}"
+    },
+    "okta-roles": {
+      "command": "node",
+      "args": [
+        "${extensionPath}${/}servers${/}okta-roles.js"
+      ],
+      "cwd": "${extensionPath}"
+    },
+    "okta-customization": {
+      "command": "node",
+      "args": [
+        "${extensionPath}${/}servers${/}okta-customization.js"
+      ],
+      "cwd": "${extensionPath}"
+    },
+    "okta-org": {
+      "command": "node",
+      "args": [
+        "${extensionPath}${/}servers${/}okta-org.js"
+      ],
+      "cwd": "${extensionPath}"
+    },
+    "okta-hooks": {
+      "command": "node",
+      "args": [
+        "${extensionPath}${/}servers${/}okta-hooks.js"
+      ],
+      "cwd": "${extensionPath}"
+    },
+    "okta-devices": {
+      "command": "node",
+      "args": [
+        "${extensionPath}${/}servers${/}okta-devices.js"
+      ],
+      "cwd": "${extensionPath}"
+    }
+  }
+}

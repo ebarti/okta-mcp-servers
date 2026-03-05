@@ -1,0 +1,1480 @@
+[
+  {
+    "name": "getWellknownSsfMetadata",
+    "description": "Retrieve the SSF transmitter metadata. Retrieves SSF Transmitter configuration metadata. This includes all supported endpoints and key information about certain properties of the Okta org as the transmitter, such as `delivery_methods_supported`, `issuer`, and `jwks_uri`.",
+    "tags": [
+      "SSFTransmitter"
+    ],
+    "method": "GET",
+    "pathTemplate": "/.well-known/ssf-configuration",
+    "pathParams": [],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {}
+    }
+  },
+  {
+    "name": "listEventHooks",
+    "description": "List all event hooks. Lists all event hooks",
+    "tags": [
+      "EventHook"
+    ],
+    "method": "GET",
+    "pathTemplate": "/api/v1/eventHooks",
+    "pathParams": [],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {}
+    }
+  },
+  {
+    "name": "createEventHook",
+    "description": "Create an event hook. Creates a new event hook for your organization in `ACTIVE` status. You pass an event hook object in the JSON payload of your request. That object represents the set of required information about the event hook you're registering, including: * The URI of your external service * The [events](https://developer.okta.com/docs/reference/api/event-types/) in Okta you want to subscribe to * An optional event hook filter that can reduce the number of event hook calls. This is a sel…",
+    "tags": [
+      "EventHook"
+    ],
+    "method": "POST",
+    "pathTemplate": "/api/v1/eventHooks",
+    "pathParams": [],
+    "queryParams": [],
+    "hasBody": true,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "requestBody": {
+          "type": "object",
+          "description": "The JSON request body. Refer to the Okta API docs for the schema."
+        }
+      },
+      "required": [
+        "requestBody"
+      ]
+    }
+  },
+  {
+    "name": "getEventHook",
+    "description": "Retrieve an event hook. Retrieves an event hook",
+    "tags": [
+      "EventHook"
+    ],
+    "method": "GET",
+    "pathTemplate": "/api/v1/eventHooks/{eventHookId}",
+    "pathParams": [
+      "eventHookId"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "eventHookId": {
+          "type": "string",
+          "description": "`id` of the Event Hook"
+        }
+      },
+      "required": [
+        "eventHookId"
+      ]
+    }
+  },
+  {
+    "name": "replaceEventHook",
+    "description": "Replace an event hook. Replaces an event hook. Okta validates the new properties before replacing the existing values. Some event hook properties are immutable and can't be updated. Refer to the parameter description in the request body schema. >**Note:** Updating the `channel` property requires you to verify the hook again.",
+    "tags": [
+      "EventHook"
+    ],
+    "method": "PUT",
+    "pathTemplate": "/api/v1/eventHooks/{eventHookId}",
+    "pathParams": [
+      "eventHookId"
+    ],
+    "queryParams": [],
+    "hasBody": true,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "eventHookId": {
+          "type": "string",
+          "description": "`id` of the Event Hook"
+        },
+        "requestBody": {
+          "type": "object",
+          "description": "The JSON request body. Refer to the Okta API docs for the schema."
+        }
+      },
+      "required": [
+        "eventHookId",
+        "requestBody"
+      ]
+    }
+  },
+  {
+    "name": "deleteEventHook",
+    "description": "Delete an event hook. Deletes the event hook that matches the provided `id`. After deletion, the event hook is unrecoverable. As a safety precaution, you can only delete event hooks with a status of `INACTIVE`.",
+    "tags": [
+      "EventHook"
+    ],
+    "method": "DELETE",
+    "pathTemplate": "/api/v1/eventHooks/{eventHookId}",
+    "pathParams": [
+      "eventHookId"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "eventHookId": {
+          "type": "string",
+          "description": "`id` of the Event Hook"
+        }
+      },
+      "required": [
+        "eventHookId"
+      ]
+    }
+  },
+  {
+    "name": "activateEventHook",
+    "description": "Activate an event hook. Activates the event hook that matches the provided `id`",
+    "tags": [
+      "EventHook"
+    ],
+    "method": "POST",
+    "pathTemplate": "/api/v1/eventHooks/{eventHookId}/lifecycle/activate",
+    "pathParams": [
+      "eventHookId"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "eventHookId": {
+          "type": "string",
+          "description": "`id` of the Event Hook"
+        }
+      },
+      "required": [
+        "eventHookId"
+      ]
+    }
+  },
+  {
+    "name": "deactivateEventHook",
+    "description": "Deactivate an event hook. Deactivates the event hook that matches the provided `id`",
+    "tags": [
+      "EventHook"
+    ],
+    "method": "POST",
+    "pathTemplate": "/api/v1/eventHooks/{eventHookId}/lifecycle/deactivate",
+    "pathParams": [
+      "eventHookId"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "eventHookId": {
+          "type": "string",
+          "description": "`id` of the Event Hook"
+        }
+      },
+      "required": [
+        "eventHookId"
+      ]
+    }
+  },
+  {
+    "name": "verifyEventHook",
+    "description": "Verify an event hook. Verifies that the event hook matches the provided `eventHookId`. To verify ownership, your endpoint must send information back to Okta in JSON format. See [Event hooks](https://developer.okta.com/docs/concepts/event-hooks/#one-time-verification-request). Only `ACTIVE` and `VERIFIED` event hooks can receive events from Okta. If a response is not received within 3 seconds, the outbound request times out. One retry is attempted after a timeout or error response. If a successf…",
+    "tags": [
+      "EventHook"
+    ],
+    "method": "POST",
+    "pathTemplate": "/api/v1/eventHooks/{eventHookId}/lifecycle/verify",
+    "pathParams": [
+      "eventHookId"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "eventHookId": {
+          "type": "string",
+          "description": "`id` of the Event Hook"
+        }
+      },
+      "required": [
+        "eventHookId"
+      ]
+    }
+  },
+  {
+    "name": "listHookKeys",
+    "description": "List all keys. Lists all keys",
+    "tags": [
+      "HookKey"
+    ],
+    "method": "GET",
+    "pathTemplate": "/api/v1/hook-keys",
+    "pathParams": [],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {}
+    }
+  },
+  {
+    "name": "createHookKey",
+    "description": "Create a key. Creates a key for use with other parts of the application, such as inline hooks > **Note:** Use the key name to access this key for inline hook operations. The total number of keys that you can create in an Okta org is limited to 50. The response is a [Key object](https://developer.okta.com/docs/reference/api/hook-keys/#key-object) that represents the key that you create. The `id` property in the response serves as the unique ID for the key, which you can specify when invoking oth…",
+    "tags": [
+      "HookKey"
+    ],
+    "method": "POST",
+    "pathTemplate": "/api/v1/hook-keys",
+    "pathParams": [],
+    "queryParams": [],
+    "hasBody": true,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "requestBody": {
+          "type": "object",
+          "description": "The JSON request body. Refer to the Okta API docs for the schema."
+        }
+      },
+      "required": [
+        "requestBody"
+      ]
+    }
+  },
+  {
+    "name": "getPublicKey",
+    "description": "Retrieve a public key. Retrieves a public key by `keyId` >**Note:** keyId is the alias of the public key.",
+    "tags": [
+      "HookKey"
+    ],
+    "method": "GET",
+    "pathTemplate": "/api/v1/hook-keys/public/{keyId}",
+    "pathParams": [
+      "keyId"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "keyId": {
+          "type": "string",
+          "description": "id\" of the Public Key"
+        }
+      },
+      "required": [
+        "keyId"
+      ]
+    }
+  },
+  {
+    "name": "getHookKey",
+    "description": "Retrieve a key by ID. Retrieves the public portion of the Key object using the `id` parameter >**Note:** The `?expand=publickey` query parameter optionally returns the full object including the details of the public key in the response body's `_embedded` property.",
+    "tags": [
+      "HookKey"
+    ],
+    "method": "GET",
+    "pathTemplate": "/api/v1/hook-keys/{id}",
+    "pathParams": [
+      "id"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "A valid key ID"
+        }
+      },
+      "required": [
+        "id"
+      ]
+    }
+  },
+  {
+    "name": "replaceHookKey",
+    "description": "Replace a key. Replaces a key by `id` This request replaces existing properties after passing validation. > **Note:** The only parameter that you can update is the name of the key, which must be unique at all times.",
+    "tags": [
+      "HookKey"
+    ],
+    "method": "PUT",
+    "pathTemplate": "/api/v1/hook-keys/{id}",
+    "pathParams": [
+      "id"
+    ],
+    "queryParams": [],
+    "hasBody": true,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "ID of the Hook Key"
+        },
+        "requestBody": {
+          "type": "object",
+          "description": "The JSON request body. Refer to the Okta API docs for the schema."
+        }
+      },
+      "required": [
+        "id",
+        "requestBody"
+      ]
+    }
+  },
+  {
+    "name": "deleteHookKey",
+    "description": "Delete a key. Deletes a key by `id`. After being deleted, the key is unrecoverable. As a safety precaution, only keys that aren't being used are eligible for deletion.",
+    "tags": [
+      "HookKey"
+    ],
+    "method": "DELETE",
+    "pathTemplate": "/api/v1/hook-keys/{id}",
+    "pathParams": [
+      "id"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "ID of the Hook Key"
+        }
+      },
+      "required": [
+        "id"
+      ]
+    }
+  },
+  {
+    "name": "listInlineHooks",
+    "description": "List all inline hooks. Lists all inline hooks or all inline hooks of a specific type. When listing a specific inline hook, you need to specify its type. The following types are currently supported: | Type Value | Name | |------------------------------------|----------------------------------------------------------------| | `com.okta.import.transform` | [User import inline hook](/openapi/okta-management/management/tag/InlineHook/#tag/InlineHook/operation/createUserImportInlineHook) | | `com.okt…",
+    "tags": [
+      "InlineHook"
+    ],
+    "method": "GET",
+    "pathTemplate": "/api/v1/inlineHooks",
+    "pathParams": [],
+    "queryParams": [
+      "type"
+    ],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "description": "One of the supported inline hook types",
+          "enum": [
+            "com.okta.import.transform",
+            "com.okta.oauth2.tokens.transform",
+            "com.okta.saml.tokens.transform",
+            "com.okta.user.credential.password.import",
+            "com.okta.user.pre-registration",
+            "com.okta.telephony.provider"
+          ]
+        }
+      }
+    }
+  },
+  {
+    "name": "createInlineHook",
+    "description": "Create an inline hook. Creates an inline hook This endpoint creates an inline hook for your org in an `ACTIVE` status. You need to pass an inline hooks object in the JSON payload of your request. That object represents the set of required information about the inline hook that you're registering, including: * The URI of your external service endpoint * The type of inline hook you're registering * The type of authentication you're registering There are two authentication options that you can con…",
+    "tags": [
+      "InlineHook"
+    ],
+    "method": "POST",
+    "pathTemplate": "/api/v1/inlineHooks",
+    "pathParams": [],
+    "queryParams": [],
+    "hasBody": true,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "requestBody": {
+          "type": "object",
+          "description": "The JSON request body. Refer to the Okta API docs for the schema."
+        }
+      },
+      "required": [
+        "requestBody"
+      ]
+    }
+  },
+  {
+    "name": "getInlineHook",
+    "description": "Retrieve an inline hook. Retrieves an inline hook by `inlineHookId`",
+    "tags": [
+      "InlineHook"
+    ],
+    "method": "GET",
+    "pathTemplate": "/api/v1/inlineHooks/{inlineHookId}",
+    "pathParams": [
+      "inlineHookId"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "inlineHookId": {
+          "type": "string",
+          "description": "`id` of the inline hook"
+        }
+      },
+      "required": [
+        "inlineHookId"
+      ]
+    }
+  },
+  {
+    "name": "updateInlineHook",
+    "description": "Update an inline hook. Updates an inline hook by `inlineHookId`",
+    "tags": [
+      "InlineHook"
+    ],
+    "method": "POST",
+    "pathTemplate": "/api/v1/inlineHooks/{inlineHookId}",
+    "pathParams": [
+      "inlineHookId"
+    ],
+    "queryParams": [],
+    "hasBody": true,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "inlineHookId": {
+          "type": "string",
+          "description": "`id` of the inline hook"
+        },
+        "requestBody": {
+          "type": "object",
+          "description": "The JSON request body. Refer to the Okta API docs for the schema."
+        }
+      },
+      "required": [
+        "inlineHookId",
+        "requestBody"
+      ]
+    }
+  },
+  {
+    "name": "replaceInlineHook",
+    "description": "Replace an inline hook. Replaces an inline hook by `inlineHookId`. The submitted inline hook properties replace the existing properties after passing validation. >**Note:** Some properties are immutable and can't be updated.",
+    "tags": [
+      "InlineHook"
+    ],
+    "method": "PUT",
+    "pathTemplate": "/api/v1/inlineHooks/{inlineHookId}",
+    "pathParams": [
+      "inlineHookId"
+    ],
+    "queryParams": [],
+    "hasBody": true,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "inlineHookId": {
+          "type": "string",
+          "description": "`id` of the inline hook"
+        },
+        "requestBody": {
+          "type": "object",
+          "description": "The JSON request body. Refer to the Okta API docs for the schema."
+        }
+      },
+      "required": [
+        "inlineHookId",
+        "requestBody"
+      ]
+    }
+  },
+  {
+    "name": "deleteInlineHook",
+    "description": "Delete an inline hook. Deletes an inline hook by `inlineHookId`. After it's deleted, the inline hook is unrecoverable. As a safety precaution, only inline hooks with a status of `INACTIVE` are eligible for deletion.",
+    "tags": [
+      "InlineHook"
+    ],
+    "method": "DELETE",
+    "pathTemplate": "/api/v1/inlineHooks/{inlineHookId}",
+    "pathParams": [
+      "inlineHookId"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "inlineHookId": {
+          "type": "string",
+          "description": "`id` of the inline hook"
+        }
+      },
+      "required": [
+        "inlineHookId"
+      ]
+    }
+  },
+  {
+    "name": "executeInlineHook",
+    "description": "Execute an inline hook. Executes the inline hook that matches the provided `inlineHookId` by using the request body as the input. This inline hook sends the provided data through the `channel` object and returns a response if it matches the correct data contract. Otherwise it returns an error. You need to construct a JSON payload that matches the payloads that Okta would send to your external service for this inline hook type. A timeout of three seconds is enforced on all outbound requests, wit…",
+    "tags": [
+      "InlineHook"
+    ],
+    "method": "POST",
+    "pathTemplate": "/api/v1/inlineHooks/{inlineHookId}/execute",
+    "pathParams": [
+      "inlineHookId"
+    ],
+    "queryParams": [],
+    "hasBody": true,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "inlineHookId": {
+          "type": "string",
+          "description": "`id` of the inline hook"
+        },
+        "requestBody": {
+          "type": "object",
+          "description": "The JSON request body. Refer to the Okta API docs for the schema."
+        }
+      },
+      "required": [
+        "inlineHookId",
+        "requestBody"
+      ]
+    }
+  },
+  {
+    "name": "activateInlineHook",
+    "description": "Activate an inline hook. Activates the inline hook by `inlineHookId`",
+    "tags": [
+      "InlineHook"
+    ],
+    "method": "POST",
+    "pathTemplate": "/api/v1/inlineHooks/{inlineHookId}/lifecycle/activate",
+    "pathParams": [
+      "inlineHookId"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "inlineHookId": {
+          "type": "string",
+          "description": "`id` of the inline hook"
+        }
+      },
+      "required": [
+        "inlineHookId"
+      ]
+    }
+  },
+  {
+    "name": "deactivateInlineHook",
+    "description": "Deactivate an inline hook. Deactivates the inline hook by `inlineHookId`",
+    "tags": [
+      "InlineHook"
+    ],
+    "method": "POST",
+    "pathTemplate": "/api/v1/inlineHooks/{inlineHookId}/lifecycle/deactivate",
+    "pathParams": [
+      "inlineHookId"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "inlineHookId": {
+          "type": "string",
+          "description": "`id` of the inline hook"
+        }
+      },
+      "required": [
+        "inlineHookId"
+      ]
+    }
+  },
+  {
+    "name": "listLogStreams",
+    "description": "List all log streams. Lists all log stream objects in your org. You can request a paginated list or a subset of log streams that match a supported filter expression.",
+    "tags": [
+      "LogStream"
+    ],
+    "method": "GET",
+    "pathTemplate": "/api/v1/logStreams",
+    "pathParams": [],
+    "queryParams": [
+      "after",
+      "limit",
+      "filter"
+    ],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "after": {
+          "type": "string",
+          "description": "The cursor to use for pagination. It is an opaque string that specifies your current location in the list and is obtained from the `Link` response header. See [Pagination](https://developer.okta.com/docs/api/#pagination)."
+        },
+        "limit": {
+          "type": "number",
+          "description": "A limit on the number of objects to return"
+        },
+        "filter": {
+          "type": "string",
+          "description": "An expression that [filters](/#filter) the returned objects. You can only use the `eq` operator on either the `status` or `type` properties in the filter expression."
+        }
+      }
+    }
+  },
+  {
+    "name": "createLogStream",
+    "description": "Create a log stream. Creates a new log stream object",
+    "tags": [
+      "LogStream"
+    ],
+    "method": "POST",
+    "pathTemplate": "/api/v1/logStreams",
+    "pathParams": [],
+    "queryParams": [],
+    "hasBody": true,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "requestBody": {
+          "type": "object",
+          "description": "The JSON request body. Refer to the Okta API docs for the schema."
+        }
+      },
+      "required": [
+        "requestBody"
+      ]
+    }
+  },
+  {
+    "name": "getLogStream",
+    "description": "Retrieve a log stream. Retrieves a log stream object by ID",
+    "tags": [
+      "LogStream"
+    ],
+    "method": "GET",
+    "pathTemplate": "/api/v1/logStreams/{logStreamId}",
+    "pathParams": [
+      "logStreamId"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "logStreamId": {
+          "type": "string",
+          "description": "Unique identifier for the log stream"
+        }
+      },
+      "required": [
+        "logStreamId"
+      ]
+    }
+  },
+  {
+    "name": "replaceLogStream",
+    "description": "Replace a log stream. Replaces the log stream object properties for a given ID. This operation is typically used to update the configuration of a log stream. Depending on the type of log stream you want to update, certain properties can't be modified after the log stream is initially created. Use the [Retrieve the log stream schema for the schema type](/openapi/okta-management/management/tag/Schema/#tag/Schema/operation/getLogStreamSchema) request to determine which properties you can update fo…",
+    "tags": [
+      "LogStream"
+    ],
+    "method": "PUT",
+    "pathTemplate": "/api/v1/logStreams/{logStreamId}",
+    "pathParams": [
+      "logStreamId"
+    ],
+    "queryParams": [],
+    "hasBody": true,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "logStreamId": {
+          "type": "string",
+          "description": "Unique identifier for the log stream"
+        },
+        "requestBody": {
+          "type": "object",
+          "description": "The JSON request body. Refer to the Okta API docs for the schema."
+        }
+      },
+      "required": [
+        "logStreamId",
+        "requestBody"
+      ]
+    }
+  },
+  {
+    "name": "deleteLogStream",
+    "description": "Delete a log stream. Deletes a log stream object from your org by ID",
+    "tags": [
+      "LogStream"
+    ],
+    "method": "DELETE",
+    "pathTemplate": "/api/v1/logStreams/{logStreamId}",
+    "pathParams": [
+      "logStreamId"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "logStreamId": {
+          "type": "string",
+          "description": "Unique identifier for the log stream"
+        }
+      },
+      "required": [
+        "logStreamId"
+      ]
+    }
+  },
+  {
+    "name": "activateLogStream",
+    "description": "Activate a log stream. Activates a log stream by `logStreamId`",
+    "tags": [
+      "LogStream"
+    ],
+    "method": "POST",
+    "pathTemplate": "/api/v1/logStreams/{logStreamId}/lifecycle/activate",
+    "pathParams": [
+      "logStreamId"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "logStreamId": {
+          "type": "string",
+          "description": "Unique identifier for the log stream"
+        }
+      },
+      "required": [
+        "logStreamId"
+      ]
+    }
+  },
+  {
+    "name": "deactivateLogStream",
+    "description": "Deactivate a log stream. Deactivates a log stream by `logStreamId`",
+    "tags": [
+      "LogStream"
+    ],
+    "method": "POST",
+    "pathTemplate": "/api/v1/logStreams/{logStreamId}/lifecycle/deactivate",
+    "pathParams": [
+      "logStreamId"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "logStreamId": {
+          "type": "string",
+          "description": "Unique identifier for the log stream"
+        }
+      },
+      "required": [
+        "logStreamId"
+      ]
+    }
+  },
+  {
+    "name": "listLogEvents",
+    "description": "List all System Log events. Lists all System Log events See [System Log query](https://developer.okta.com/docs/reference/system-log-query/) for further details and examples, and [System Log filters and search](https://help.okta.com/okta_help.htm?type=oie&id=csh-syslog-filters) for common use cases. By default, 100 System Log events are returned. If there are more events, see the [header link](https://developer.okta.com/docs/api/#link-header) for the `next` link, or increase the number of return…",
+    "tags": [
+      "SystemLog"
+    ],
+    "method": "GET",
+    "pathTemplate": "/api/v1/logs",
+    "pathParams": [],
+    "queryParams": [
+      "since",
+      "until",
+      "after",
+      "filter",
+      "q",
+      "limit",
+      "sortOrder"
+    ],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "since": {
+          "type": "string",
+          "description": "Filters the lower time bound of the log events `published` property for bounded queries or persistence time for polling queries"
+        },
+        "until": {
+          "type": "string",
+          "description": "Filters the upper time bound of the log events `published` property for bounded queries or persistence time for polling queries."
+        },
+        "after": {
+          "type": "string",
+          "description": "Retrieves the next page of results. Okta returns a link in the HTTP Header (`rel=next`) that includes the after query parameter"
+        },
+        "filter": {
+          "type": "string",
+          "description": "Filter expression that filters the results. All operators except [ ] are supported. See [Filter](https://developer.okta.com/docs/api/#filter) and [Operators](https://developer.okta.com/docs/api/#operators)."
+        },
+        "q": {
+          "type": "string",
+          "description": "Filters log events results by one or more case insensitive keywords."
+        },
+        "limit": {
+          "type": "number",
+          "description": "Sets the number of results that are returned in the response"
+        },
+        "sortOrder": {
+          "type": "string",
+          "description": "The order of the returned events that are sorted by the `published` property",
+          "enum": [
+            "ASCENDING",
+            "DESCENDING"
+          ]
+        }
+      }
+    }
+  },
+  {
+    "name": "listSubscriptionsRole",
+    "description": "List all subscriptions for a role. Lists all subscriptions available to a specified Role",
+    "tags": [
+      "Subscription"
+    ],
+    "method": "GET",
+    "pathTemplate": "/api/v1/roles/{roleRef}/subscriptions",
+    "pathParams": [
+      "roleRef"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "roleRef": {
+          "type": "string",
+          "description": "A reference to an existing role. Standard roles require a `roleType`, while Custom Roles require a `roleId`. See [Standard Roles](/openapi/okta-management/guides/roles/#standard-roles)."
+        }
+      },
+      "required": [
+        "roleRef"
+      ]
+    }
+  },
+  {
+    "name": "getSubscriptionsNotificationTypeRole",
+    "description": "Retrieve a subscription for a role. Retrieves a subscription by `notificationType` for a specified Role",
+    "tags": [
+      "Subscription"
+    ],
+    "method": "GET",
+    "pathTemplate": "/api/v1/roles/{roleRef}/subscriptions/{notificationType}",
+    "pathParams": [
+      "roleRef",
+      "notificationType"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "roleRef": {
+          "type": "string",
+          "description": "A reference to an existing role. Standard roles require a `roleType`, while Custom Roles require a `roleId`. See [Standard Roles](/openapi/okta-management/guides/roles/#standard-roles)."
+        },
+        "notificationType": {
+          "type": "string",
+          "description": ""
+        }
+      },
+      "required": [
+        "roleRef",
+        "notificationType"
+      ]
+    }
+  },
+  {
+    "name": "subscribeByNotificationTypeRole",
+    "description": "Subscribe a role to a specific notification type. Subscribes a Role to a specified notification type. Changes to Role subscriptions override the subscription status of any individual users with the Role.",
+    "tags": [
+      "Subscription"
+    ],
+    "method": "POST",
+    "pathTemplate": "/api/v1/roles/{roleRef}/subscriptions/{notificationType}/subscribe",
+    "pathParams": [
+      "roleRef",
+      "notificationType"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "roleRef": {
+          "type": "string",
+          "description": "A reference to an existing role. Standard roles require a `roleType`, while Custom Roles require a `roleId`. See [Standard Roles](/openapi/okta-management/guides/roles/#standard-roles)."
+        },
+        "notificationType": {
+          "type": "string",
+          "description": ""
+        }
+      },
+      "required": [
+        "roleRef",
+        "notificationType"
+      ]
+    }
+  },
+  {
+    "name": "unsubscribeByNotificationTypeRole",
+    "description": "Unsubscribe a role from a specific notification type. Unsubscribes a Role from a specified notification type. Changes to Role subscriptions override the subscription status of any individual users with the Role.",
+    "tags": [
+      "Subscription"
+    ],
+    "method": "POST",
+    "pathTemplate": "/api/v1/roles/{roleRef}/subscriptions/{notificationType}/unsubscribe",
+    "pathParams": [
+      "roleRef",
+      "notificationType"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "roleRef": {
+          "type": "string",
+          "description": "A reference to an existing role. Standard roles require a `roleType`, while Custom Roles require a `roleId`. See [Standard Roles](/openapi/okta-management/guides/roles/#standard-roles)."
+        },
+        "notificationType": {
+          "type": "string",
+          "description": ""
+        }
+      },
+      "required": [
+        "roleRef",
+        "notificationType"
+      ]
+    }
+  },
+  {
+    "name": "listSecurityEventsProviderInstances",
+    "description": "List all security events providers. Lists all Security Events Provider instances",
+    "tags": [
+      "SSFReceiver"
+    ],
+    "method": "GET",
+    "pathTemplate": "/api/v1/security-events-providers",
+    "pathParams": [],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {}
+    }
+  },
+  {
+    "name": "createSecurityEventsProviderInstance",
+    "description": "Create a security events provider. Creates a Security Events Provider instance",
+    "tags": [
+      "SSFReceiver"
+    ],
+    "method": "POST",
+    "pathTemplate": "/api/v1/security-events-providers",
+    "pathParams": [],
+    "queryParams": [],
+    "hasBody": true,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "requestBody": {
+          "type": "object",
+          "description": "The JSON request body. Refer to the Okta API docs for the schema."
+        }
+      },
+      "required": [
+        "requestBody"
+      ]
+    }
+  },
+  {
+    "name": "getSecurityEventsProviderInstance",
+    "description": "Retrieve the security events provider. Retrieves the Security Events Provider instance specified by `id`",
+    "tags": [
+      "SSFReceiver"
+    ],
+    "method": "GET",
+    "pathTemplate": "/api/v1/security-events-providers/{securityEventProviderId}",
+    "pathParams": [
+      "securityEventProviderId"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "securityEventProviderId": {
+          "type": "string",
+          "description": "`id` of the Security Events Provider instance"
+        }
+      },
+      "required": [
+        "securityEventProviderId"
+      ]
+    }
+  },
+  {
+    "name": "replaceSecurityEventsProviderInstance",
+    "description": "Replace a security events provider. Replaces a Security Events Provider instance specified by `id`",
+    "tags": [
+      "SSFReceiver"
+    ],
+    "method": "PUT",
+    "pathTemplate": "/api/v1/security-events-providers/{securityEventProviderId}",
+    "pathParams": [
+      "securityEventProviderId"
+    ],
+    "queryParams": [],
+    "hasBody": true,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "securityEventProviderId": {
+          "type": "string",
+          "description": "`id` of the Security Events Provider instance"
+        },
+        "requestBody": {
+          "type": "object",
+          "description": "The JSON request body. Refer to the Okta API docs for the schema."
+        }
+      },
+      "required": [
+        "securityEventProviderId",
+        "requestBody"
+      ]
+    }
+  },
+  {
+    "name": "deleteSecurityEventsProviderInstance",
+    "description": "Delete a security events provider. Deletes a Security Events Provider instance specified by `id`",
+    "tags": [
+      "SSFReceiver"
+    ],
+    "method": "DELETE",
+    "pathTemplate": "/api/v1/security-events-providers/{securityEventProviderId}",
+    "pathParams": [
+      "securityEventProviderId"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "securityEventProviderId": {
+          "type": "string",
+          "description": "`id` of the Security Events Provider instance"
+        }
+      },
+      "required": [
+        "securityEventProviderId"
+      ]
+    }
+  },
+  {
+    "name": "activateSecurityEventsProviderInstance",
+    "description": "Activate a security events provider. Activates a Security Events Provider instance by setting its status to `ACTIVE`. This operation resumes the flow of events from the Security Events Provider to Okta.",
+    "tags": [
+      "SSFReceiver"
+    ],
+    "method": "POST",
+    "pathTemplate": "/api/v1/security-events-providers/{securityEventProviderId}/lifecycle/activate",
+    "pathParams": [
+      "securityEventProviderId"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "securityEventProviderId": {
+          "type": "string",
+          "description": "`id` of the Security Events Provider instance"
+        }
+      },
+      "required": [
+        "securityEventProviderId"
+      ]
+    }
+  },
+  {
+    "name": "deactivateSecurityEventsProviderInstance",
+    "description": "Deactivate a security events provider. Deactivates a Security Events Provider instance by setting its status to `INACTIVE`. This operation stops the flow of events from the Security Events Provider to Okta.",
+    "tags": [
+      "SSFReceiver"
+    ],
+    "method": "POST",
+    "pathTemplate": "/api/v1/security-events-providers/{securityEventProviderId}/lifecycle/deactivate",
+    "pathParams": [
+      "securityEventProviderId"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "securityEventProviderId": {
+          "type": "string",
+          "description": "`id` of the Security Events Provider instance"
+        }
+      },
+      "required": [
+        "securityEventProviderId"
+      ]
+    }
+  },
+  {
+    "name": "getSsfStreams",
+    "description": "Retrieve the SSF stream configuration(s). Retrieves either a list of all known SSF Stream configurations or the individual configuration if specified by ID. As Stream configurations are tied to a Client ID, only the Stream associated with the Client ID of the request OAuth 2.0 access token can be viewed.",
+    "tags": [
+      "SSFTransmitter"
+    ],
+    "method": "GET",
+    "pathTemplate": "/api/v1/ssf/stream",
+    "pathParams": [],
+    "queryParams": [
+      "stream_id"
+    ],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "stream_id": {
+          "type": "string",
+          "description": "The ID of the specified SSF Stream configuration"
+        }
+      }
+    }
+  },
+  {
+    "name": "createSsfStream",
+    "description": "Create an SSF stream. Creates an SSF Stream for an event receiver to start receiving security events in the form of Security Event Tokens (SETs) from Okta. An SSF Stream is associated with the Client ID of the OAuth 2.0 access token used to create the stream. The Client ID is provided by Okta for an [OAuth 2.0 app integration](https://help.okta.com/okta_help.htm?id=ext_Apps_App_Integration_Wizard-oidc). One SSF Stream is allowed for each Client ID, hence, one SSF Stream is allowed for each app …",
+    "tags": [
+      "SSFTransmitter"
+    ],
+    "method": "POST",
+    "pathTemplate": "/api/v1/ssf/stream",
+    "pathParams": [],
+    "queryParams": [],
+    "hasBody": true,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "requestBody": {
+          "type": "object",
+          "description": "The JSON request body. Refer to the Okta API docs for the schema."
+        }
+      },
+      "required": [
+        "requestBody"
+      ]
+    }
+  },
+  {
+    "name": "replaceSsfStream",
+    "description": "Replace an SSF stream. Replaces all properties for an existing SSF Stream configuration. If the `stream_id` isn't provided in the request body, the associated stream with the Client ID (through the request OAuth 2.0 access token) is replaced.",
+    "tags": [
+      "SSFTransmitter"
+    ],
+    "method": "PUT",
+    "pathTemplate": "/api/v1/ssf/stream",
+    "pathParams": [],
+    "queryParams": [],
+    "hasBody": true,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "requestBody": {
+          "type": "object",
+          "description": "The JSON request body. Refer to the Okta API docs for the schema."
+        }
+      },
+      "required": [
+        "requestBody"
+      ]
+    }
+  },
+  {
+    "name": "updateSsfStream",
+    "description": "Update an SSF stream. Updates properties for an existing SSF Stream configuration. If the `stream_id` isn't provided in the request body, the associated stream with the Client ID (through the request OAuth 2.0 access token) is updated.",
+    "tags": [
+      "SSFTransmitter"
+    ],
+    "method": "PATCH",
+    "pathTemplate": "/api/v1/ssf/stream",
+    "pathParams": [],
+    "queryParams": [],
+    "hasBody": true,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "requestBody": {
+          "type": "object",
+          "description": "The JSON request body. Refer to the Okta API docs for the schema."
+        }
+      },
+      "required": [
+        "requestBody"
+      ]
+    }
+  },
+  {
+    "name": "deleteSsfStream",
+    "description": "Delete an SSF stream. Deletes the specified SSF Stream. If the `stream_id` is not provided in the query string, the associated stream with the Client ID (through the request OAuth 2.0 access token) is deleted. Otherwise, the SSF Stream with the `stream_id` is deleted, if found.",
+    "tags": [
+      "SSFTransmitter"
+    ],
+    "method": "DELETE",
+    "pathTemplate": "/api/v1/ssf/stream",
+    "pathParams": [],
+    "queryParams": [
+      "stream_id"
+    ],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "stream_id": {
+          "type": "string",
+          "description": "The ID of the specified SSF Stream configuration"
+        }
+      }
+    }
+  },
+  {
+    "name": "getSsfStreamStatus",
+    "description": "Retrieve the SSF Stream status. Retrieves the status of an SSF Stream. The status indicates whether the transmitter is able to transmit events over the stream.",
+    "tags": [
+      "SSFTransmitter"
+    ],
+    "method": "GET",
+    "pathTemplate": "/api/v1/ssf/stream/status",
+    "pathParams": [],
+    "queryParams": [
+      "stream_id"
+    ],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "stream_id": {
+          "type": "string",
+          "description": "The ID of the specified SSF Stream configuration"
+        }
+      },
+      "required": [
+        "stream_id"
+      ]
+    }
+  },
+  {
+    "name": "verifySsfStream",
+    "description": "Verify an SSF stream. Verifies an SSF Stream by publishing a Verification Event requested by a Security Events Provider. > **Note:** A successful response doesn't indicate that the Verification Event was transmitted successfully, only that Okta has transmitted the event or will at some point in the future. The SSF Receiver is responsible for validating and acknowledging successful transmission of the request by responding with HTTP Response Status Code 202.",
+    "tags": [
+      "SSFTransmitter"
+    ],
+    "method": "POST",
+    "pathTemplate": "/api/v1/ssf/stream/verification",
+    "pathParams": [],
+    "queryParams": [],
+    "hasBody": true,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "requestBody": {
+          "type": "object",
+          "description": "The JSON request body. Refer to the Okta API docs for the schema."
+        }
+      },
+      "required": [
+        "requestBody"
+      ]
+    }
+  },
+  {
+    "name": "listSubscriptionsUser",
+    "description": "List all subscriptions for a user. Lists all subscriptions available to a specified user. Returns an `AccessDeniedException` message if requests are made for another user.",
+    "tags": [
+      "Subscription"
+    ],
+    "method": "GET",
+    "pathTemplate": "/api/v1/users/{userId}/subscriptions",
+    "pathParams": [
+      "userId"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "description": ""
+        }
+      },
+      "required": [
+        "userId"
+      ]
+    }
+  },
+  {
+    "name": "getSubscriptionsNotificationTypeUser",
+    "description": "Retrieve a subscription for a user. Retrieves a subscription by `notificationType` for a specified user. Returns an `AccessDeniedException` message if requests are made for another user.",
+    "tags": [
+      "Subscription"
+    ],
+    "method": "GET",
+    "pathTemplate": "/api/v1/users/{userId}/subscriptions/{notificationType}",
+    "pathParams": [
+      "userId",
+      "notificationType"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "description": ""
+        },
+        "notificationType": {
+          "type": "string",
+          "description": ""
+        }
+      },
+      "required": [
+        "userId",
+        "notificationType"
+      ]
+    }
+  },
+  {
+    "name": "subscribeByNotificationTypeUser",
+    "description": "Subscribe a user to a specific notification type. Subscribes the current user to a specified notification type. Returns an `AccessDeniedException` message if requests are made for another user.",
+    "tags": [
+      "Subscription"
+    ],
+    "method": "POST",
+    "pathTemplate": "/api/v1/users/{userId}/subscriptions/{notificationType}/subscribe",
+    "pathParams": [
+      "userId",
+      "notificationType"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "description": ""
+        },
+        "notificationType": {
+          "type": "string",
+          "description": ""
+        }
+      },
+      "required": [
+        "userId",
+        "notificationType"
+      ]
+    }
+  },
+  {
+    "name": "unsubscribeByNotificationTypeUser",
+    "description": "Unsubscribe a user from a specific notification type. Unsubscribes the current user from a specified notification type. Returns an `AccessDeniedException` message if requests are made for another user.",
+    "tags": [
+      "Subscription"
+    ],
+    "method": "POST",
+    "pathTemplate": "/api/v1/users/{userId}/subscriptions/{notificationType}/unsubscribe",
+    "pathParams": [
+      "userId",
+      "notificationType"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "description": ""
+        },
+        "notificationType": {
+          "type": "string",
+          "description": ""
+        }
+      },
+      "required": [
+        "userId",
+        "notificationType"
+      ]
+    }
+  },
+  {
+    "name": "publishSecurityEventTokens",
+    "description": "Publish a security event token. Publishes a Security Event Token (SET) sent by a Security Events Provider. After the token is verified, Okta ingests the event and performs any appropriate action.",
+    "tags": [
+      "SSFSecurityEventToken"
+    ],
+    "method": "POST",
+    "pathTemplate": "/security/api/v1/security-events",
+    "pathParams": [],
+    "queryParams": [],
+    "hasBody": true,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "requestBody": {
+          "type": "object",
+          "description": "The JSON request body. Refer to the Okta API docs for the schema."
+        }
+      },
+      "required": [
+        "requestBody"
+      ]
+    }
+  }
+]

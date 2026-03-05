@@ -1,0 +1,2379 @@
+[
+  {
+    "name": "getWellKnownAppAuthenticatorConfiguration",
+    "description": "Retrieve the well-known app authenticator configuration. Retrieves the well-known app authenticator configuration. Includes an app authenticator's settings, supported methods, and other details.",
+    "tags": [
+      "Authenticator"
+    ],
+    "method": "GET",
+    "pathTemplate": "/.well-known/app-authenticator-configuration",
+    "pathParams": [],
+    "queryParams": [
+      "oauthClientId"
+    ],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "oauthClientId": {
+          "type": "string",
+          "description": "Filters app authenticator configurations by `oauthClientId`"
+        }
+      },
+      "required": [
+        "oauthClientId"
+      ]
+    }
+  },
+  {
+    "name": "listAuthenticators",
+    "description": "List all authenticators. Lists all authenticators",
+    "tags": [
+      "Authenticator"
+    ],
+    "method": "GET",
+    "pathTemplate": "/api/v1/authenticators",
+    "pathParams": [],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {}
+    }
+  },
+  {
+    "name": "createAuthenticator",
+    "description": "Create an authenticator. Creates an authenticator",
+    "tags": [
+      "Authenticator"
+    ],
+    "method": "POST",
+    "pathTemplate": "/api/v1/authenticators",
+    "pathParams": [],
+    "queryParams": [
+      "activate"
+    ],
+    "hasBody": true,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "activate": {
+          "type": "boolean",
+          "description": "Whether to execute the activation lifecycle operation when Okta creates the authenticator"
+        },
+        "requestBody": {
+          "type": "object",
+          "description": "The JSON request body. Refer to the Okta API docs for the schema."
+        }
+      }
+    }
+  },
+  {
+    "name": "getAuthenticator",
+    "description": "Retrieve an authenticator. Retrieves an authenticator from your Okta organization by `authenticatorId`",
+    "tags": [
+      "Authenticator"
+    ],
+    "method": "GET",
+    "pathTemplate": "/api/v1/authenticators/{authenticatorId}",
+    "pathParams": [
+      "authenticatorId"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "authenticatorId": {
+          "type": "string",
+          "description": "`id` of the authenticator"
+        }
+      },
+      "required": [
+        "authenticatorId"
+      ]
+    }
+  },
+  {
+    "name": "replaceAuthenticator",
+    "description": "Replace an authenticator. Replaces the properties for an authenticator identified by `authenticatorId`",
+    "tags": [
+      "Authenticator"
+    ],
+    "method": "PUT",
+    "pathTemplate": "/api/v1/authenticators/{authenticatorId}",
+    "pathParams": [
+      "authenticatorId"
+    ],
+    "queryParams": [],
+    "hasBody": true,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "authenticatorId": {
+          "type": "string",
+          "description": "`id` of the authenticator"
+        },
+        "requestBody": {
+          "type": "object",
+          "description": "The JSON request body. Refer to the Okta API docs for the schema."
+        }
+      },
+      "required": [
+        "authenticatorId"
+      ]
+    }
+  },
+  {
+    "name": "listAllCustomAAGUIDs",
+    "description": "List all custom AAGUIDs. Lists all custom Authenticator Attestation Global Unique Identifiers (AAGUIDs) in the org Only custom AAGUIDs that an admin has created are returned.",
+    "tags": [
+      "Authenticator"
+    ],
+    "method": "GET",
+    "pathTemplate": "/api/v1/authenticators/{authenticatorId}/aaguids",
+    "pathParams": [
+      "authenticatorId"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "authenticatorId": {
+          "type": "string",
+          "description": "`id` of the authenticator"
+        }
+      },
+      "required": [
+        "authenticatorId"
+      ]
+    }
+  },
+  {
+    "name": "createCustomAAGUID",
+    "description": "Create a custom AAGUID. Creates a custom AAGUID for the WebAuthn authenticator",
+    "tags": [
+      "Authenticator"
+    ],
+    "method": "POST",
+    "pathTemplate": "/api/v1/authenticators/{authenticatorId}/aaguids",
+    "pathParams": [
+      "authenticatorId"
+    ],
+    "queryParams": [],
+    "hasBody": true,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "authenticatorId": {
+          "type": "string",
+          "description": "`id` of the authenticator"
+        },
+        "requestBody": {
+          "type": "object",
+          "description": "The JSON request body. Refer to the Okta API docs for the schema."
+        }
+      },
+      "required": [
+        "authenticatorId"
+      ]
+    }
+  },
+  {
+    "name": "getCustomAAGUID",
+    "description": "Retrieve a custom AAGUID. Retrieves a custom AAGUID",
+    "tags": [
+      "Authenticator"
+    ],
+    "method": "GET",
+    "pathTemplate": "/api/v1/authenticators/{authenticatorId}/aaguids/{aaguid}",
+    "pathParams": [
+      "authenticatorId",
+      "aaguid"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "authenticatorId": {
+          "type": "string",
+          "description": "`id` of the authenticator"
+        },
+        "aaguid": {
+          "type": "string",
+          "description": "Unique ID of a custom AAGUID"
+        }
+      },
+      "required": [
+        "authenticatorId",
+        "aaguid"
+      ]
+    }
+  },
+  {
+    "name": "replaceCustomAAGUID",
+    "description": "Replace a custom AAGUID. Replaces a custom AAGUID for the specified WebAuthn authenticator",
+    "tags": [
+      "Authenticator"
+    ],
+    "method": "PUT",
+    "pathTemplate": "/api/v1/authenticators/{authenticatorId}/aaguids/{aaguid}",
+    "pathParams": [
+      "authenticatorId",
+      "aaguid"
+    ],
+    "queryParams": [],
+    "hasBody": true,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "authenticatorId": {
+          "type": "string",
+          "description": "`id` of the authenticator"
+        },
+        "aaguid": {
+          "type": "string",
+          "description": "Unique ID of a custom AAGUID"
+        },
+        "requestBody": {
+          "type": "object",
+          "description": "The JSON request body. Refer to the Okta API docs for the schema."
+        }
+      },
+      "required": [
+        "authenticatorId",
+        "aaguid"
+      ]
+    }
+  },
+  {
+    "name": "updateCustomAAGUID",
+    "description": "Update a custom AAGUID. Updates the properties of a custom AAGUID by the `authenticatorId` and `aaguid` ID",
+    "tags": [
+      "Authenticator"
+    ],
+    "method": "PATCH",
+    "pathTemplate": "/api/v1/authenticators/{authenticatorId}/aaguids/{aaguid}",
+    "pathParams": [
+      "authenticatorId",
+      "aaguid"
+    ],
+    "queryParams": [],
+    "hasBody": true,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "authenticatorId": {
+          "type": "string",
+          "description": "`id` of the authenticator"
+        },
+        "aaguid": {
+          "type": "string",
+          "description": "Unique ID of a custom AAGUID"
+        },
+        "requestBody": {
+          "type": "object",
+          "description": "The JSON request body. Refer to the Okta API docs for the schema."
+        }
+      },
+      "required": [
+        "authenticatorId",
+        "aaguid"
+      ]
+    }
+  },
+  {
+    "name": "deleteCustomAAGUID",
+    "description": "Delete a custom AAGUID. Deletes a custom AAGUID You can only delete custom AAGUIDs that an admin has created.",
+    "tags": [
+      "Authenticator"
+    ],
+    "method": "DELETE",
+    "pathTemplate": "/api/v1/authenticators/{authenticatorId}/aaguids/{aaguid}",
+    "pathParams": [
+      "authenticatorId",
+      "aaguid"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "authenticatorId": {
+          "type": "string",
+          "description": "`id` of the authenticator"
+        },
+        "aaguid": {
+          "type": "string",
+          "description": "Unique ID of a custom AAGUID"
+        }
+      },
+      "required": [
+        "authenticatorId",
+        "aaguid"
+      ]
+    }
+  },
+  {
+    "name": "activateAuthenticator",
+    "description": "Activate an authenticator. Activates an authenticator by `authenticatorId`",
+    "tags": [
+      "Authenticator"
+    ],
+    "method": "POST",
+    "pathTemplate": "/api/v1/authenticators/{authenticatorId}/lifecycle/activate",
+    "pathParams": [
+      "authenticatorId"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "authenticatorId": {
+          "type": "string",
+          "description": "`id` of the authenticator"
+        }
+      },
+      "required": [
+        "authenticatorId"
+      ]
+    }
+  },
+  {
+    "name": "deactivateAuthenticator",
+    "description": "Deactivate an authenticator. Deactivates an authenticator by `authenticatorId`",
+    "tags": [
+      "Authenticator"
+    ],
+    "method": "POST",
+    "pathTemplate": "/api/v1/authenticators/{authenticatorId}/lifecycle/deactivate",
+    "pathParams": [
+      "authenticatorId"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "authenticatorId": {
+          "type": "string",
+          "description": "`id` of the authenticator"
+        }
+      },
+      "required": [
+        "authenticatorId"
+      ]
+    }
+  },
+  {
+    "name": "listAuthenticatorMethods",
+    "description": "List all methods of an authenticator. Lists all methods of an authenticator identified by `authenticatorId`",
+    "tags": [
+      "Authenticator"
+    ],
+    "method": "GET",
+    "pathTemplate": "/api/v1/authenticators/{authenticatorId}/methods",
+    "pathParams": [
+      "authenticatorId"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "authenticatorId": {
+          "type": "string",
+          "description": "`id` of the authenticator"
+        }
+      },
+      "required": [
+        "authenticatorId"
+      ]
+    }
+  },
+  {
+    "name": "getAuthenticatorMethod",
+    "description": "Retrieve an authenticator method. Retrieves a method identified by `methodType` of an authenticator identified by `authenticatorId`",
+    "tags": [
+      "Authenticator"
+    ],
+    "method": "GET",
+    "pathTemplate": "/api/v1/authenticators/{authenticatorId}/methods/{methodType}",
+    "pathParams": [
+      "authenticatorId",
+      "methodType"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "authenticatorId": {
+          "type": "string",
+          "description": "`id` of the authenticator"
+        },
+        "methodType": {
+          "type": "string",
+          "description": "Type of authenticator method"
+        }
+      },
+      "required": [
+        "authenticatorId",
+        "methodType"
+      ]
+    }
+  },
+  {
+    "name": "replaceAuthenticatorMethod",
+    "description": "Replace an authenticator method. Replaces a method of `methodType` for an authenticator identified by `authenticatorId`",
+    "tags": [
+      "Authenticator"
+    ],
+    "method": "PUT",
+    "pathTemplate": "/api/v1/authenticators/{authenticatorId}/methods/{methodType}",
+    "pathParams": [
+      "authenticatorId",
+      "methodType"
+    ],
+    "queryParams": [],
+    "hasBody": true,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "authenticatorId": {
+          "type": "string",
+          "description": "`id` of the authenticator"
+        },
+        "methodType": {
+          "type": "string",
+          "description": "Type of authenticator method"
+        },
+        "requestBody": {
+          "type": "object",
+          "description": "The JSON request body. Refer to the Okta API docs for the schema."
+        }
+      },
+      "required": [
+        "authenticatorId",
+        "methodType"
+      ]
+    }
+  },
+  {
+    "name": "activateAuthenticatorMethod",
+    "description": "Activate an authenticator method. Activates a method for an authenticator identified by `authenticatorId` and `methodType`",
+    "tags": [
+      "Authenticator"
+    ],
+    "method": "POST",
+    "pathTemplate": "/api/v1/authenticators/{authenticatorId}/methods/{methodType}/lifecycle/activate",
+    "pathParams": [
+      "authenticatorId",
+      "methodType"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "authenticatorId": {
+          "type": "string",
+          "description": "`id` of the authenticator"
+        },
+        "methodType": {
+          "type": "string",
+          "description": "Type of authenticator method"
+        }
+      },
+      "required": [
+        "authenticatorId",
+        "methodType"
+      ]
+    }
+  },
+  {
+    "name": "deactivateAuthenticatorMethod",
+    "description": "Deactivate an authenticator method. Deactivates a method for an authenticator identified by `authenticatorId` and `methodType`",
+    "tags": [
+      "Authenticator"
+    ],
+    "method": "POST",
+    "pathTemplate": "/api/v1/authenticators/{authenticatorId}/methods/{methodType}/lifecycle/deactivate",
+    "pathParams": [
+      "authenticatorId",
+      "methodType"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "authenticatorId": {
+          "type": "string",
+          "description": "`id` of the authenticator"
+        },
+        "methodType": {
+          "type": "string",
+          "description": "Type of authenticator method"
+        }
+      },
+      "required": [
+        "authenticatorId",
+        "methodType"
+      ]
+    }
+  },
+  {
+    "name": "verifyRpIdDomain",
+    "description": "Verify a Relying Party ID domain. Verifies the [Relying Party identifier (RP ID)](https://www.w3.org/TR/webauthn/#relying-party-identifier) domain for the specified WebAuthn authenticator and the specific `webauthn` authenticator method",
+    "tags": [
+      "Authenticator"
+    ],
+    "method": "POST",
+    "pathTemplate": "/api/v1/authenticators/{authenticatorId}/methods/{webAuthnMethodType}/verify-rp-id-domain",
+    "pathParams": [
+      "authenticatorId",
+      "webAuthnMethodType"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "authenticatorId": {
+          "type": "string",
+          "description": "`id` of the authenticator"
+        },
+        "webAuthnMethodType": {
+          "type": "string",
+          "description": "Type of authenticator method"
+        }
+      },
+      "required": [
+        "authenticatorId",
+        "webAuthnMethodType"
+      ]
+    }
+  },
+  {
+    "name": "listBehaviorDetectionRules",
+    "description": "List all behavior detection rules. Lists all behavior detection rules with pagination support",
+    "tags": [
+      "Behavior"
+    ],
+    "method": "GET",
+    "pathTemplate": "/api/v1/behaviors",
+    "pathParams": [],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {}
+    }
+  },
+  {
+    "name": "createBehaviorDetectionRule",
+    "description": "Create a behavior detection rule. Creates a new behavior detection rule",
+    "tags": [
+      "Behavior"
+    ],
+    "method": "POST",
+    "pathTemplate": "/api/v1/behaviors",
+    "pathParams": [],
+    "queryParams": [],
+    "hasBody": true,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "requestBody": {
+          "type": "object",
+          "description": "The JSON request body. Refer to the Okta API docs for the schema."
+        }
+      },
+      "required": [
+        "requestBody"
+      ]
+    }
+  },
+  {
+    "name": "getBehaviorDetectionRule",
+    "description": "Retrieve a behavior detection rule. Retrieves a Behavior Detection Rule by `behaviorId`",
+    "tags": [
+      "Behavior"
+    ],
+    "method": "GET",
+    "pathTemplate": "/api/v1/behaviors/{behaviorId}",
+    "pathParams": [
+      "behaviorId"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "behaviorId": {
+          "type": "string",
+          "description": "ID of the Behavior Detection Rule"
+        }
+      },
+      "required": [
+        "behaviorId"
+      ]
+    }
+  },
+  {
+    "name": "replaceBehaviorDetectionRule",
+    "description": "Replace a behavior detection rule. Replaces a Behavior Detection Rule by `behaviorId`",
+    "tags": [
+      "Behavior"
+    ],
+    "method": "PUT",
+    "pathTemplate": "/api/v1/behaviors/{behaviorId}",
+    "pathParams": [
+      "behaviorId"
+    ],
+    "queryParams": [],
+    "hasBody": true,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "behaviorId": {
+          "type": "string",
+          "description": "ID of the Behavior Detection Rule"
+        },
+        "requestBody": {
+          "type": "object",
+          "description": "The JSON request body. Refer to the Okta API docs for the schema."
+        }
+      },
+      "required": [
+        "behaviorId",
+        "requestBody"
+      ]
+    }
+  },
+  {
+    "name": "deleteBehaviorDetectionRule",
+    "description": "Delete a behavior detection rule. Deletes a Behavior Detection Rule by `behaviorId`",
+    "tags": [
+      "Behavior"
+    ],
+    "method": "DELETE",
+    "pathTemplate": "/api/v1/behaviors/{behaviorId}",
+    "pathParams": [
+      "behaviorId"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "behaviorId": {
+          "type": "string",
+          "description": "ID of the Behavior Detection Rule"
+        }
+      },
+      "required": [
+        "behaviorId"
+      ]
+    }
+  },
+  {
+    "name": "activateBehaviorDetectionRule",
+    "description": "Activate a behavior detection rule. Activates a behavior detection rule",
+    "tags": [
+      "Behavior"
+    ],
+    "method": "POST",
+    "pathTemplate": "/api/v1/behaviors/{behaviorId}/lifecycle/activate",
+    "pathParams": [
+      "behaviorId"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "behaviorId": {
+          "type": "string",
+          "description": "ID of the Behavior Detection Rule"
+        }
+      },
+      "required": [
+        "behaviorId"
+      ]
+    }
+  },
+  {
+    "name": "deactivateBehaviorDetectionRule",
+    "description": "Deactivate a behavior detection rule. Deactivates a behavior detection rule",
+    "tags": [
+      "Behavior"
+    ],
+    "method": "POST",
+    "pathTemplate": "/api/v1/behaviors/{behaviorId}/lifecycle/deactivate",
+    "pathParams": [
+      "behaviorId"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "behaviorId": {
+          "type": "string",
+          "description": "ID of the Behavior Detection Rule"
+        }
+      },
+      "required": [
+        "behaviorId"
+      ]
+    }
+  },
+  {
+    "name": "listCaptchaInstances",
+    "description": "List all CAPTCHA instances. Lists all CAPTCHA instances with pagination support. A subset of CAPTCHA instances can be returned that match a supported filter expression or query.",
+    "tags": [
+      "CAPTCHA"
+    ],
+    "method": "GET",
+    "pathTemplate": "/api/v1/captchas",
+    "pathParams": [],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {}
+    }
+  },
+  {
+    "name": "createCaptchaInstance",
+    "description": "Create a CAPTCHA instance. Creates a new CAPTCHA instance. Currently, an org can only configure a single CAPTCHA instance.",
+    "tags": [
+      "CAPTCHA"
+    ],
+    "method": "POST",
+    "pathTemplate": "/api/v1/captchas",
+    "pathParams": [],
+    "queryParams": [],
+    "hasBody": true,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "requestBody": {
+          "type": "object",
+          "description": "The JSON request body. Refer to the Okta API docs for the schema."
+        }
+      },
+      "required": [
+        "requestBody"
+      ]
+    }
+  },
+  {
+    "name": "getCaptchaInstance",
+    "description": "Retrieve a CAPTCHA instance. Retrieves the properties of a specified CAPTCHA instance",
+    "tags": [
+      "CAPTCHA"
+    ],
+    "method": "GET",
+    "pathTemplate": "/api/v1/captchas/{captchaId}",
+    "pathParams": [
+      "captchaId"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "captchaId": {
+          "type": "string",
+          "description": "The unique key used to identify your CAPTCHA instance"
+        }
+      },
+      "required": [
+        "captchaId"
+      ]
+    }
+  },
+  {
+    "name": "updateCaptchaInstance",
+    "description": "Update a CAPTCHA instance. Partially updates the properties of a specified CAPTCHA instance",
+    "tags": [
+      "CAPTCHA"
+    ],
+    "method": "POST",
+    "pathTemplate": "/api/v1/captchas/{captchaId}",
+    "pathParams": [
+      "captchaId"
+    ],
+    "queryParams": [],
+    "hasBody": true,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "captchaId": {
+          "type": "string",
+          "description": "The unique key used to identify your CAPTCHA instance"
+        },
+        "requestBody": {
+          "type": "object",
+          "description": "The JSON request body. Refer to the Okta API docs for the schema."
+        }
+      },
+      "required": [
+        "captchaId",
+        "requestBody"
+      ]
+    }
+  },
+  {
+    "name": "replaceCaptchaInstance",
+    "description": "Replace a CAPTCHA instance. Replaces the properties for a specified CAPTCHA instance",
+    "tags": [
+      "CAPTCHA"
+    ],
+    "method": "PUT",
+    "pathTemplate": "/api/v1/captchas/{captchaId}",
+    "pathParams": [
+      "captchaId"
+    ],
+    "queryParams": [],
+    "hasBody": true,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "captchaId": {
+          "type": "string",
+          "description": "The unique key used to identify your CAPTCHA instance"
+        },
+        "requestBody": {
+          "type": "object",
+          "description": "The JSON request body. Refer to the Okta API docs for the schema."
+        }
+      },
+      "required": [
+        "captchaId",
+        "requestBody"
+      ]
+    }
+  },
+  {
+    "name": "deleteCaptchaInstance",
+    "description": "Delete a CAPTCHA instance. Deletes a specified CAPTCHA instance > **Note:** If your CAPTCHA instance is still associated with your org, the request fails. You must first update your Org-wide CAPTCHA settings to remove the CAPTCHA instance.",
+    "tags": [
+      "CAPTCHA"
+    ],
+    "method": "DELETE",
+    "pathTemplate": "/api/v1/captchas/{captchaId}",
+    "pathParams": [
+      "captchaId"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "captchaId": {
+          "type": "string",
+          "description": "The unique key used to identify your CAPTCHA instance"
+        }
+      },
+      "required": [
+        "captchaId"
+      ]
+    }
+  },
+  {
+    "name": "listDeviceAssurancePolicies",
+    "description": "List all device assurance policies. Lists all device assurance policies",
+    "tags": [
+      "DeviceAssurance"
+    ],
+    "method": "GET",
+    "pathTemplate": "/api/v1/device-assurances",
+    "pathParams": [],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {}
+    }
+  },
+  {
+    "name": "createDeviceAssurancePolicy",
+    "description": "Create a device assurance policy. Creates a new device assurance policy",
+    "tags": [
+      "DeviceAssurance"
+    ],
+    "method": "POST",
+    "pathTemplate": "/api/v1/device-assurances",
+    "pathParams": [],
+    "queryParams": [],
+    "hasBody": true,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "requestBody": {
+          "type": "object",
+          "description": "The JSON request body. Refer to the Okta API docs for the schema."
+        }
+      },
+      "required": [
+        "requestBody"
+      ]
+    }
+  },
+  {
+    "name": "getDeviceAssurancePolicy",
+    "description": "Retrieve a device assurance policy. Retrieves a device assurance policy by `deviceAssuranceId`",
+    "tags": [
+      "DeviceAssurance"
+    ],
+    "method": "GET",
+    "pathTemplate": "/api/v1/device-assurances/{deviceAssuranceId}",
+    "pathParams": [
+      "deviceAssuranceId"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "deviceAssuranceId": {
+          "type": "string",
+          "description": "Id of the device assurance policy"
+        }
+      },
+      "required": [
+        "deviceAssuranceId"
+      ]
+    }
+  },
+  {
+    "name": "replaceDeviceAssurancePolicy",
+    "description": "Replace a device assurance policy. Replaces a device assurance policy by `deviceAssuranceId`",
+    "tags": [
+      "DeviceAssurance"
+    ],
+    "method": "PUT",
+    "pathTemplate": "/api/v1/device-assurances/{deviceAssuranceId}",
+    "pathParams": [
+      "deviceAssuranceId"
+    ],
+    "queryParams": [],
+    "hasBody": true,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "deviceAssuranceId": {
+          "type": "string",
+          "description": "Id of the device assurance policy"
+        },
+        "requestBody": {
+          "type": "object",
+          "description": "The JSON request body. Refer to the Okta API docs for the schema."
+        }
+      },
+      "required": [
+        "deviceAssuranceId",
+        "requestBody"
+      ]
+    }
+  },
+  {
+    "name": "deleteDeviceAssurancePolicy",
+    "description": "Delete a device assurance policy. Deletes a device assurance policy by `deviceAssuranceId`. If the device assurance policy is currently being used in the org Authentication Policies, the delete will not be allowed.",
+    "tags": [
+      "DeviceAssurance"
+    ],
+    "method": "DELETE",
+    "pathTemplate": "/api/v1/device-assurances/{deviceAssuranceId}",
+    "pathParams": [
+      "deviceAssuranceId"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "deviceAssuranceId": {
+          "type": "string",
+          "description": "Id of the device assurance policy"
+        }
+      },
+      "required": [
+        "deviceAssuranceId"
+      ]
+    }
+  },
+  {
+    "name": "listDevicePostureChecks",
+    "description": "List all device posture checks. Lists all device posture checks",
+    "tags": [
+      "DevicePostureCheck"
+    ],
+    "method": "GET",
+    "pathTemplate": "/api/v1/device-posture-checks",
+    "pathParams": [],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {}
+    }
+  },
+  {
+    "name": "createDevicePostureCheck",
+    "description": "Create a device posture check. Creates a device posture check",
+    "tags": [
+      "DevicePostureCheck"
+    ],
+    "method": "POST",
+    "pathTemplate": "/api/v1/device-posture-checks",
+    "pathParams": [],
+    "queryParams": [],
+    "hasBody": true,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "requestBody": {
+          "type": "object",
+          "description": "The JSON request body. Refer to the Okta API docs for the schema."
+        }
+      },
+      "required": [
+        "requestBody"
+      ]
+    }
+  },
+  {
+    "name": "listDefaultDevicePostureChecks",
+    "description": "List all default device posture checks. Lists all default device posture checks. Default device posture checks are defined by Okta. Their type will always be `BUILTIN`.",
+    "tags": [
+      "DevicePostureCheck"
+    ],
+    "method": "GET",
+    "pathTemplate": "/api/v1/device-posture-checks/default",
+    "pathParams": [],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {}
+    }
+  },
+  {
+    "name": "getDevicePostureCheck",
+    "description": "Retrieve a device posture check. Retrieves a device posture check by `postureCheckId`",
+    "tags": [
+      "DevicePostureCheck"
+    ],
+    "method": "GET",
+    "pathTemplate": "/api/v1/device-posture-checks/{postureCheckId}",
+    "pathParams": [
+      "postureCheckId"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "postureCheckId": {
+          "type": "string",
+          "description": "ID of the device posture check"
+        }
+      },
+      "required": [
+        "postureCheckId"
+      ]
+    }
+  },
+  {
+    "name": "replaceDevicePostureCheck",
+    "description": "Replace a device posture check. Replaces a device posture check by `postureCheckId`",
+    "tags": [
+      "DevicePostureCheck"
+    ],
+    "method": "PUT",
+    "pathTemplate": "/api/v1/device-posture-checks/{postureCheckId}",
+    "pathParams": [
+      "postureCheckId"
+    ],
+    "queryParams": [],
+    "hasBody": true,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "postureCheckId": {
+          "type": "string",
+          "description": "ID of the device posture check"
+        },
+        "requestBody": {
+          "type": "object",
+          "description": "The JSON request body. Refer to the Okta API docs for the schema."
+        }
+      },
+      "required": [
+        "postureCheckId",
+        "requestBody"
+      ]
+    }
+  },
+  {
+    "name": "deleteDevicePostureCheck",
+    "description": "Delete a device posture check. Deletes a device posture check by `postureCheckId`. You can't delete the device posture check if it's used in a device assurance policy.",
+    "tags": [
+      "DevicePostureCheck"
+    ],
+    "method": "DELETE",
+    "pathTemplate": "/api/v1/device-posture-checks/{postureCheckId}",
+    "pathParams": [
+      "postureCheckId"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "postureCheckId": {
+          "type": "string",
+          "description": "ID of the device posture check"
+        }
+      },
+      "required": [
+        "postureCheckId"
+      ]
+    }
+  },
+  {
+    "name": "getOrgCaptchaSettings",
+    "description": "Retrieve the org-wide CAPTCHA settings. Retrieves the CAPTCHA settings object for your organization > **Note**: If the current organization hasn't configured CAPTCHA Settings, the request returns an empty object.",
+    "tags": [
+      "CAPTCHA"
+    ],
+    "method": "GET",
+    "pathTemplate": "/api/v1/org/captcha",
+    "pathParams": [],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {}
+    }
+  },
+  {
+    "name": "replacesOrgCaptchaSettings",
+    "description": "Replace the org-wide CAPTCHA settings. Replaces the CAPTCHA settings object for your organization > **Note**: You can disable CAPTCHA for your organization by setting `captchaId` and `enabledPages` to `null`.",
+    "tags": [
+      "CAPTCHA"
+    ],
+    "method": "PUT",
+    "pathTemplate": "/api/v1/org/captcha",
+    "pathParams": [],
+    "queryParams": [],
+    "hasBody": true,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "requestBody": {
+          "type": "object",
+          "description": "The JSON request body. Refer to the Okta API docs for the schema."
+        }
+      },
+      "required": [
+        "requestBody"
+      ]
+    }
+  },
+  {
+    "name": "deleteOrgCaptchaSettings",
+    "description": "Delete the org-wide CAPTCHA settings. Deletes the CAPTCHA settings object for your organization",
+    "tags": [
+      "CAPTCHA"
+    ],
+    "method": "DELETE",
+    "pathTemplate": "/api/v1/org/captcha",
+    "pathParams": [],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {}
+    }
+  },
+  {
+    "name": "listPolicies",
+    "description": "List all policies. Lists all policies with the specified type",
+    "tags": [
+      "Policy"
+    ],
+    "method": "GET",
+    "pathTemplate": "/api/v1/policies",
+    "pathParams": [],
+    "queryParams": [
+      "type",
+      "status",
+      "q",
+      "expand",
+      "sortBy",
+      "limit",
+      "resourceId",
+      "after"
+    ],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "description": "Specifies the type of policy to return. The following policy types are available only with the Okta Identity Engine - `ACCESS_POLICY`, <x-lifecycle class=\"ea\"></x-lifecycle> `DEVICE_SIGNAL_COLLECTION`, `PROFILE_ENROLLMENT`, `POST_AUTH_SESSION` and `ENTITY_RISK`.",
+          "enum": [
+            "OKTA_SIGN_ON",
+            "PASSWORD",
+            "MFA_ENROLL",
+            "IDP_DISCOVERY",
+            "ACCESS_POLICY",
+            "DEVICE_SIGNAL_COLLECTION",
+            "PROFILE_ENROLLMENT",
+            "POST_AUTH_SESSION",
+            "ENTITY_RISK"
+          ]
+        },
+        "status": {
+          "type": "string",
+          "description": "Refines the query by the `status` of the policy - `ACTIVE` or `INACTIVE`"
+        },
+        "q": {
+          "type": "string",
+          "description": "Refines the query by policy name prefix (startWith method) passed in as `q=string`"
+        },
+        "expand": {
+          "type": "string",
+          "description": ""
+        },
+        "sortBy": {
+          "type": "string",
+          "description": "Refines the query by sorting on the policy `name` in ascending order"
+        },
+        "limit": {
+          "type": "string",
+          "description": "Defines the number of policies returned, see [Pagination](https://developer.okta.com/docs/api/#pagination)"
+        },
+        "resourceId": {
+          "type": "string",
+          "description": "Reference to the associated authorization server"
+        },
+        "after": {
+          "type": "string",
+          "description": "End page cursor for pagination, see [Pagination](https://developer.okta.com/docs/api/#pagination)"
+        }
+      },
+      "required": [
+        "type"
+      ]
+    }
+  },
+  {
+    "name": "createPolicy",
+    "description": "Create a policy. Creates a policy. There are many types of policies that you can create. See [Policies](https://developer.okta.com/docs/concepts/policies/) for an overview of the types of policies available and links to more indepth information.",
+    "tags": [
+      "Policy"
+    ],
+    "method": "POST",
+    "pathTemplate": "/api/v1/policies",
+    "pathParams": [],
+    "queryParams": [
+      "activate"
+    ],
+    "hasBody": true,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "activate": {
+          "type": "boolean",
+          "description": "This query parameter is only valid for Classic Engine orgs."
+        },
+        "requestBody": {
+          "type": "object",
+          "description": "The JSON request body. Refer to the Okta API docs for the schema."
+        }
+      },
+      "required": [
+        "requestBody"
+      ]
+    }
+  },
+  {
+    "name": "createPolicySimulation",
+    "description": "Create a policy simulation. Creates a policy or policy rule simulation. The access simulation evaluates policy and policy rules based on the existing policy rule configuration. The evaluation result simulates what the real-world authentication flow is and what policy rules have been applied or matched to the authentication flow.",
+    "tags": [
+      "Policy"
+    ],
+    "method": "POST",
+    "pathTemplate": "/api/v1/policies/simulate",
+    "pathParams": [],
+    "queryParams": [
+      "expand"
+    ],
+    "hasBody": true,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "expand": {
+          "type": "string",
+          "description": "Use `expand=EVALUATED` to include a list of evaluated but not matched policies and policy rules. Use `expand=RULE` to include details about why a rule condition wasn't matched."
+        },
+        "requestBody": {
+          "type": "object",
+          "description": "The JSON request body. Refer to the Okta API docs for the schema."
+        }
+      },
+      "required": [
+        "requestBody"
+      ]
+    }
+  },
+  {
+    "name": "getPolicy",
+    "description": "Retrieve a policy. Retrieves a policy",
+    "tags": [
+      "Policy"
+    ],
+    "method": "GET",
+    "pathTemplate": "/api/v1/policies/{policyId}",
+    "pathParams": [
+      "policyId"
+    ],
+    "queryParams": [
+      "expand"
+    ],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "policyId": {
+          "type": "string",
+          "description": "`id` of the Policy"
+        },
+        "expand": {
+          "type": "string",
+          "description": ""
+        }
+      },
+      "required": [
+        "policyId"
+      ]
+    }
+  },
+  {
+    "name": "replacePolicy",
+    "description": "Replace a policy. Replaces the properties of a policy identified by `policyId`",
+    "tags": [
+      "Policy"
+    ],
+    "method": "PUT",
+    "pathTemplate": "/api/v1/policies/{policyId}",
+    "pathParams": [
+      "policyId"
+    ],
+    "queryParams": [],
+    "hasBody": true,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "policyId": {
+          "type": "string",
+          "description": "`id` of the Policy"
+        },
+        "requestBody": {
+          "type": "object",
+          "description": "The JSON request body. Refer to the Okta API docs for the schema."
+        }
+      },
+      "required": [
+        "policyId",
+        "requestBody"
+      ]
+    }
+  },
+  {
+    "name": "deletePolicy",
+    "description": "Delete a policy. Deletes a policy",
+    "tags": [
+      "Policy"
+    ],
+    "method": "DELETE",
+    "pathTemplate": "/api/v1/policies/{policyId}",
+    "pathParams": [
+      "policyId"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "policyId": {
+          "type": "string",
+          "description": "`id` of the Policy"
+        }
+      },
+      "required": [
+        "policyId"
+      ]
+    }
+  },
+  {
+    "name": "listPolicyApps",
+    "description": "List all apps mapped to a policy. Lists all applications mapped to a policy identified by `policyId` > **Note:** Use [List all resources mapped to a Policy](https://developer.okta.com/docs/api/openapi/okta-management/management/tag/Policy/#tag/Policy/operation/listPolicyMappings) to list all applications mapped to a policy.",
+    "tags": [
+      "Policy"
+    ],
+    "method": "GET",
+    "pathTemplate": "/api/v1/policies/{policyId}/app",
+    "pathParams": [
+      "policyId"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "policyId": {
+          "type": "string",
+          "description": "`id` of the Policy"
+        }
+      },
+      "required": [
+        "policyId"
+      ]
+    }
+  },
+  {
+    "name": "clonePolicy",
+    "description": "Clone an existing policy. Clones an existing policy",
+    "tags": [
+      "Policy"
+    ],
+    "method": "POST",
+    "pathTemplate": "/api/v1/policies/{policyId}/clone",
+    "pathParams": [
+      "policyId"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "policyId": {
+          "type": "string",
+          "description": "`id` of the Policy"
+        }
+      },
+      "required": [
+        "policyId"
+      ]
+    }
+  },
+  {
+    "name": "activatePolicy",
+    "description": "Activate a policy. Activates a policy",
+    "tags": [
+      "Policy"
+    ],
+    "method": "POST",
+    "pathTemplate": "/api/v1/policies/{policyId}/lifecycle/activate",
+    "pathParams": [
+      "policyId"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "policyId": {
+          "type": "string",
+          "description": "`id` of the Policy"
+        }
+      },
+      "required": [
+        "policyId"
+      ]
+    }
+  },
+  {
+    "name": "deactivatePolicy",
+    "description": "Deactivate a policy. Deactivates a policy",
+    "tags": [
+      "Policy"
+    ],
+    "method": "POST",
+    "pathTemplate": "/api/v1/policies/{policyId}/lifecycle/deactivate",
+    "pathParams": [
+      "policyId"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "policyId": {
+          "type": "string",
+          "description": "`id` of the Policy"
+        }
+      },
+      "required": [
+        "policyId"
+      ]
+    }
+  },
+  {
+    "name": "listPolicyMappings",
+    "description": "List all resources mapped to a policy. Lists all resources mapped to a policy identified by `policyId`",
+    "tags": [
+      "Policy"
+    ],
+    "method": "GET",
+    "pathTemplate": "/api/v1/policies/{policyId}/mappings",
+    "pathParams": [
+      "policyId"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "policyId": {
+          "type": "string",
+          "description": "`id` of the Policy"
+        }
+      },
+      "required": [
+        "policyId"
+      ]
+    }
+  },
+  {
+    "name": "mapResourceToPolicy",
+    "description": "Map a resource to a policy. Maps a resource to a policy identified by `policyId` > **Note:** Use the [Assign an app sign-in policy](https://developer.okta.com/docs/api/openapi/okta-management/management/tag/ApplicationPolicies/#tag/ApplicationPolicies/operation/assignApplicationPolicy) endpoint to assign an app sign-in policy to an app.",
+    "tags": [
+      "Policy"
+    ],
+    "method": "POST",
+    "pathTemplate": "/api/v1/policies/{policyId}/mappings",
+    "pathParams": [
+      "policyId"
+    ],
+    "queryParams": [],
+    "hasBody": true,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "policyId": {
+          "type": "string",
+          "description": "`id` of the Policy"
+        },
+        "requestBody": {
+          "type": "object",
+          "description": "The JSON request body. Refer to the Okta API docs for the schema."
+        }
+      },
+      "required": [
+        "policyId",
+        "requestBody"
+      ]
+    }
+  },
+  {
+    "name": "getPolicyMapping",
+    "description": "Retrieve a policy resource mapping. Retrieves a resource mapping for a policy identified by `policyId` and `mappingId`",
+    "tags": [
+      "Policy"
+    ],
+    "method": "GET",
+    "pathTemplate": "/api/v1/policies/{policyId}/mappings/{mappingId}",
+    "pathParams": [
+      "policyId",
+      "mappingId"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "policyId": {
+          "type": "string",
+          "description": "`id` of the Policy"
+        },
+        "mappingId": {
+          "type": "string",
+          "description": "`id` of the policy resource Mapping"
+        }
+      },
+      "required": [
+        "policyId",
+        "mappingId"
+      ]
+    }
+  },
+  {
+    "name": "deletePolicyResourceMapping",
+    "description": "Delete a policy resource mapping. Deletes the resource mapping for a policy identified by `policyId` and `mappingId`",
+    "tags": [
+      "Policy"
+    ],
+    "method": "DELETE",
+    "pathTemplate": "/api/v1/policies/{policyId}/mappings/{mappingId}",
+    "pathParams": [
+      "policyId",
+      "mappingId"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "policyId": {
+          "type": "string",
+          "description": "`id` of the Policy"
+        },
+        "mappingId": {
+          "type": "string",
+          "description": "`id` of the policy resource Mapping"
+        }
+      },
+      "required": [
+        "policyId",
+        "mappingId"
+      ]
+    }
+  },
+  {
+    "name": "listPolicyRules",
+    "description": "List all policy rules. Lists all policy rules",
+    "tags": [
+      "Policy"
+    ],
+    "method": "GET",
+    "pathTemplate": "/api/v1/policies/{policyId}/rules",
+    "pathParams": [
+      "policyId"
+    ],
+    "queryParams": [
+      "limit"
+    ],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "policyId": {
+          "type": "string",
+          "description": "`id` of the Policy"
+        },
+        "limit": {
+          "type": "string",
+          "description": "Defines the number of policy rules returned. See [Pagination](https://developer.okta.com/docs/api/#pagination)."
+        }
+      },
+      "required": [
+        "policyId"
+      ]
+    }
+  },
+  {
+    "name": "createPolicyRule",
+    "description": "Create a policy rule. Creates a policy rule > **Note:** You can't create additional rules for the `PROFILE_ENROLLMENT` or `POST_AUTH_SESSION` policies.",
+    "tags": [
+      "Policy"
+    ],
+    "method": "POST",
+    "pathTemplate": "/api/v1/policies/{policyId}/rules",
+    "pathParams": [
+      "policyId"
+    ],
+    "queryParams": [
+      "limit",
+      "activate"
+    ],
+    "hasBody": true,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "policyId": {
+          "type": "string",
+          "description": "`id` of the Policy"
+        },
+        "limit": {
+          "type": "string",
+          "description": "Defines the number of policy rules returned. See [Pagination](https://developer.okta.com/docs/api/#pagination)."
+        },
+        "activate": {
+          "type": "boolean",
+          "description": "Set this parameter to `false` to create an `INACTIVE` rule."
+        },
+        "requestBody": {
+          "type": "object",
+          "description": "The JSON request body. Refer to the Okta API docs for the schema."
+        }
+      },
+      "required": [
+        "policyId",
+        "requestBody"
+      ]
+    }
+  },
+  {
+    "name": "getPolicyRule",
+    "description": "Retrieve a policy rule. Retrieves a policy rule",
+    "tags": [
+      "Policy"
+    ],
+    "method": "GET",
+    "pathTemplate": "/api/v1/policies/{policyId}/rules/{ruleId}",
+    "pathParams": [
+      "policyId",
+      "ruleId"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "policyId": {
+          "type": "string",
+          "description": "`id` of the Policy"
+        },
+        "ruleId": {
+          "type": "string",
+          "description": "`id` of the policy rule"
+        }
+      },
+      "required": [
+        "policyId",
+        "ruleId"
+      ]
+    }
+  },
+  {
+    "name": "replacePolicyRule",
+    "description": "Replace a policy rule. Replaces the properties for a policy rule identified by `policyId` and `ruleId`",
+    "tags": [
+      "Policy"
+    ],
+    "method": "PUT",
+    "pathTemplate": "/api/v1/policies/{policyId}/rules/{ruleId}",
+    "pathParams": [
+      "policyId",
+      "ruleId"
+    ],
+    "queryParams": [],
+    "hasBody": true,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "policyId": {
+          "type": "string",
+          "description": "`id` of the Policy"
+        },
+        "ruleId": {
+          "type": "string",
+          "description": "`id` of the policy rule"
+        },
+        "requestBody": {
+          "type": "object",
+          "description": "The JSON request body. Refer to the Okta API docs for the schema."
+        }
+      },
+      "required": [
+        "policyId",
+        "ruleId",
+        "requestBody"
+      ]
+    }
+  },
+  {
+    "name": "deletePolicyRule",
+    "description": "Delete a policy rule. Deletes a policy rule identified by `policyId` and `ruleId`",
+    "tags": [
+      "Policy"
+    ],
+    "method": "DELETE",
+    "pathTemplate": "/api/v1/policies/{policyId}/rules/{ruleId}",
+    "pathParams": [
+      "policyId",
+      "ruleId"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "policyId": {
+          "type": "string",
+          "description": "`id` of the Policy"
+        },
+        "ruleId": {
+          "type": "string",
+          "description": "`id` of the policy rule"
+        }
+      },
+      "required": [
+        "policyId",
+        "ruleId"
+      ]
+    }
+  },
+  {
+    "name": "activatePolicyRule",
+    "description": "Activate a policy rule. Activates a policy rule identified by `policyId` and `ruleId`",
+    "tags": [
+      "Policy"
+    ],
+    "method": "POST",
+    "pathTemplate": "/api/v1/policies/{policyId}/rules/{ruleId}/lifecycle/activate",
+    "pathParams": [
+      "policyId",
+      "ruleId"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "policyId": {
+          "type": "string",
+          "description": "`id` of the Policy"
+        },
+        "ruleId": {
+          "type": "string",
+          "description": "`id` of the policy rule"
+        }
+      },
+      "required": [
+        "policyId",
+        "ruleId"
+      ]
+    }
+  },
+  {
+    "name": "deactivatePolicyRule",
+    "description": "Deactivate a policy rule. Deactivates a policy rule identified by `policyId` and `ruleId`",
+    "tags": [
+      "Policy"
+    ],
+    "method": "POST",
+    "pathTemplate": "/api/v1/policies/{policyId}/rules/{ruleId}/lifecycle/deactivate",
+    "pathParams": [
+      "policyId",
+      "ruleId"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "policyId": {
+          "type": "string",
+          "description": "`id` of the Policy"
+        },
+        "ruleId": {
+          "type": "string",
+          "description": "`id` of the policy rule"
+        }
+      },
+      "required": [
+        "policyId",
+        "ruleId"
+      ]
+    }
+  },
+  {
+    "name": "getCurrentConfiguration",
+    "description": "Retrieve the ThreatInsight configuration. Retrieves the ThreatInsight configuration for the org",
+    "tags": [
+      "ThreatInsight"
+    ],
+    "method": "GET",
+    "pathTemplate": "/api/v1/threats/configuration",
+    "pathParams": [],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {}
+    }
+  },
+  {
+    "name": "updateConfiguration",
+    "description": "Update the ThreatInsight configuration. Updates the ThreatInsight configuration for the org",
+    "tags": [
+      "ThreatInsight"
+    ],
+    "method": "POST",
+    "pathTemplate": "/api/v1/threats/configuration",
+    "pathParams": [],
+    "queryParams": [],
+    "hasBody": true,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "requestBody": {
+          "type": "object",
+          "description": "The JSON request body. Refer to the Okta API docs for the schema."
+        }
+      },
+      "required": [
+        "requestBody"
+      ]
+    }
+  },
+  {
+    "name": "listNetworkZones",
+    "description": "List all network zones. Lists all Network Zones with pagination. A subset of zones can be returned that match a supported filter expression or query. This operation requires URL encoding. For example, `filter=(id eq \"nzoul0wf9jyb8xwZm0g3\" or id eq \"nzoul1MxmGN18NDQT0g3\")` is encoded as `filter=%28id+eq+%22nzoul0wf9jyb8xwZm0g3%22+or+id+eq+%22nzoul1MxmGN18NDQT0g3%22%29`. Okta supports filtering on the `id`, `usage`, and `system` properties. See [Filter](https://developer.okta.com/docs/api/#filter…",
+    "tags": [
+      "NetworkZone"
+    ],
+    "method": "GET",
+    "pathTemplate": "/api/v1/zones",
+    "pathParams": [],
+    "queryParams": [
+      "after",
+      "limit",
+      "filter"
+    ],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "after": {
+          "type": "string",
+          "description": ""
+        },
+        "limit": {
+          "type": "number",
+          "description": ""
+        },
+        "filter": {
+          "type": "string",
+          "description": ""
+        }
+      }
+    }
+  },
+  {
+    "name": "createNetworkZone",
+    "description": "Create a network zone. Creates a Network Zone * For an IP Network Zone, you must define either `gateways` or `proxies`. * For a Dynamic Network Zone, you must define at least one of the following: `asns`, `locations`, or `proxyType`. * For an Enhanced Dynamic Network Zone, you must define at least one of the following: `asns`, `locations`, or `ipServiceCategories`. > **Note:** To view all properties for an Enhanced Dynamic Network Zone, select `DYNAMIC_V2` from the `type` dropdown list.",
+    "tags": [
+      "NetworkZone"
+    ],
+    "method": "POST",
+    "pathTemplate": "/api/v1/zones",
+    "pathParams": [],
+    "queryParams": [],
+    "hasBody": true,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "requestBody": {
+          "type": "object",
+          "description": "The JSON request body. Refer to the Okta API docs for the schema."
+        }
+      },
+      "required": [
+        "requestBody"
+      ]
+    }
+  },
+  {
+    "name": "getNetworkZone",
+    "description": "Retrieve a network zone. Retrieves a Network Zone by `zoneId`",
+    "tags": [
+      "NetworkZone"
+    ],
+    "method": "GET",
+    "pathTemplate": "/api/v1/zones/{zoneId}",
+    "pathParams": [
+      "zoneId"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "zoneId": {
+          "type": "string",
+          "description": "`id` of the Network Zone"
+        }
+      },
+      "required": [
+        "zoneId"
+      ]
+    }
+  },
+  {
+    "name": "replaceNetworkZone",
+    "description": "Replace a network zone. Replaces a Network Zone by `zoneId`. The replaced Network Zone type must be the same as the existing type. You can replace the usage (`POLICY`, `BLOCKLIST`) of a Network Zone by updating the `usage` attribute. **IP exempt zone**<br> If you have the IP exempt zone feature enabled, you can allow traffic from specific gateway IPs irrespective of Okta ThreatInsight configurations, blocked network zones, or IP change events within Identity Threat Protection with Okta AI.<br> …",
+    "tags": [
+      "NetworkZone"
+    ],
+    "method": "PUT",
+    "pathTemplate": "/api/v1/zones/{zoneId}",
+    "pathParams": [
+      "zoneId"
+    ],
+    "queryParams": [],
+    "hasBody": true,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "zoneId": {
+          "type": "string",
+          "description": "`id` of the Network Zone"
+        },
+        "requestBody": {
+          "type": "object",
+          "description": "The JSON request body. Refer to the Okta API docs for the schema."
+        }
+      },
+      "required": [
+        "zoneId",
+        "requestBody"
+      ]
+    }
+  },
+  {
+    "name": "deleteNetworkZone",
+    "description": "Delete a network zone. Deletes a Network Zone by `zoneId` > **Notes:** > * You can't delete a Network Zone that's used by a [Policy](https://developer.okta.com/docs/api/openapi/okta-management/management/tag/Policy/) or [Rule](https://developer.okta.com/docs/api/openapi/okta-management/management/tag/Policy/#tag/Policy/operation/listPolicyRules). > * For Okta Identity Engine orgs, you can't delete a Network Zone with an ACTIVE `status`. <x-lifecycle class=\"oie\"></x-lifecycle>",
+    "tags": [
+      "NetworkZone"
+    ],
+    "method": "DELETE",
+    "pathTemplate": "/api/v1/zones/{zoneId}",
+    "pathParams": [
+      "zoneId"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "zoneId": {
+          "type": "string",
+          "description": "`id` of the Network Zone"
+        }
+      },
+      "required": [
+        "zoneId"
+      ]
+    }
+  },
+  {
+    "name": "activateNetworkZone",
+    "description": "Activate a network zone. Activates a Network Zone by `zoneId`",
+    "tags": [
+      "NetworkZone"
+    ],
+    "method": "POST",
+    "pathTemplate": "/api/v1/zones/{zoneId}/lifecycle/activate",
+    "pathParams": [
+      "zoneId"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "zoneId": {
+          "type": "string",
+          "description": "`id` of the Network Zone"
+        }
+      },
+      "required": [
+        "zoneId"
+      ]
+    }
+  },
+  {
+    "name": "deactivateNetworkZone",
+    "description": "Deactivate a network zone. Deactivates a Network Zone by `zoneId`",
+    "tags": [
+      "NetworkZone"
+    ],
+    "method": "POST",
+    "pathTemplate": "/api/v1/zones/{zoneId}/lifecycle/deactivate",
+    "pathParams": [
+      "zoneId"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "zoneId": {
+          "type": "string",
+          "description": "`id` of the Network Zone"
+        }
+      },
+      "required": [
+        "zoneId"
+      ]
+    }
+  },
+  {
+    "name": "getAuthenticatorSettings",
+    "description": "Retrieve the authenticator settings. Retrieves the Authenticator Settings for an org",
+    "tags": [
+      "AttackProtection"
+    ],
+    "method": "GET",
+    "pathTemplate": "/attack-protection/api/v1/authenticator-settings",
+    "pathParams": [],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {}
+    }
+  },
+  {
+    "name": "replaceAuthenticatorSettings",
+    "description": "Replace the authenticator settings. Replaces the Authenticator Settings for an org",
+    "tags": [
+      "AttackProtection"
+    ],
+    "method": "PUT",
+    "pathTemplate": "/attack-protection/api/v1/authenticator-settings",
+    "pathParams": [],
+    "queryParams": [],
+    "hasBody": true,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "requestBody": {
+          "type": "object",
+          "description": "The JSON request body. Refer to the Okta API docs for the schema."
+        }
+      },
+      "required": [
+        "requestBody"
+      ]
+    }
+  },
+  {
+    "name": "getUserLockoutSettings",
+    "description": "Retrieve the user lockout settings. Retrieves the User Lockout Settings for an org",
+    "tags": [
+      "AttackProtection"
+    ],
+    "method": "GET",
+    "pathTemplate": "/attack-protection/api/v1/user-lockout-settings",
+    "pathParams": [],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {}
+    }
+  },
+  {
+    "name": "replaceUserLockoutSettings",
+    "description": "Replace the user lockout settings. Replaces the User Lockout Settings for an org",
+    "tags": [
+      "AttackProtection"
+    ],
+    "method": "PUT",
+    "pathTemplate": "/attack-protection/api/v1/user-lockout-settings",
+    "pathParams": [],
+    "queryParams": [],
+    "hasBody": true,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "requestBody": {
+          "type": "object",
+          "description": "The JSON request body. Refer to the Okta API docs for the schema."
+        }
+      },
+      "required": [
+        "requestBody"
+      ]
+    }
+  },
+  {
+    "name": "activatePreregistrationEnrollment",
+    "description": "Activate a preregistered WebAuthn factor. Activates a preregistered WebAuthn factor. As part of this operation, Okta first decrypts and verifies the factor PIN and enrollment data sent by the fulfillment provider.",
+    "tags": [
+      "WebAuthnPreregistration"
+    ],
+    "method": "POST",
+    "pathTemplate": "/webauthn-registration/api/v1/activate",
+    "pathParams": [],
+    "queryParams": [],
+    "hasBody": true,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "requestBody": {
+          "type": "object",
+          "description": "The JSON request body. Refer to the Okta API docs for the schema."
+        }
+      }
+    }
+  },
+  {
+    "name": "enrollPreregistrationEnrollment",
+    "description": "Enroll a preregistered WebAuthn factor. Enrolls a preregistered WebAuthn factor. This WebAuthn factor has a longer challenge timeout period to accommodate the fulfillment request process. As part of this operation, Okta generates elliptic curve (EC) key-pairs used to encrypt the factor PIN and enrollment data sent by the fulfillment provider.",
+    "tags": [
+      "WebAuthnPreregistration"
+    ],
+    "method": "POST",
+    "pathTemplate": "/webauthn-registration/api/v1/enroll",
+    "pathParams": [],
+    "queryParams": [],
+    "hasBody": true,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "requestBody": {
+          "type": "object",
+          "description": "The JSON request body. Refer to the Okta API docs for the schema."
+        }
+      }
+    }
+  },
+  {
+    "name": "generateFulfillmentRequest",
+    "description": "Generate a fulfillment request. Generates a fulfillment request by sending a WebAuthn preregistration event to start the flow. The WebAuthn preregistration integration for Okta Workflows uses a preregistration event to populate the fulfillment request.",
+    "tags": [
+      "WebAuthnPreregistration"
+    ],
+    "method": "POST",
+    "pathTemplate": "/webauthn-registration/api/v1/initiate-fulfillment-request",
+    "pathParams": [],
+    "queryParams": [],
+    "hasBody": true,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "requestBody": {
+          "type": "object",
+          "description": "The JSON request body. Refer to the Okta API docs for the schema."
+        }
+      }
+    }
+  },
+  {
+    "name": "sendPin",
+    "description": "Send a PIN to user. Sends the decoded PIN for the specified WebAuthn preregistration enrollment. PINs are sent to the user's email. To resend the PIN, call this operation again.",
+    "tags": [
+      "WebAuthnPreregistration"
+    ],
+    "method": "POST",
+    "pathTemplate": "/webauthn-registration/api/v1/send-pin",
+    "pathParams": [],
+    "queryParams": [],
+    "hasBody": true,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "requestBody": {
+          "type": "object",
+          "description": "The JSON request body. Refer to the Okta API docs for the schema."
+        }
+      }
+    }
+  },
+  {
+    "name": "listWebAuthnPreregistrationFactors",
+    "description": "List all WebAuthn preregistration factors. Lists all WebAuthn preregistration factors for the specified user",
+    "tags": [
+      "WebAuthnPreregistration"
+    ],
+    "method": "GET",
+    "pathTemplate": "/webauthn-registration/api/v1/users/{userId}/enrollments",
+    "pathParams": [
+      "userId"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "description": "ID of an existing Okta user"
+        }
+      },
+      "required": [
+        "userId"
+      ]
+    }
+  },
+  {
+    "name": "deleteWebAuthnPreregistrationFactor",
+    "description": "Delete a WebAuthn preregistration factor. Deletes a specific WebAuthn preregistration factor for a user",
+    "tags": [
+      "WebAuthnPreregistration"
+    ],
+    "method": "DELETE",
+    "pathTemplate": "/webauthn-registration/api/v1/users/{userId}/enrollments/{authenticatorEnrollmentId}",
+    "pathParams": [
+      "userId",
+      "authenticatorEnrollmentId"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "description": "ID of an existing Okta user"
+        },
+        "authenticatorEnrollmentId": {
+          "type": "string",
+          "description": "ID for a WebAuthn preregistration factor in Okta"
+        }
+      },
+      "required": [
+        "userId",
+        "authenticatorEnrollmentId"
+      ]
+    }
+  },
+  {
+    "name": "assignFulfillmentErrorWebAuthnPreregistrationFactor",
+    "description": "Assign the fulfillment error status to a WebAuthn preregistration factor. Assigns the fulfillment error status to a WebAuthn preregistration factor for a user. The `/mark-error` path indicates that the specific `FULFILLMENT_ERRORED` AuthFactor status is set on the enrollment.",
+    "tags": [
+      "WebAuthnPreregistration"
+    ],
+    "method": "POST",
+    "pathTemplate": "/webauthn-registration/api/v1/users/{userId}/enrollments/{authenticatorEnrollmentId}/mark-error",
+    "pathParams": [
+      "userId",
+      "authenticatorEnrollmentId"
+    ],
+    "queryParams": [],
+    "hasBody": false,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "description": "ID of an existing Okta user"
+        },
+        "authenticatorEnrollmentId": {
+          "type": "string",
+          "description": "ID for a WebAuthn preregistration factor in Okta"
+        }
+      },
+      "required": [
+        "userId",
+        "authenticatorEnrollmentId"
+      ]
+    }
+  }
+]
