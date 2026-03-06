@@ -68,6 +68,22 @@ export async function createServer(serverName) {
         description: `Okta Management API — ${description}`,
     });
 
+    // Force MCP protocol version to 2024-11-05 (pre-auth).
+    // SDK v1.27.1 defaults to 2025-11-25 which includes MCP-level OAuth.
+    // Gemini CLI sees 2025-11-25 and tries dynamic client registration,
+    // which fails because our server handles auth internally via Okta.
+    const origConnect = server.server.connect.bind(server.server);
+    server.server.connect = async function(transport) {
+        await origConnect(transport);
+        const origSend = transport.send.bind(transport);
+        transport.send = async function(message) {
+            if (message.result && message.result.protocolVersion) {
+                message.result.protocolVersion = '2024-11-05';
+            }
+            return origSend(message);
+        };
+    };
+
     // ── Register every tool ──────────────────────────────────
     for (const tool of tools) {
         const zodSchema = buildZodSchema(tool.inputSchema);
