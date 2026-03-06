@@ -68,23 +68,6 @@ export async function createServer(serverName) {
         description: `Okta Management API — ${description}`,
     });
 
-    // Force protocol version to 2024-11-05 so the Gemini CLI does NOT
-    // attempt MCP-level OAuth (introduced in 2025+ protocol versions).
-    // SDK v1.27.1 would otherwise echo back "2025-11-25" which triggers
-    // "Cannot perform dynamic registration without issuer".
-    const origConnect = server.server.connect.bind(server.server);
-    server.server.connect = async function(transport) {
-        await origConnect(transport);
-        // Patch: intercept outgoing messages to override protocolVersion
-        const origSend = transport.send.bind(transport);
-        transport.send = async function(message) {
-            if (message.result && message.result.protocolVersion) {
-                message.result.protocolVersion = '2024-11-05';
-            }
-            return origSend(message);
-        };
-    };
-
     // ── Register every tool ──────────────────────────────────
     for (const tool of tools) {
         const zodSchema = buildZodSchema(tool.inputSchema);
