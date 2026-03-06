@@ -428,6 +428,7 @@ export async function initializeAuth() {
 /**
  * Returns the Authorization header value for Okta API requests.
  * Handles token acquisition, caching, and refresh automatically.
+ * Uses lock file coordination so only one process re-authenticates.
  *
  * @returns {Promise<string>} e.g. "Bearer xxx" or "SSWS xxx"
  */
@@ -451,13 +452,39 @@ export async function getAuthHeader() {
         return `Bearer ${cachedToken.accessToken}`;
     }
 
-    // Acquire new token
-    process.stderr.write('[okta-auth] Token expired, refreshing...\n');
-    if (mode === 'private_key_jwt') {
-        cachedToken = await getTokenViaPrivateKeyJwt(orgUrl);
-    } else {
-        cachedToken = await getTokenViaDeviceAuth(orgUrl);
+    // Need to acquire a new token — use lock to coordinate across processes
+    if (tryAcquireLock()) {
+        process.stderr.write('[okta-auth] Acquired auth lock — authenticating...\n');
+        try {
+            if (mode === 'private_key_jwt') {
+                cachedToken = await getTokenViaPrivateKeyJwt(orgUrl);
+            } else {
+                cachedToken = await getTokenViaDeviceAuth(orgUrl);
+            }
+        } finally {
+            releaseLock();
+        }
+        return `Bearer ${cachedToken.accessToken}`;
     }
 
-    return `Bearer ${cachedToken.accessToken}`;
+    // Another process is authenticating — wait for it
+    process.stderr.write('[okta-auth] Another server is authenticating, waiting...\n');
+    const waitDeadline = Date.now() + AUTH_LOCK_MAX_AGE_MS;
+    while (Date.now() < waitDeadline) {
+        await sleep(AUTH_LOCK_POLL_MS);
+
+        const token = loadPersistedToken();
+        if (token) {
+            cachedToken = token;
+            process.stderr.write('[okta-auth] ✓ Received token from another process\n');
+            return `Bearer ${cachedToken.accessToken}`;
+        }
+
+        if (!existsSync(AUTH_LOCK_FILE) || isLockStale()) {
+            process.stderr.write('[okta-auth] Retrying auth...\n');
+            return getAuthHeader(); // recursive retry
+        }
+    }
+
+    throw new Error('Timed out waiting for authentication.');
 }

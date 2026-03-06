@@ -12,7 +12,6 @@ import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
 import { z } from 'zod';
 import { callOktaApi } from './okta-client.js';
-import { initializeAuth } from './okta-auth.js';
 import { SERVER_DESCRIPTIONS } from './server-groups.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -50,9 +49,6 @@ function buildZodSchema(inputSchema) {
  * @param {string} serverName  e.g. "okta-users"
  */
 export async function createServer(serverName) {
-    // ── Authenticate eagerly at startup ─────────────────────
-    await initializeAuth();
-
     // ── Load the per-group manifest ──────────────────────────
     const manifestPath = join(__dirname, 'servers', `${serverName}.json`);
     let tools;
