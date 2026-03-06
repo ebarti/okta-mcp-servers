@@ -8,7 +8,7 @@
  *      Best for automated, server-to-server communication.
  *
  *   2. Device Authorization Grant — OKTA_CLIENT_ID (no private key)
- *      Interactive flow: prints a code + URL for the user to authorize.
+ *      Interactive flow: opens browser for user to authorize.
  *      Best for CLI / interactive use.
  *
  *   3. SSWS (legacy) — OKTA_API_TOKEN
@@ -22,10 +22,10 @@
  *   OKTA_PRIVATE_KEY_FILE   (pkjwt)     Path to PEM private key file
  *   OKTA_PRIVATE_KEY_KID    (pkjwt)     Key ID for JWT header (optional)
  *   OKTA_SCOPES             (oauth)     Space-separated scopes (optional)
- *   OKTA_AUTH_SERVER_ID     (oauth)     Custom auth server ID (optional)
  */
 
 import { readFileSync } from 'fs';
+import { exec } from 'child_process';
 import jwt from 'jsonwebtoken';
 import { randomUUID } from 'crypto';
 
@@ -59,31 +59,52 @@ export function detectAuthMode() {
 
 // ── Helper: build token endpoint URL ─────────────────────────
 
+function getOrgUrl() {
+    const orgUrl = process.env.OKTA_ORG_URL;
+    if (!orgUrl) throw new Error('OKTA_ORG_URL env var is required');
+    return orgUrl.replace(/\/+$/, '');
+}
+
 function getTokenEndpoint(orgUrl) {
-    const authServerId = process.env.OKTA_AUTH_SERVER_ID;
-    if (authServerId) {
-        return `${orgUrl}/oauth2/${authServerId}/v1/token`;
-    }
+    // Always use the org-level authorization server (matching official Okta MCP server)
     return `${orgUrl}/oauth2/v1/token`;
 }
 
 function getDeviceAuthorizeEndpoint(orgUrl) {
-    const authServerId = process.env.OKTA_AUTH_SERVER_ID;
-    if (authServerId) {
-        return `${orgUrl}/oauth2/${authServerId}/v1/device/authorize`;
-    }
     return `${orgUrl}/oauth2/v1/device/authorize`;
 }
 
 function getScopes() {
-    return process.env.OKTA_SCOPES || 'okta.users.manage';
+    const envScopes = (process.env.OKTA_SCOPES || '').replace(/^["']|["']$/g, '').trim();
+    return envScopes || 'okta.users.manage';
+}
+
+// ── Browser helper ───────────────────────────────────────────
+
+function openBrowser(url) {
+    const platform = process.platform;
+    let cmd;
+    if (platform === 'darwin') cmd = `open "${url}"`;
+    else if (platform === 'win32') cmd = `start "" "${url}"`;
+    else cmd = `xdg-open "${url}"`;
+
+    exec(cmd, (err) => {
+        if (err) {
+            process.stderr.write(`Could not open browser automatically. Please open manually:\n  ${url}\n`);
+        }
+    });
 }
 
 // ── Private Key JWT flow ─────────────────────────────────────
 
 function loadPrivateKey() {
     if (process.env.OKTA_PRIVATE_KEY) {
-        return process.env.OKTA_PRIVATE_KEY;
+        let key = process.env.OKTA_PRIVATE_KEY;
+        // Handle escaped newlines from env vars (e.g. from Docker)
+        if (key.includes('\\n')) {
+            key = key.replace(/\\n/g, '\n');
+        }
+        return key;
     }
     if (process.env.OKTA_PRIVATE_KEY_FILE) {
         return readFileSync(process.env.OKTA_PRIVATE_KEY_FILE, 'utf-8');
@@ -112,8 +133,9 @@ async function getTokenViaPrivateKeyJwt(orgUrl) {
     };
 
     const header = { algorithm: 'RS256' };
-    if (process.env.OKTA_PRIVATE_KEY_KID) {
-        header.keyid = process.env.OKTA_PRIVATE_KEY_KID;
+    const kid = process.env.OKTA_PRIVATE_KEY_KID || process.env.OKTA_KEY_ID;
+    if (kid) {
+        header.keyid = kid;
     }
 
     const assertion = jwt.sign(payload, privateKey, header);
@@ -125,6 +147,8 @@ async function getTokenViaPrivateKeyJwt(orgUrl) {
         client_assertion_type: 'urn:ietf:params:oauth:client-assertion-type:jwt-bearer',
         client_assertion: assertion,
     });
+
+    process.stderr.write('[okta-auth] Requesting token via Private Key JWT...\n');
 
     const response = await fetch(tokenEndpoint, {
         method: 'POST',
@@ -138,6 +162,8 @@ async function getTokenViaPrivateKeyJwt(orgUrl) {
     }
 
     const data = await response.json();
+    process.stderr.write('[okta-auth] ✓ Token acquired via Private Key JWT\n');
+
     return {
         accessToken: data.access_token,
         expiresAt: Date.now() + (data.expires_in * 1000),
@@ -148,7 +174,7 @@ async function getTokenViaPrivateKeyJwt(orgUrl) {
 
 /**
  * Obtain an access token via the Device Authorization Grant (RFC 8628).
- * Prints the verification URL and user code to stderr for the user.
+ * Opens the browser and prints instructions to stderr.
  */
 async function getTokenViaDeviceAuth(orgUrl) {
     const clientId = process.env.OKTA_CLIENT_ID;
@@ -161,6 +187,8 @@ async function getTokenViaDeviceAuth(orgUrl) {
         client_id: clientId,
         scope: scopes,
     });
+
+    process.stderr.write('[okta-auth] Initiating device authorization flow...\n');
 
     const deviceResponse = await fetch(deviceAuthorizeUrl, {
         method: 'POST',
@@ -183,17 +211,22 @@ async function getTokenViaDeviceAuth(orgUrl) {
         expires_in: expiresIn = 600,
     } = deviceData;
 
-    // Print instructions to stderr (stdout is reserved for MCP JSON-RPC)
+    // Open browser automatically (like the official Okta MCP server)
     const displayUri = verificationUriComplete || verificationUri;
+    openBrowser(displayUri);
+
+    // Print instructions to stderr (stdout is reserved for MCP JSON-RPC)
     process.stderr.write('\n');
     process.stderr.write('┌─────────────────────────────────────────────────────────┐\n');
     process.stderr.write('│              Okta Device Authorization                  │\n');
     process.stderr.write('├─────────────────────────────────────────────────────────┤\n');
-    process.stderr.write(`│  1. Open: ${displayUri}\n`);
-    process.stderr.write(`│  2. Enter code: ${userCode}\n`);
+    process.stderr.write(`│  URL: ${displayUri}\n`);
+    if (userCode) {
+        process.stderr.write(`│  Code: ${userCode}\n`);
+    }
     process.stderr.write('└─────────────────────────────────────────────────────────┘\n');
     process.stderr.write('\n');
-    process.stderr.write('Waiting for authorization...\n');
+    process.stderr.write('[okta-auth] Waiting for authorization...\n');
 
     // Step 2: Poll for token
     const deadline = Date.now() + (expiresIn * 1000);
@@ -216,8 +249,8 @@ async function getTokenViaDeviceAuth(orgUrl) {
 
         const tokenData = await tokenResponse.json();
 
-        if (tokenResponse.ok) {
-            process.stderr.write('✓ Authorization successful!\n\n');
+        if (tokenResponse.ok && tokenData.access_token) {
+            process.stderr.write('[okta-auth] ✓ Authorization successful!\n\n');
             return {
                 accessToken: tokenData.access_token,
                 expiresAt: Date.now() + (tokenData.expires_in * 1000),
@@ -232,6 +265,9 @@ async function getTokenViaDeviceAuth(orgUrl) {
             pollInterval += 5000;  // back off
             continue;
         }
+        if (tokenData.error === 'access_denied') {
+            throw new Error('Device authorization was denied by the user.');
+        }
         // Any other error is fatal
         throw new Error(`Device auth token polling failed: ${tokenData.error} — ${tokenData.error_description || ''}`);
     }
@@ -243,6 +279,33 @@ function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
+// ── Eager authentication ─────────────────────────────────────
+
+/**
+ * Perform authentication eagerly at server startup.
+ * For SSWS mode this is a no-op (token is static).
+ * For OAuth modes, this acquires a token immediately.
+ *
+ * Call this during server initialization, before tools are available.
+ */
+export async function initializeAuth() {
+    const mode = detectAuthMode();
+    process.stderr.write(`[okta-auth] Auth mode: ${mode}\n`);
+
+    if (mode === 'ssws') {
+        process.stderr.write('[okta-auth] Using SSWS API token\n');
+        return; // nothing to do — token is static
+    }
+
+    const orgUrl = getOrgUrl();
+
+    if (mode === 'private_key_jwt') {
+        cachedToken = await getTokenViaPrivateKeyJwt(orgUrl);
+    } else {
+        cachedToken = await getTokenViaDeviceAuth(orgUrl);
+    }
+}
+
 // ── Main entry point ─────────────────────────────────────────
 
 /**
@@ -252,10 +315,7 @@ function sleep(ms) {
  * @returns {Promise<string>} e.g. "Bearer xxx" or "SSWS xxx"
  */
 export async function getAuthHeader() {
-    const orgUrl = process.env.OKTA_ORG_URL;
-    if (!orgUrl) throw new Error('OKTA_ORG_URL env var is required');
-    const baseUrl = orgUrl.replace(/\/+$/, '');
-
+    const orgUrl = getOrgUrl();
     const mode = detectAuthMode();
 
     // SSWS — no token lifecycle, just return the static header
@@ -268,11 +328,12 @@ export async function getAuthHeader() {
         return `Bearer ${cachedToken.accessToken}`;
     }
 
-    // Acquire new token
+    // Acquire new token (refresh)
+    process.stderr.write('[okta-auth] Token expired, refreshing...\n');
     if (mode === 'private_key_jwt') {
-        cachedToken = await getTokenViaPrivateKeyJwt(baseUrl);
+        cachedToken = await getTokenViaPrivateKeyJwt(orgUrl);
     } else {
-        cachedToken = await getTokenViaDeviceAuth(baseUrl);
+        cachedToken = await getTokenViaDeviceAuth(orgUrl);
     }
 
     return `Bearer ${cachedToken.accessToken}`;

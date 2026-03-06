@@ -18,7 +18,7 @@
       "name": "Private Key (PEM)",
       "description": "PEM-encoded private key for Private Key JWT authentication. Register the matching public key (JWK) in your Okta Service app's credentials. Leave empty to use Device Authorization Grant or SSWS instead.",
       "envVar": "OKTA_PRIVATE_KEY",
-      "sensitive": true
+      "sensitive": false
     },
     {
       "name": "Private Key File Path",
@@ -36,18 +36,12 @@
       "name": "SSWS API Token",
       "description": "Legacy Okta API token (SSWS). Only needed if not using OAuth (no Client ID). Create one in Admin Console → Security → API → Tokens.",
       "envVar": "OKTA_API_TOKEN",
-      "sensitive": true
+      "sensitive": false
     },
     {
       "name": "OAuth Scopes",
       "description": "Space-separated OAuth 2.0 scopes (e.g. 'okta.users.manage okta.apps.manage'). Defaults to 'okta.users.manage'. Only used with OAuth flows.",
       "envVar": "OKTA_SCOPES",
-      "sensitive": false
-    },
-    {
-      "name": "Authorization Server ID",
-      "description": "Custom authorization server ID (e.g. 'default'). Omit to use the org-level authorization server. Only used with OAuth flows.",
-      "envVar": "OKTA_AUTH_SERVER_ID",
       "sensitive": false
     }
   ],

@@ -153,13 +153,12 @@ describe('okta-auth', () => {
             expect(decoded.payload.aud).toBe('https://test.okta.com/oauth2/v1/token');
         });
 
-        it('uses custom auth server ID when OKTA_AUTH_SERVER_ID is set', async () => {
+        it('always uses org-level token endpoint (matching official Okta MCP server)', async () => {
             const { privateKey } = generateTestKeyPair();
 
             process.env.OKTA_ORG_URL = 'https://test.okta.com';
             process.env.OKTA_CLIENT_ID = 'test-client-id';
             process.env.OKTA_PRIVATE_KEY = privateKey;
-            process.env.OKTA_AUTH_SERVER_ID = 'custom-server';
 
             const mockFetch = mockFetchToken();
             vi.stubGlobal('fetch', mockFetch);
@@ -168,7 +167,7 @@ describe('okta-auth', () => {
             await getAuthHeader();
 
             const [url] = mockFetch.mock.calls[0];
-            expect(url).toBe('https://test.okta.com/oauth2/custom-server/v1/token');
+            expect(url).toBe('https://test.okta.com/oauth2/v1/token');
         });
 
         it('includes kid in JWT header when OKTA_PRIVATE_KEY_KID is set', async () => {
