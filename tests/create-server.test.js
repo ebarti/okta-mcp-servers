@@ -106,10 +106,10 @@ describe('create-server', () => {
     // ── Manifest loading ─────────────────────────────────────
 
     describe('manifest loading', () => {
-        it('all 10 server manifests are valid JSON arrays', () => {
+        it('all 6 server manifests are valid JSON arrays', () => {
             const servers = [
-                'okta-users', 'okta-apps', 'okta-authz', 'okta-idps', 'okta-security',
-                'okta-roles', 'okta-customization', 'okta-org', 'okta-hooks', 'okta-devices',
+                'okta-users', 'okta-apps', 'okta-idps', 'okta-security',
+                'okta-roles', 'okta-devices',
             ];
 
             for (const server of servers) {
@@ -136,8 +136,8 @@ describe('create-server', () => {
 
         it('tool names are unique within each manifest', () => {
             const servers = [
-                'okta-users', 'okta-apps', 'okta-authz', 'okta-idps', 'okta-security',
-                'okta-roles', 'okta-customization', 'okta-org', 'okta-hooks', 'okta-devices',
+                'okta-users', 'okta-apps', 'okta-idps', 'okta-security',
+                'okta-roles', 'okta-devices',
             ];
 
             for (const server of servers) {
@@ -151,8 +151,8 @@ describe('create-server', () => {
 
         it('tool names are globally unique across all manifests', () => {
             const servers = [
-                'okta-users', 'okta-apps', 'okta-authz', 'okta-idps', 'okta-security',
-                'okta-roles', 'okta-customization', 'okta-org', 'okta-hooks', 'okta-devices',
+                'okta-users', 'okta-apps', 'okta-idps', 'okta-security',
+                'okta-roles', 'okta-devices',
             ];
 
             const allNames = new Set();
