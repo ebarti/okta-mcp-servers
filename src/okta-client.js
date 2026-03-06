@@ -5,20 +5,22 @@
  * Handles auth, URL construction, path-parameter interpolation,
  * query parameters, and JSON request/response bodies.
  *
+ * Authentication is delegated to okta-auth.js which supports:
+ *   - Private Key JWT  (OKTA_CLIENT_ID + OKTA_PRIVATE_KEY)
+ *   - Device Auth Grant (OKTA_CLIENT_ID only)
+ *   - SSWS API token    (OKTA_API_TOKEN)
+ *
  * Configuration (env vars):
- *   OKTA_ORG_URL  – e.g. https://my-org.okta.com
- *   OKTA_API_TOKEN – SSWS API token
+ *   OKTA_ORG_URL – e.g. https://my-org.okta.com
+ *   (plus auth-specific vars — see okta-auth.js)
  */
 
-function getConfig() {
+import { getAuthHeader } from './okta-auth.js';
+
+function getOrgUrl() {
     const orgUrl = process.env.OKTA_ORG_URL;
-    const apiToken = process.env.OKTA_API_TOKEN;
     if (!orgUrl) throw new Error('OKTA_ORG_URL env var is required');
-    if (!apiToken) throw new Error('OKTA_API_TOKEN env var is required');
-    return {
-        orgUrl: orgUrl.replace(/\/+$/, ''),  // strip trailing slash
-        apiToken,
-    };
+    return orgUrl.replace(/\/+$/, '');  // strip trailing slash
 }
 
 /**
@@ -33,7 +35,7 @@ function getConfig() {
  * @returns {Promise<{ status: number, data: any }>}
  */
 export async function callOktaApi({ method, pathTemplate, pathParams = {}, queryParams = {}, body }) {
-    const { orgUrl, apiToken } = getConfig();
+    const orgUrl = getOrgUrl();
 
     // Interpolate path parameters
     let path = pathTemplate;
@@ -51,9 +53,12 @@ export async function callOktaApi({ method, pathTemplate, pathParams = {}, query
     const queryString = qs.toString();
     const url = `${orgUrl}${path}${queryString ? '?' + queryString : ''}`;
 
+    // Get auth header (handles token lifecycle automatically)
+    const authorization = await getAuthHeader();
+
     const headers = {
         'Accept': 'application/json',
-        'Authorization': `SSWS ${apiToken}`,
+        'Authorization': authorization,
     };
     if (body !== undefined) {
         headers['Content-Type'] = 'application/json';

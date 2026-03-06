@@ -25,14 +25,62 @@ Gemini CLI extension that exposes **all 694 Okta Management API operations** as 
 gemini extension install /path/to/okta-mcp-server
 ```
 
-### 2. Set your Okta credentials
+### 2. Configure authentication
+
+The servers support three authentication modes, auto-detected from environment variables.
+
+#### Option A — Private Key JWT *(recommended for automation)*
+
+Best for CI/CD, scripts, and server-to-server use. No user interaction required.
+
+**Okta setup:** Create a **Service** application in Okta Admin Console → Applications, enable **Client Credentials** grant type, and add a public key (JWK) under the application's credentials.
+
+```bash
+export OKTA_ORG_URL=https://your-org.okta.com
+export OKTA_CLIENT_ID=0oa...your-client-id
+export OKTA_PRIVATE_KEY_FILE=/path/to/private-key.pem
+# Optional:
+export OKTA_PRIVATE_KEY_KID=your-key-id        # if multiple keys are registered
+export OKTA_SCOPES="okta.users.manage okta.apps.manage"  # space-separated scopes
+export OKTA_AUTH_SERVER_ID=default              # omit for org-level authorization server
+```
+
+Alternatively, pass the PEM key inline:
+
+```bash
+export OKTA_PRIVATE_KEY="-----BEGIN RSA PRIVATE KEY-----\n...\n-----END RSA PRIVATE KEY-----"
+```
+
+#### Option B — Device Authorization Grant *(recommended for interactive use)*
+
+Best for CLI sessions where a human is present. The server will print a URL and code — open the URL in your browser and enter the code to authorize.
+
+**Okta setup:** Create a **Native** application in Okta Admin Console → Applications, enable **Device Authorization** grant type, and ensure the authorization server policy allows device authorization.
+
+```bash
+export OKTA_ORG_URL=https://your-org.okta.com
+export OKTA_CLIENT_ID=0oa...your-client-id
+# Optional:
+export OKTA_SCOPES="okta.users.manage okta.apps.manage"
+export OKTA_AUTH_SERVER_ID=default
+```
+
+#### Option C — SSWS API Token *(legacy)*
+
+Static API token — simple but less secure. Kept for backward compatibility.
 
 ```bash
 export OKTA_ORG_URL=https://your-org.okta.com
 export OKTA_API_TOKEN=your-ssws-token
 ```
 
-That's it — the servers are ready to use. You can selectively enable the ones you need from the extension settings.
+### Auth mode priority
+
+When multiple variables are set, the server picks the most secure option:
+
+1. **Private Key JWT** — if `OKTA_CLIENT_ID` + `OKTA_PRIVATE_KEY` / `OKTA_PRIVATE_KEY_FILE` are set
+2. **Device Authorization Grant** — if only `OKTA_CLIENT_ID` is set
+3. **SSWS** — if only `OKTA_API_TOKEN` is set
 
 ## Automatic Updates
 
@@ -57,7 +105,8 @@ If you update the OpenAPI spec:
 ├── src/
 │   ├── server-groups.js           # Tag-to-server mapping config
 │   ├── create-server.js           # Shared MCP server factory
-│   ├── okta-client.js             # HTTP client (SSWS auth)
+│   ├── okta-auth.js               # OAuth2 token manager (Device Auth / PKJWT / SSWS)
+│   ├── okta-client.js             # HTTP client (delegates auth to okta-auth.js)
 │   └── servers/                   # Pre-generated per-server manifests
 │       ├── okta-users.json
 │       ├── okta-apps.json
