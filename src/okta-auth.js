@@ -29,7 +29,7 @@
  *   OKTA_SCOPES             (oauth)     Space-separated scopes (optional)
  */
 
-import { readFileSync, writeFileSync, mkdirSync, existsSync, unlinkSync } from 'fs';
+import { readFileSync, writeFileSync, mkdirSync, existsSync, unlinkSync, openSync, closeSync, statSync, constants as fsConstants } from 'fs';
 import { join } from 'path';
 import { homedir } from 'os';
 import { exec } from 'child_process';
@@ -42,6 +42,9 @@ let cachedToken = null;   // { accessToken, expiresAt }
 const TOKEN_REFRESH_BUFFER_MS = 60_000; // refresh 60s before expiry
 const TOKEN_CACHE_DIR = join(homedir(), '.okta-mcp');
 const TOKEN_CACHE_FILE = join(TOKEN_CACHE_DIR, 'token-cache.json');
+const AUTH_LOCK_FILE = join(TOKEN_CACHE_DIR, 'auth.lock');
+const AUTH_LOCK_MAX_AGE_MS = 10 * 60 * 1000; // 10 min stale lock timeout
+const AUTH_LOCK_POLL_MS = 2000; // poll every 2s while waiting
 
 // ── File-based token persistence ─────────────────────────────
 
@@ -315,12 +318,50 @@ function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
+// ── Lock file coordination ───────────────────────────────────
+
+/**
+ * Try to acquire the auth lock (atomic, non-blocking).
+ * Uses O_EXCL to guarantee only one process wins.
+ * @returns {boolean} true if lock was acquired
+ */
+function tryAcquireLock() {
+    try {
+        mkdirSync(TOKEN_CACHE_DIR, { recursive: true, mode: 0o700 });
+
+        // O_CREAT | O_EXCL | O_WRONLY — fails if file already exists
+        const fd = openSync(AUTH_LOCK_FILE, fsConstants.O_CREAT | fsConstants.O_EXCL | fsConstants.O_WRONLY, 0o600);
+        writeFileSync(fd, JSON.stringify({ pid: process.pid, createdAt: Date.now() }));
+        closeSync(fd);
+        return true;
+    } catch {
+        return false; // another process holds the lock
+    }
+}
+
+function releaseLock() {
+    try { unlinkSync(AUTH_LOCK_FILE); } catch { /* ignore */ }
+}
+
+function isLockStale() {
+    try {
+        const stat = statSync(AUTH_LOCK_FILE);
+        return (Date.now() - stat.mtimeMs) > AUTH_LOCK_MAX_AGE_MS;
+    } catch {
+        return true; // file doesn't exist or can't be read
+    }
+}
+
 // ── Eager authentication ─────────────────────────────────────
 
 /**
  * Perform authentication eagerly at server startup.
- * Checks the shared token cache first — if a valid token exists from
- * another server process, it reuses it without triggering a new auth flow.
+ *
+ * Uses a lock file to coordinate across the 10 server processes:
+ * - The first process to start acquires the lock and performs the auth flow
+ * - Other processes wait for the lock to be released and reuse the persisted token
+ *
+ * This prevents 10 simultaneous device auth flows (and avoids 429 rate limits).
  */
 export async function initializeAuth() {
     const mode = detectAuthMode();
@@ -331,7 +372,7 @@ export async function initializeAuth() {
         return;
     }
 
-    // Check persisted token from another server process
+    // 1. Check persisted token (fast path — another process already authenticated)
     const persisted = loadPersistedToken();
     if (persisted) {
         cachedToken = persisted;
@@ -340,13 +381,46 @@ export async function initializeAuth() {
         return;
     }
 
-    const orgUrl = getOrgUrl();
-
-    if (mode === 'private_key_jwt') {
-        cachedToken = await getTokenViaPrivateKeyJwt(orgUrl);
-    } else {
-        cachedToken = await getTokenViaDeviceAuth(orgUrl);
+    // 2. Try to become the leader (acquire lock)
+    if (tryAcquireLock()) {
+        process.stderr.write('[okta-auth] Acquired auth lock — this process will authenticate\n');
+        try {
+            const orgUrl = getOrgUrl();
+            if (mode === 'private_key_jwt') {
+                cachedToken = await getTokenViaPrivateKeyJwt(orgUrl);
+            } else {
+                cachedToken = await getTokenViaDeviceAuth(orgUrl);
+            }
+        } finally {
+            releaseLock();
+        }
+        return;
     }
+
+    // 3. Another process is authenticating — wait for it
+    process.stderr.write('[okta-auth] Another server is authenticating, waiting...\n');
+
+    const waitDeadline = Date.now() + AUTH_LOCK_MAX_AGE_MS;
+    while (Date.now() < waitDeadline) {
+        await sleep(AUTH_LOCK_POLL_MS);
+
+        // Check if the leader has persisted a token
+        const token = loadPersistedToken();
+        if (token) {
+            cachedToken = token;
+            const remainingSec = Math.round((token.expiresAt - Date.now()) / 1000);
+            process.stderr.write(`[okta-auth] ✓ Received token from another process (expires in ${remainingSec}s)\n`);
+            return;
+        }
+
+        // If lock is gone but no token, the leader failed — try to become leader
+        if (!existsSync(AUTH_LOCK_FILE) || isLockStale()) {
+            process.stderr.write('[okta-auth] Leader process finished/failed, retrying auth...\n');
+            return initializeAuth(); // recursive retry
+        }
+    }
+
+    throw new Error('Timed out waiting for another process to complete authentication.');
 }
 
 // ── Main entry point ─────────────────────────────────────────
