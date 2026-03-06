@@ -14,6 +14,11 @@
  *   3. SSWS (legacy) — OKTA_API_TOKEN
  *      Static API token, no OAuth. Kept for backward compatibility.
  *
+ * Token Persistence:
+ *   Tokens are persisted to ~/.okta-mcp/token-cache.json so that
+ *   multiple MCP server processes (okta-users, okta-apps, etc.) can
+ *   share a single token without each triggering a separate auth flow.
+ *
  * Environment variables:
  *   OKTA_ORG_URL            (required)  Okta org URL
  *   OKTA_API_TOKEN          (ssws)      SSWS API token
@@ -24,7 +29,9 @@
  *   OKTA_SCOPES             (oauth)     Space-separated scopes (optional)
  */
 
-import { readFileSync } from 'fs';
+import { readFileSync, writeFileSync, mkdirSync, existsSync, unlinkSync } from 'fs';
+import { join } from 'path';
+import { homedir } from 'os';
 import { exec } from 'child_process';
 import jwt from 'jsonwebtoken';
 import { randomUUID } from 'crypto';
@@ -33,6 +40,57 @@ import { randomUUID } from 'crypto';
 let cachedToken = null;   // { accessToken, expiresAt }
 
 const TOKEN_REFRESH_BUFFER_MS = 60_000; // refresh 60s before expiry
+const TOKEN_CACHE_DIR = join(homedir(), '.okta-mcp');
+const TOKEN_CACHE_FILE = join(TOKEN_CACHE_DIR, 'token-cache.json');
+
+// ── File-based token persistence ─────────────────────────────
+
+/**
+ * Load a persisted token from disk.
+ * Returns the token object if valid, null otherwise.
+ */
+function loadPersistedToken() {
+    try {
+        if (!existsSync(TOKEN_CACHE_FILE)) return null;
+
+        const data = JSON.parse(readFileSync(TOKEN_CACHE_FILE, 'utf-8'));
+
+        // Validate structure and expiry
+        if (!data.accessToken || !data.expiresAt) return null;
+        if (Date.now() >= data.expiresAt - TOKEN_REFRESH_BUFFER_MS) return null;
+
+        // Validate it's for the same org + client
+        const orgUrl = getOrgUrl();
+        const clientId = process.env.OKTA_CLIENT_ID || '';
+        if (data.orgUrl !== orgUrl || data.clientId !== clientId) return null;
+
+        return { accessToken: data.accessToken, expiresAt: data.expiresAt };
+    } catch {
+        return null; // corrupt file, ignore
+    }
+}
+
+/**
+ * Persist a token to disk so other server processes can reuse it.
+ */
+function persistToken(token) {
+    try {
+        mkdirSync(TOKEN_CACHE_DIR, { recursive: true, mode: 0o700 });
+
+        const data = {
+            accessToken: token.accessToken,
+            expiresAt: token.expiresAt,
+            orgUrl: getOrgUrl(),
+            clientId: process.env.OKTA_CLIENT_ID || '',
+            createdAt: new Date().toISOString(),
+        };
+
+        writeFileSync(TOKEN_CACHE_FILE, JSON.stringify(data, null, 2), { mode: 0o600 });
+    } catch (err) {
+        // Non-fatal — in-memory cache still works
+        process.stderr.write(`[okta-auth] Warning: could not persist token: ${err.message}\n`);
+    }
+}
 
 // ── Auth mode detection ──────────────────────────────────────
 
@@ -66,7 +124,6 @@ function getOrgUrl() {
 }
 
 function getTokenEndpoint(orgUrl) {
-    // Always use the org-level authorization server (matching official Okta MCP server)
     return `${orgUrl}/oauth2/v1/token`;
 }
 
@@ -100,7 +157,6 @@ function openBrowser(url) {
 function loadPrivateKey() {
     if (process.env.OKTA_PRIVATE_KEY) {
         let key = process.env.OKTA_PRIVATE_KEY;
-        // Handle escaped newlines from env vars (e.g. from Docker)
         if (key.includes('\\n')) {
             key = key.replace(/\\n/g, '\n');
         }
@@ -112,35 +168,27 @@ function loadPrivateKey() {
     throw new Error('Private key not found. Set OKTA_PRIVATE_KEY or OKTA_PRIVATE_KEY_FILE.');
 }
 
-/**
- * Obtain an access token via the client_credentials grant
- * using a Private Key JWT assertion (RFC 7523).
- */
 async function getTokenViaPrivateKeyJwt(orgUrl) {
     const clientId = process.env.OKTA_CLIENT_ID;
     const privateKey = loadPrivateKey();
     const tokenEndpoint = getTokenEndpoint(orgUrl);
 
-    // Build the JWT assertion
     const now = Math.floor(Date.now() / 1000);
     const payload = {
         iss: clientId,
         sub: clientId,
         aud: tokenEndpoint,
         iat: now,
-        exp: now + 300,       // 5 min lifetime
+        exp: now + 300,
         jti: randomUUID(),
     };
 
     const header = { algorithm: 'RS256' };
     const kid = process.env.OKTA_PRIVATE_KEY_KID || process.env.OKTA_KEY_ID;
-    if (kid) {
-        header.keyid = kid;
-    }
+    if (kid) header.keyid = kid;
 
     const assertion = jwt.sign(payload, privateKey, header);
 
-    // Exchange for access token
     const body = new URLSearchParams({
         grant_type: 'client_credentials',
         scope: getScopes(),
@@ -164,25 +212,23 @@ async function getTokenViaPrivateKeyJwt(orgUrl) {
     const data = await response.json();
     process.stderr.write('[okta-auth] ✓ Token acquired via Private Key JWT\n');
 
-    return {
+    const token = {
         accessToken: data.access_token,
         expiresAt: Date.now() + (data.expires_in * 1000),
     };
+
+    persistToken(token);
+    return token;
 }
 
 // ── Device Authorization Grant flow ──────────────────────────
 
-/**
- * Obtain an access token via the Device Authorization Grant (RFC 8628).
- * Opens the browser and prints instructions to stderr.
- */
 async function getTokenViaDeviceAuth(orgUrl) {
     const clientId = process.env.OKTA_CLIENT_ID;
     const deviceAuthorizeUrl = getDeviceAuthorizeEndpoint(orgUrl);
     const tokenEndpoint = getTokenEndpoint(orgUrl);
     const scopes = getScopes();
 
-    // Step 1: Request device code
     const deviceBody = new URLSearchParams({
         client_id: clientId,
         scope: scopes,
@@ -211,11 +257,9 @@ async function getTokenViaDeviceAuth(orgUrl) {
         expires_in: expiresIn = 600,
     } = deviceData;
 
-    // Open browser automatically (like the official Okta MCP server)
     const displayUri = verificationUriComplete || verificationUri;
     openBrowser(displayUri);
 
-    // Print instructions to stderr (stdout is reserved for MCP JSON-RPC)
     process.stderr.write('\n');
     process.stderr.write('┌─────────────────────────────────────────────────────────┐\n');
     process.stderr.write('│              Okta Device Authorization                  │\n');
@@ -228,7 +272,6 @@ async function getTokenViaDeviceAuth(orgUrl) {
     process.stderr.write('\n');
     process.stderr.write('[okta-auth] Waiting for authorization...\n');
 
-    // Step 2: Poll for token
     const deadline = Date.now() + (expiresIn * 1000);
     let pollInterval = interval * 1000;
 
@@ -251,24 +294,17 @@ async function getTokenViaDeviceAuth(orgUrl) {
 
         if (tokenResponse.ok && tokenData.access_token) {
             process.stderr.write('[okta-auth] ✓ Authorization successful!\n\n');
-            return {
+            const token = {
                 accessToken: tokenData.access_token,
                 expiresAt: Date.now() + (tokenData.expires_in * 1000),
             };
+            persistToken(token);
+            return token;
         }
 
-        // Handle polling responses
-        if (tokenData.error === 'authorization_pending') {
-            continue;  // keep polling
-        }
-        if (tokenData.error === 'slow_down') {
-            pollInterval += 5000;  // back off
-            continue;
-        }
-        if (tokenData.error === 'access_denied') {
-            throw new Error('Device authorization was denied by the user.');
-        }
-        // Any other error is fatal
+        if (tokenData.error === 'authorization_pending') continue;
+        if (tokenData.error === 'slow_down') { pollInterval += 5000; continue; }
+        if (tokenData.error === 'access_denied') throw new Error('Device authorization was denied by the user.');
         throw new Error(`Device auth token polling failed: ${tokenData.error} — ${tokenData.error_description || ''}`);
     }
 
@@ -283,10 +319,8 @@ function sleep(ms) {
 
 /**
  * Perform authentication eagerly at server startup.
- * For SSWS mode this is a no-op (token is static).
- * For OAuth modes, this acquires a token immediately.
- *
- * Call this during server initialization, before tools are available.
+ * Checks the shared token cache first — if a valid token exists from
+ * another server process, it reuses it without triggering a new auth flow.
  */
 export async function initializeAuth() {
     const mode = detectAuthMode();
@@ -294,7 +328,16 @@ export async function initializeAuth() {
 
     if (mode === 'ssws') {
         process.stderr.write('[okta-auth] Using SSWS API token\n');
-        return; // nothing to do — token is static
+        return;
+    }
+
+    // Check persisted token from another server process
+    const persisted = loadPersistedToken();
+    if (persisted) {
+        cachedToken = persisted;
+        const remainingSec = Math.round((persisted.expiresAt - Date.now()) / 1000);
+        process.stderr.write(`[okta-auth] ✓ Reusing persisted token (expires in ${remainingSec}s)\n`);
+        return;
     }
 
     const orgUrl = getOrgUrl();
@@ -318,17 +361,23 @@ export async function getAuthHeader() {
     const orgUrl = getOrgUrl();
     const mode = detectAuthMode();
 
-    // SSWS — no token lifecycle, just return the static header
     if (mode === 'ssws') {
         return `SSWS ${process.env.OKTA_API_TOKEN}`;
     }
 
-    // Check cached token
+    // Check in-memory cache
     if (cachedToken && Date.now() < cachedToken.expiresAt - TOKEN_REFRESH_BUFFER_MS) {
         return `Bearer ${cachedToken.accessToken}`;
     }
 
-    // Acquire new token (refresh)
+    // Check persisted token (another process may have refreshed)
+    const persisted = loadPersistedToken();
+    if (persisted) {
+        cachedToken = persisted;
+        return `Bearer ${cachedToken.accessToken}`;
+    }
+
+    // Acquire new token
     process.stderr.write('[okta-auth] Token expired, refreshing...\n');
     if (mode === 'private_key_jwt') {
         cachedToken = await getTokenViaPrivateKeyJwt(orgUrl);

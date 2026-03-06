@@ -1,14 +1,19 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { generateKeyPairSync } from 'crypto';
+import { existsSync, unlinkSync } from 'fs';
+import { join } from 'path';
+import { homedir } from 'os';
 import jwt from 'jsonwebtoken';
 
 // ── Helpers ──────────────────────────────────────────────────
+
+const TOKEN_CACHE_FILE = join(homedir(), '.okta-mcp', 'token-cache.json');
 
 /** Save and restore env vars around each test */
 const ENV_KEYS = [
     'OKTA_ORG_URL', 'OKTA_API_TOKEN', 'OKTA_CLIENT_ID',
     'OKTA_PRIVATE_KEY', 'OKTA_PRIVATE_KEY_FILE', 'OKTA_PRIVATE_KEY_KID',
-    'OKTA_SCOPES', 'OKTA_AUTH_SERVER_ID',
+    'OKTA_SCOPES', 'OKTA_KEY_ID',
 ];
 
 function clearAuthEnv() {
@@ -35,6 +40,13 @@ function mockFetchToken(accessToken = 'mock-access-token', expiresIn = 3600) {
     });
 }
 
+/** Remove persisted token cache to isolate tests */
+function cleanTokenCache() {
+    try {
+        if (existsSync(TOKEN_CACHE_FILE)) unlinkSync(TOKEN_CACHE_FILE);
+    } catch { /* ignore */ }
+}
+
 // ── Tests ────────────────────────────────────────────────────
 
 describe('okta-auth', () => {
@@ -43,12 +55,13 @@ describe('okta-auth', () => {
     beforeEach(() => {
         savedEnv = { ...process.env };
         clearAuthEnv();
-        // Reset module cache so each test gets a fresh cachedToken
+        cleanTokenCache();
         vi.resetModules();
     });
 
     afterEach(() => {
         process.env = savedEnv;
+        cleanTokenCache();
         vi.restoreAllMocks();
     });
 
@@ -166,6 +179,7 @@ describe('okta-auth', () => {
             const { getAuthHeader } = await import('../src/okta-auth.js');
             await getAuthHeader();
 
+            expect(mockFetch).toHaveBeenCalled();
             const [url] = mockFetch.mock.calls[0];
             expect(url).toBe('https://test.okta.com/oauth2/v1/token');
         });
@@ -184,6 +198,7 @@ describe('okta-auth', () => {
             const { getAuthHeader } = await import('../src/okta-auth.js');
             await getAuthHeader();
 
+            expect(mockFetch).toHaveBeenCalled();
             const body = new URLSearchParams(mockFetch.mock.calls[0][1].body);
             const decoded = jwt.decode(body.get('client_assertion'), { complete: true });
             expect(decoded.header.kid).toBe('my-key-id');
@@ -203,6 +218,7 @@ describe('okta-auth', () => {
             const { getAuthHeader } = await import('../src/okta-auth.js');
             await getAuthHeader();
 
+            expect(mockFetch).toHaveBeenCalled();
             const body = new URLSearchParams(mockFetch.mock.calls[0][1].body);
             expect(body.get('scope')).toBe('okta.apps.manage okta.users.read');
         });
@@ -242,6 +258,31 @@ describe('okta-auth', () => {
 
             const { getAuthHeader } = await import('../src/okta-auth.js');
             await expect(getAuthHeader()).rejects.toThrow('Private Key JWT token request failed');
+        });
+    });
+
+    // ── initializeAuth (token persistence) ───────────────────
+
+    describe('initializeAuth() — token persistence', () => {
+        it('persists token to disk after acquiring', async () => {
+            const { privateKey } = generateTestKeyPair();
+
+            process.env.OKTA_ORG_URL = 'https://test.okta.com';
+            process.env.OKTA_CLIENT_ID = 'test-client-id';
+            process.env.OKTA_PRIVATE_KEY = privateKey;
+
+            const mockFetch = mockFetchToken('persisted-token', 3600);
+            vi.stubGlobal('fetch', mockFetch);
+
+            const { initializeAuth } = await import('../src/okta-auth.js');
+            await initializeAuth();
+
+            // Verify token was persisted
+            expect(existsSync(TOKEN_CACHE_FILE)).toBe(true);
+            const cached = JSON.parse(require('fs').readFileSync(TOKEN_CACHE_FILE, 'utf-8'));
+            expect(cached.accessToken).toBe('persisted-token');
+            expect(cached.orgUrl).toBe('https://test.okta.com');
+            expect(cached.clientId).toBe('test-client-id');
         });
     });
 });
