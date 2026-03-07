@@ -12,6 +12,7 @@ import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
 import { z } from 'zod';
 import { callOktaApi } from './okta-client.js';
+import { initializeAuth } from './okta-auth.js';
 import { SERVER_DESCRIPTIONS } from './server-groups.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -87,7 +88,17 @@ export async function createServer(serverName) {
         });
     }
 
-    // ── Connect transport ────────────────────────────────────
+    // ── Connect transport first (so the MCP host doesn't kill us) ─
     const transport = new StdioServerTransport();
     await server.connect(transport);
+
+    // ── Authenticate ─────────────────────────────────────────
+    // For non-interactive modes (ssws, private_key_jwt), auth is fast
+    // so we can do it after connect. For device_auth, this will run
+    // in the background — actual auth happens lazily via getAuthHeader()
+    // on the first tool call if the eager init hasn't completed yet.
+    initializeAuth().catch((err) => {
+        process.stderr.write(`[okta-auth] Background auth init failed: ${err.message}\n`);
+        // Non-fatal — getAuthHeader() will retry on first tool call
+    });
 }

@@ -9,14 +9,14 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 describe('server-groups', () => {
     const serverNames = Object.keys(SERVER_GROUPS);
 
-    it('defines exactly 10 servers', () => {
-        expect(serverNames).toHaveLength(10);
+    it('defines exactly 6 servers', () => {
+        expect(serverNames).toHaveLength(6);
     });
 
     it('defines all expected server names', () => {
         const expected = [
-            'okta-users', 'okta-apps', 'okta-authz', 'okta-idps', 'okta-security',
-            'okta-roles', 'okta-customization', 'okta-org', 'okta-hooks', 'okta-devices',
+            'okta-users', 'okta-apps', 'okta-idps', 'okta-security',
+            'okta-roles', 'okta-devices',
         ];
         expect(serverNames.sort()).toEqual(expected.sort());
     });

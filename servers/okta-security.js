@@ -3,4 +3,7 @@ import { basename } from 'path';
 import { fileURLToPath } from 'url';
 
 const serverName = basename(fileURLToPath(import.meta.url), '.js');
-createServer(serverName);
+createServer(serverName).catch((err) => {
+    process.stderr.write(`[${serverName}] Fatal: ${err.message}\n`);
+    process.exit(1);
+});

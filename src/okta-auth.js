@@ -43,8 +43,11 @@ const TOKEN_REFRESH_BUFFER_MS = 60_000; // refresh 60s before expiry
 const TOKEN_CACHE_DIR = join(homedir(), '.okta-mcp');
 const TOKEN_CACHE_FILE = join(TOKEN_CACHE_DIR, 'token-cache.json');
 const AUTH_LOCK_FILE = join(TOKEN_CACHE_DIR, 'auth.lock');
+const AUTH_ERROR_FILE = join(TOKEN_CACHE_DIR, 'auth-error.json');
 const AUTH_LOCK_MAX_AGE_MS = 10 * 60 * 1000; // 10 min stale lock timeout
 const AUTH_LOCK_POLL_MS = 2000; // poll every 2s while waiting
+const MAX_AUTH_RETRIES = 3; // max times a follower will retry after leader failure
+const AUTH_ERROR_MAX_AGE_MS = 60 * 1000; // ignore error markers older than 60s
 
 // ── File-based token persistence ─────────────────────────────
 
@@ -93,6 +96,41 @@ function persistToken(token) {
         // Non-fatal — in-memory cache still works
         process.stderr.write(`[okta-auth] Warning: could not persist token: ${err.message}\n`);
     }
+}
+
+/**
+ * Persist an auth error to disk so follower processes know why the leader failed.
+ */
+function persistAuthError(error) {
+    try {
+        mkdirSync(TOKEN_CACHE_DIR, { recursive: true, mode: 0o700 });
+        const data = {
+            message: error.message,
+            createdAt: Date.now(),
+        };
+        writeFileSync(AUTH_ERROR_FILE, JSON.stringify(data, null, 2), { mode: 0o600 });
+    } catch { /* non-fatal */ }
+}
+
+/**
+ * Load a recent auth error persisted by the leader process.
+ * Returns the error message if recent, null otherwise.
+ */
+function loadAuthError() {
+    try {
+        if (!existsSync(AUTH_ERROR_FILE)) return null;
+        const data = JSON.parse(readFileSync(AUTH_ERROR_FILE, 'utf-8'));
+        if (!data.message || !data.createdAt) return null;
+        // Ignore old errors
+        if (Date.now() - data.createdAt > AUTH_ERROR_MAX_AGE_MS) return null;
+        return data.message;
+    } catch {
+        return null;
+    }
+}
+
+function clearAuthError() {
+    try { unlinkSync(AUTH_ERROR_FILE); } catch { /* ignore */ }
 }
 
 // ── Auth mode detection ──────────────────────────────────────
@@ -363,7 +401,7 @@ function isLockStale() {
  *
  * This prevents 10 simultaneous device auth flows (and avoids 429 rate limits).
  */
-export async function initializeAuth() {
+export async function initializeAuth(retryCount = 0) {
     const mode = detectAuthMode();
     process.stderr.write(`[okta-auth] Auth mode: ${mode}\n`);
 
@@ -381,9 +419,16 @@ export async function initializeAuth() {
         return;
     }
 
-    // 2. Try to become the leader (acquire lock)
+    // 2. Check if a recent leader already failed (don't repeat the same failure)
+    const recentError = loadAuthError();
+    if (recentError) {
+        throw new Error(`Authentication failed (from leader process): ${recentError}`);
+    }
+
+    // 3. Try to become the leader (acquire lock)
     if (tryAcquireLock()) {
         process.stderr.write('[okta-auth] Acquired auth lock — this process will authenticate\n');
+        clearAuthError(); // clear any old error marker
         try {
             const orgUrl = getOrgUrl();
             if (mode === 'private_key_jwt') {
@@ -391,6 +436,10 @@ export async function initializeAuth() {
             } else {
                 cachedToken = await getTokenViaDeviceAuth(orgUrl);
             }
+        } catch (err) {
+            process.stderr.write(`[okta-auth] ✗ Authentication failed: ${err.message}\n`);
+            persistAuthError(err);
+            throw err;
         } finally {
             releaseLock();
         }
@@ -413,10 +462,26 @@ export async function initializeAuth() {
             return;
         }
 
+        // Check if the leader failed — stop immediately with the real error
+        const leaderError = loadAuthError();
+        if (leaderError) {
+            throw new Error(`Authentication failed (from leader process): ${leaderError}`);
+        }
+
         // If lock is gone but no token, the leader failed — try to become leader
         if (!existsSync(AUTH_LOCK_FILE) || isLockStale()) {
-            process.stderr.write('[okta-auth] Leader process finished/failed, retrying auth...\n');
-            return initializeAuth(); // recursive retry
+            if (retryCount >= MAX_AUTH_RETRIES) {
+                throw new Error(
+                    `Authentication failed after ${MAX_AUTH_RETRIES} retries. ` +
+                    'The leader process failed repeatedly to acquire a token.'
+                );
+            }
+            // Remove stale lock so tryAcquireLock() (O_EXCL) can succeed on retry
+            releaseLock();
+            const backoffMs = Math.pow(2, retryCount) * 1000;
+            process.stderr.write(`[okta-auth] Leader process finished/failed, retrying auth (attempt ${retryCount + 1}/${MAX_AUTH_RETRIES}, backoff ${backoffMs}ms)...\n`);
+            await sleep(backoffMs);
+            return initializeAuth(retryCount + 1);
         }
     }
 
